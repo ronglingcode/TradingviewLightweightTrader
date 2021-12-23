@@ -32,4 +32,14 @@ function myCrosshairMoveHandler(param) {
 
 chart.subscribeClick(myCrosshairMoveHandler);
 
-candleSeries.setData(SampleData);
+let candles = window.TradingApp_TOS.getSamplePriceHistory();
+candleSeries.setData(candles);
+let lastCandle = candles[candles.length - 1];
+let lastCandleClose = lastCandle.close;
+
+setInterval(function(){
+    lastCandle.close = lastCandleClose + Math.random() - 0.5;
+    lastCandle.high = Math.max(lastCandle.high, lastCandle.close);
+    lastCandle.low = Math.min(lastCandle.low, lastCandle.close);
+    candleSeries.update(lastCandle);
+}, 200);
