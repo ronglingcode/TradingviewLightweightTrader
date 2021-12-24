@@ -2,7 +2,17 @@ var chart = LightweightCharts.createChart(
     document.getElementById("chart"),
     window.TradingApp_Settings_Tradingview.chartSettings
 );
-
+var volumeSeries = chart.addHistogramSeries({
+    color: '#E1F5FE',
+    priceFormat: {
+        type: 'volume',
+    },
+    priceScaleId: '',
+    scaleMargins: {
+        top: 0.7,
+        bottom: 0,
+    },
+});
 var candleSeries = chart.addCandlestickSeries(window.TradingApp_Settings_Tradingview.candlestickSeriesSettings);
 var vwapSeries = chart.addLineSeries({
     color: '#6a1b9a',
@@ -41,6 +51,7 @@ function myCrosshairMoveHandler(param) {
 chart.subscribeClick(myCrosshairMoveHandler);
 let openingCandle;
 window.TradingApp.DB.initialize();
+volumeSeries.setData(window.TradingApp.DB.volumes);
 
 let candles = window.TradingApp.DB.candles;
 let vwap = window.TradingApp.DB.vwap;

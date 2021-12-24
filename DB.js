@@ -13,6 +13,7 @@ window.TradingApp.DB = (function () {
     let openLow1R = [];
     let openLow2R = [];
     let openLow3R = [];
+    let volumes = [];
 
     const initialize = () => {
         data = window.sample_price_history.candles;
@@ -29,6 +30,7 @@ window.TradingApp.DB = (function () {
                 volume: element.volume
             };
             candles.push(newCandle);
+            volumes.push({ time: newD, value: element.volume });
 
             if (d.getFullYear() == window.TradingApp.Settings.currentDay.getFullYear() &&
                 d.getMonth() == window.TradingApp.Settings.currentDay.getMonth() &&
@@ -86,7 +88,7 @@ window.TradingApp.DB = (function () {
         openLow,
         openLow1R,
         openLow2R,
-        openLow3R
-
+        openLow3R,
+        volumes
     }
 })();
