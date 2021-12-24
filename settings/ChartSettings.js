@@ -1,6 +1,6 @@
 let chartSettings = {
-    width: 600,
-    height: 300,
+    width: 1000,
+    height: 500,
     layout: {
         backgroundColor: '#ffffff',
         textColor: 'rgba(33, 56, 77, 1)',
