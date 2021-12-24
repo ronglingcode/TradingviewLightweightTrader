@@ -1,31 +1,40 @@
-window.TradingApp_DB = (function() {
+window.TradingApp.DB = (function () {
     let candles = [];
-    let totalVolume = [];
-    let totalTradingAmount = [];
+    let totalVolume = 0;
+    let totalTradingAmount = 0;
     let vwap = [];
 
     const initialize = () => {
         data = window.sample_price_history.candles;
-        data.forEach(element => {
+        for (let i = 0; i < data.length; i++) {
+            let element = data[i];
             const d = new Date(element.datetime);
             const newD = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()) / 1000;
             candles.push({
-                time: newD, 
-                open: element.open, 
-                high: element.high, 
-                low: element.low, 
+                time: newD,
+                open: element.open,
+                high: element.high,
+                low: element.low,
                 close: element.close,
                 volume: element.volume
             });
-            //totalVolume += element.volume;
-            //totalTradingAmount += (element.volume * element.close);
-            // TODO: skip early bars and mark current bars
 
-        });
+            if (element.datetime > 1640233560000) {
+                totalVolume += element.volume;
+                totalTradingAmount += (element.volume * element.close);
+
+                vwap.push({
+                    time: newD,
+                    value: totalTradingAmount / totalVolume
+                });
+            }
+        }
+
     };
-    
+
     return {
         initialize,
-        candles        
+        candles,
+        vwap
     }
 })();
