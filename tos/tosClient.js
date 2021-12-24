@@ -46,7 +46,8 @@ window.TradingApp.TOS = (function () {
     };
 
     const testOrder = () => {
-        order = { "orderId": null, "quantity": 0.0, "orderLegCollection": [{ "orderLegType": "EQUITY", "instrument": { "assetType": "EQUITY", "symbol": "MSFT" }, "instruction": "BUY", "quantity": 1.0 }], "session": "NORMAL", "duration": "DAY", "orderType": "MARKET", "orderStrategyType": "SINGLE", "childOrderStrategies": null, "price": null, "stopPrice": null, "status": null };
+        let order = window.TradingApp.OrderFactory.createTestOrder();
+        console.log('test order');
         placeOrderBase(order);
     };
 
