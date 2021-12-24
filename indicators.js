@@ -7,7 +7,7 @@ window.TradingApp.Indicators = (function () {
         let redColor = '#ff4444';
         let greenColor = '#00c851';
         const commonPriceLineSettings = {
-            lineWidth: 3,
+            lineWidth: 2,
             lineStyle: LightweightCharts.LineStyle.Solid,
             axisLabelVisible: true
             // title: 'open price',
@@ -28,7 +28,7 @@ window.TradingApp.Indicators = (function () {
             ...commonPriceLineSettings
         });
         const dashLineSettings = {
-            lineWidth: 2,
+            lineWidth: 1,
             lineStyle: LightweightCharts.LineStyle.LargeDashed,
             axisLabelVisible: true
             // title: 'open price',

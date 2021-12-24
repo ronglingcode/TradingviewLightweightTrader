@@ -1,37 +1,37 @@
 let chartSettings = {
-    width: 1000,
-    height: 500,
+    width: 500,
+    height: 250,
     layout: {
         backgroundColor: '#ffffff',
         textColor: 'rgba(33, 56, 77, 1)',
     },
-	grid: {
+    grid: {
         horzLines: {
-          color: '#F0F3FA',
+            color: '#F0F3FA',
         },
         vertLines: {
-          color: '#F0F3FA',
+            color: '#F0F3FA',
         },
     },
     /* comment out because LightweightCharts is not loaded
     crosshair: {
-		mode: LightweightCharts.CrosshairMode.Normal,
-	},*/
-    crosshair: { mode: 0},
-	rightPriceScale: {
-		borderColor: 'rgba(197, 203, 206, 0.8)',
-	},
-	timeScale: {
-		borderColor: 'rgba(197, 203, 206, 0.8)',
+        mode: LightweightCharts.CrosshairMode.Normal,
+    },*/
+    crosshair: { mode: 0 },
+    rightPriceScale: {
+        borderColor: 'rgba(197, 203, 206, 0.8)',
+    },
+    timeScale: {
+        borderColor: 'rgba(197, 203, 206, 0.8)',
         timeVisible: true
-	},
+    },
 };
 
 let candlestickSeriesSettings = {
-    upColor: 'rgb(38,166,154)',
-    downColor: 'rgb(255,82,82)',
-    wickUpColor: '#26a69a',// 'rgb(38,166,154)',
-    wickDownColor: 'rgb(255,82,82)',
+    upColor: '#08b265',
+    downColor: '#fb3434',// 'rgb(255,82,82)',
+    wickUpColor: '#08b265',// '#26a69a',// 'rgb(38,166,154)',
+    wickDownColor: '#fb3434',// '#ac2e2e',//'rgb(255,82,82)',
     borderVisible: false,
 };
 
