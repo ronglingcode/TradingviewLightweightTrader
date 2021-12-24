@@ -1,5 +1,42 @@
 window.TradingApp.TOS = (function () {
-    const getPriceHistory = (text) => {
+    /* #region Utils */
+    const sendJsonPostRequestWithAccessToken = (url, data) => {
+        const config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.TradingApp.Secrets.accessToken
+            },
+            body: JSON.stringify(data)
+        };
+        return fetch(url, config);
+    };
+    /* #endregion */
+
+    /* #region Access */
+    const createAccessToken = () => {
+        const AUTH_URL = "https://api.tdameritrade.com/v1/oauth2/token";
+        fetch(AUTH_URL, {
+            method: 'POST',
+            body: new URLSearchParams({
+                grant_type: "refresh_token",
+                refresh_token: window.TradingApp.Secrets.refreshToken,
+                code: window.TradingApp.Secrets.code,
+                client_id: window.TradingApp.Secrets.clientId,
+                redirect_url: window.TradingApp.Secrets.redirectUrl
+            })
+        }).then(response => response.json())  // convert to json
+            .then(json => window.TradingApp.Secrets.accessToken = json.access_token)
+            .catch(err => console.log('Request Failed', err)); // Catch errors
+    };
+    /* #endregion */
+    /* #region Account */
+
+    /* #endregion */
+
+    /* #region Price history, Quote */
+    const getPriceHistory = (symbol) => {
         console.log('get price history');
         let url = "https://api.tdameritrade.com/v1/marketdata/SPY/pricehistory?apikey={client_id}&frequencyType=minute&frequency=1&startDate=1640010600000&endDate=1640297198351";
 
@@ -28,21 +65,14 @@ window.TradingApp.TOS = (function () {
         });
         return candles;
     };
+    /* #endregion */
 
+    /* #region Order */
     const placeOrderBase = (order) => {
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
         console.log(url);
-        const config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + window.TradingApp.Secrets.accessToken
-            },
-            body: JSON.stringify(order)
-        }
-        fetch(url, config)
+        sendJsonPostRequestWithAccessToken(url, order);
     };
 
     const testOrder = () => {
@@ -50,8 +80,9 @@ window.TradingApp.TOS = (function () {
         console.log('test order');
         placeOrderBase(order);
     };
-
+    /* #endregion */
     return {
+        createAccessToken,
         getPriceHistory,
         getSamplePriceHistory,
         testOrder
