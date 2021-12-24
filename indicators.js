@@ -32,8 +32,7 @@ window.TradingApp.Indicators = (function () {
         const dashLineSettings = {
             lineWidth: 1,
             lineStyle: LightweightCharts.LineStyle.LargeDashed,
-            axisLabelVisible: true
-            // title: 'open price',
+            axisLabelVisible: false
         };
         for (let i = 1; i <= 3; i++) {
             priceLines.push({

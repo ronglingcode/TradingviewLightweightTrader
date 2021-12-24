@@ -33,6 +33,10 @@ let candlestickSeriesSettings = {
     wickUpColor: '#08b265',// '#26a69a',// 'rgb(38,166,154)',
     wickDownColor: '#fb3434',// '#ac2e2e',//'rgb(255,82,82)',
     borderVisible: false,
+    scaleMargins: {
+        top: 0,
+        bottom: 0.3,
+    },
 };
 
 window.TradingApp_Settings_Tradingview = {
