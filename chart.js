@@ -4,6 +4,13 @@ var chart = LightweightCharts.createChart(
 );
 
 var candleSeries = chart.addCandlestickSeries(window.TradingApp_Settings_Tradingview.candlestickSeriesSettings);
+var vwapSeries = chart.addLineSeries({
+    color: '#6a1b9a',
+    lineWidth: 1,
+    crosshairMarkerVisible: false
+});
+
+let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
 function myClickHandler(param) {
     if (!param.point) {
@@ -33,7 +40,22 @@ function myCrosshairMoveHandler(param) {
 
 chart.subscribeClick(myCrosshairMoveHandler);
 let openingCandle;
-let candles = window.TradingApp_TOS.getSamplePriceHistory();
+window.TradingApp.DB.initialize();
+
+let candles = window.TradingApp.DB.candles;
+let vwap = window.TradingApp.DB.vwap;
+/*
+openRangeSeriesList[0].setData(window.TradingApp.DB.openLow3R);
+openRangeSeriesList[1].setData(window.TradingApp.DB.openLow2R);
+openRangeSeriesList[2].setData(window.TradingApp.DB.openLow1R);
+openRangeSeriesList[3].setData(window.TradingApp.DB.openLow);
+openRangeSeriesList[4].setData(window.TradingApp.DB.openPrice);
+openRangeSeriesList[5].setData(window.TradingApp.DB.openHigh);
+openRangeSeriesList[6].setData(window.TradingApp.DB.openHigh1R);
+openRangeSeriesList[7].setData(window.TradingApp.DB.openHigh2R);
+openRangeSeriesList[8].setData(window.TradingApp.DB.openHigh3R);
+*/
+vwapSeries.setData(vwap);
 for (let i = 0; i < candles.length; i++) {
     let d = new Date(candles[i].time * 1000);
     // UTC 22:30 is market open time
@@ -41,12 +63,9 @@ for (let i = 0; i < candles.length; i++) {
         openingCandle = candles[i];
     }
 }
-console.log('opening candle');
-console.log(openingCandle);
 
 candleSeries.setData(candles);
 window.TradingApp.Indicators.openRangeBreakoutPriceLines(openingCandle).forEach(priceLine => {
-    console.log(priceLine);
     candleSeries.createPriceLine(priceLine);
 });
 let lastCandle = candles[candles.length - 1];
