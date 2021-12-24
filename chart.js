@@ -10,6 +10,8 @@ var vwapSeries = chart.addLineSeries({
     crosshairMarkerVisible: false
 });
 
+let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
+
 function myClickHandler(param) {
     if (!param.point) {
         return;
@@ -42,8 +44,18 @@ window.TradingApp.DB.initialize();
 
 let candles = window.TradingApp.DB.candles;
 let vwap = window.TradingApp.DB.vwap;
+/*
+openRangeSeriesList[0].setData(window.TradingApp.DB.openLow3R);
+openRangeSeriesList[1].setData(window.TradingApp.DB.openLow2R);
+openRangeSeriesList[2].setData(window.TradingApp.DB.openLow1R);
+openRangeSeriesList[3].setData(window.TradingApp.DB.openLow);
+openRangeSeriesList[4].setData(window.TradingApp.DB.openPrice);
+openRangeSeriesList[5].setData(window.TradingApp.DB.openHigh);
+openRangeSeriesList[6].setData(window.TradingApp.DB.openHigh1R);
+openRangeSeriesList[7].setData(window.TradingApp.DB.openHigh2R);
+openRangeSeriesList[8].setData(window.TradingApp.DB.openHigh3R);
+*/
 vwapSeries.setData(vwap);
-console.log(vwap)
 for (let i = 0; i < candles.length; i++) {
     let d = new Date(candles[i].time * 1000);
     // UTC 22:30 is market open time
