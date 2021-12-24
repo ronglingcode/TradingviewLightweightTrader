@@ -30,7 +30,7 @@ let chartSettings = {
 let candlestickSeriesSettings = {
     upColor: 'rgb(38,166,154)',
     downColor: 'rgb(255,82,82)',
-    wickUpColor: 'rgb(38,166,154)',
+    wickUpColor: '#26a69a',// 'rgb(38,166,154)',
     wickDownColor: 'rgb(255,82,82)',
     borderVisible: false,
 };
