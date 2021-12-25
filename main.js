@@ -13,12 +13,22 @@ const run = async () => {
         console.log(messageEvent);
         let messageData = JSON.parse(messageEvent.data);
         // messageData can have either notify or response
-        if (!messageData.response) {
+        if (messageData.notify) {
             return;
+        } else if (messageData.response) {
+            messageData.response.forEach(resp => {
+                let service = resp.service;
+                if (service === "ADMIN" && resp.command === "LOGIN") {
+                    // send more streaming requests
+                    let mainRequest = window.TradingApp.Streaming.createMainRequest();
+                    websocket.send(JSON.stringify(mainRequest));
+                }
+                else if (service in ["TIMESALE_EQUITY", "TIMESALE_FUTURES"]) {
+                    console.log(resp);
+                }
+                //console.log(resp);
+            });
         }
-        messageData.response.forEach(resp => {
-            console.log(resp);
-        });
     };
 
     websocket.onopen = function () {
