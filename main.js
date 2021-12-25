@@ -10,7 +10,12 @@ const run = async () => {
     let socketUrl = "wss://" + window.TradingApp.TOS.userPrincipal.streamerInfo["streamerSocketUrl"] + "/ws";
     let websocket = new WebSocket(socketUrl);
     websocket.onmessage = function (messageEvent) {
+        console.log(messageEvent);
         let messageData = JSON.parse(messageEvent.data);
+        // messageData can have either notify or response
+        if (!messageData.response) {
+            return;
+        }
         messageData.response.forEach(resp => {
             console.log(resp);
         });
@@ -18,7 +23,7 @@ const run = async () => {
 
     websocket.onopen = function () {
         request = window.TradingApp.Streaming.createLoginRequest(window.TradingApp.TOS.userPrincipal);
-        websocket.send(request);
+        websocket.send(JSON.stringify(request));
     }
 };
 
