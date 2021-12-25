@@ -30,6 +30,11 @@ window.TradingApp.TOS = (function () {
             .then(json => window.TradingApp.Secrets.accessToken = json.access_token)
             .catch(err => console.log('Request Failed', err)); // Catch errors
     };
+
+    const getUserPrincipal = () => {
+        let url = "https://api.tdameritrade.com/v1/userprincipals";
+        url += "?fields=streamerSubscriptionKeys,streamerConnectionInfo";
+    }
     /* #endregion */
     /* #region Account */
 
