@@ -28,7 +28,8 @@ function myClickHandler(param) {
     }
 
     console.log(`Click at ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
-    console.log(param.time)
+    console.log(param)
+    console.log(candleSeries.coordinateToPrice(param.point.y));
 }
 
 chart.subscribeClick(myClickHandler);
@@ -45,7 +46,7 @@ function myCrosshairMoveHandler(param) {
         return;
     }
 
-    console.log(`Crosshair moved to ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
+    //console.log(`Crosshair moved to ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
 }
 
 chart.subscribeClick(myCrosshairMoveHandler);
