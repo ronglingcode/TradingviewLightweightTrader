@@ -1,0 +1,1 @@
+window.TradingApp.Chart.initialize();
