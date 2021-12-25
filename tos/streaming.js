@@ -8,11 +8,7 @@ window.TradingApp.Streaming = (function () {
 
     const createLoginRequest = (userPrincipal) => {
         let requestContainer = { requests: [] };
-        let request = createRequestBase(0, userPrincipal);
-
-        request.service = "ADMIN";
-        request.command = "LOGIN";
-
+        let request = createRequestBase(0, userPrincipal, "ADMIN", "LOGIN");
         let streamerInfo = userPrincipal.streamerInfo;
         let tokenTimeStampAsDateObj = new Date(userPrincipal.streamerInfo.tokenTimestamp);
         let tokenTimeStampAsMs = tokenTimeStampAsDateObj.getTime();
@@ -38,15 +34,53 @@ window.TradingApp.Streaming = (function () {
         return requestContainer;
     };
 
-    const createRequestBase = (requestId, userPrincipal) => {
+    const createRequestBase = (requestId, userPrincipal, service, command) => {
         return {
             requestid: requestId,
             account: userPrincipal.accounts[0].accountId,
-            source: userPrincipal.streamerInfo.appId
+            source: userPrincipal.streamerInfo.appId,
+            service: service,
+            command: command
         };
     };
 
+    const createMainRequest = () => {
+        let userPrincipal = window.TradingApp.TOS.userPrincipal;
+        let requestId = 1;
+        let requests = [];
+        requests.push(createQualityOfServiceRequest(requestId++, userPrincipal));
+        requests.push(createAccountActivityRequest(requestId++, userPrincipal));
+        requests.push(createESTimeSaleRequest(requestId++, userPrincipal));
+        let requestContainer = { requests: requests };
+        return requestContainer;
+    };
+
+    const createQualityOfServiceRequest = (requestId, userPrincipal) => {
+        let request = createRequestBase(requestId, userPrincipal, "ADMIN", "QOS");
+        request.parameters = { "qoslevel": "0" };
+        return request;
+    }
+
+    const createAccountActivityRequest = (requestId, userPrincipal) => {
+        let request = createRequestBase(requestId, userPrincipal, "ACCT_ACTIVITY", "SUBS");
+        request.parameters = {
+            "keys": userPrincipal.streamerSubscriptionKeys.keys[0]["key"],
+            "fields": "0,1,2,3"
+        };
+        return request;
+    }
+
+    const createESTimeSaleRequest = (requestId, userPrincipal) => {
+        let request = createRequestBase(requestId, userPrincipal, "TIMESALE_FUTURES", "SUBS");
+        request.parameters = {
+            "keys": "/ES",
+            "fields": "0,1,2,3,4"
+        };
+        return request;
+    }
+
     return {
         createLoginRequest,
+        createMainRequest
     }
 })();
