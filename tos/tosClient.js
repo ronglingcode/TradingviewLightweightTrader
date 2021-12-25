@@ -1,4 +1,12 @@
 window.TradingApp.TOS = (function () {
+    let initialized = false;
+    let userPrincipal = {};
+    const initialize = async () => {
+        await createAccessToken();
+        await getUserPrincipal();
+        console.log('initialized');
+        window.TradingApp.TOS.initialized = true;
+    };
     /* #region Utils */
     const sendJsonPostRequestWithAccessToken = (url, data) => {
         const config = {
@@ -12,12 +20,23 @@ window.TradingApp.TOS = (function () {
         };
         return fetch(url, config);
     };
+    const asyncGet = (url) => {
+        const config = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.TradingApp.Secrets.accessToken
+            }
+        };
+        return fetch(url, config);
+    }
     /* #endregion */
 
     /* #region Access */
-    const createAccessToken = () => {
+    const createAccessToken = async () => {
         const AUTH_URL = "https://api.tdameritrade.com/v1/oauth2/token";
-        fetch(AUTH_URL, {
+        return fetch(AUTH_URL, {
             method: 'POST',
             body: new URLSearchParams({
                 grant_type: "refresh_token",
@@ -31,9 +50,12 @@ window.TradingApp.TOS = (function () {
             .catch(err => console.log('Request Failed', err)); // Catch errors
     };
 
-    const getUserPrincipal = () => {
+    const getUserPrincipal = async () => {
         let url = "https://api.tdameritrade.com/v1/userprincipals";
         url += "?fields=streamerSubscriptionKeys,streamerConnectionInfo";
+        return asyncGet(url).then(response => response.json())  // convert to json
+        .then(json => window.TradingApp.TOS.userPrincipal = json)
+        .catch(err => console.log('Request Failed', err)); //;
     }
     /* #endregion */
     /* #region Account */
@@ -90,6 +112,10 @@ window.TradingApp.TOS = (function () {
         createAccessToken,
         getPriceHistory,
         getSamplePriceHistory,
-        testOrder
+        testOrder,
+        getUserPrincipal,
+        initialize,
+        initialized,
+        userPrincipal,
     }
 })();
