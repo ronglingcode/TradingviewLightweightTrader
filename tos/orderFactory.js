@@ -29,9 +29,35 @@ window.TradingApp.OrderFactory = (function () {
     const createTestOrder = () => {
         // market order to buy 1 share of MSFT
         return createMarketOrder("MSFT", 1, "BUY");
-    }
+    };
+
+    const createOneTriggerOcoOrder = (symbol, orderType, quantity, quantity, entryPrice, stopOut, limitPrice, orderLegInstruction) => { };
+
+    const createBreakoutOrders = (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
+        let RiskManager = window.TradingApp.Algo.RiskManager;
+        let riskPerShare = Math.abs(entryPrice - stopOut);
+        let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
+        let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
+        let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
+        let totalShares = Math.min(totalShares1, totalShares2);
+
+        let TakeProfit = window.TradingApp.Algo.TakeProfit;
+        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOut, setupQuality);
+
+        let orders = [];
+        profitTargets.forEach(profitTarget => {
+            let quantity = profitTarget.Quantity;
+            let limitPrice = profitTarget.Target;
+            let order = createOneTriggerOcoOrder(symbol, orderType, quantity, quantity, entryPrice, stopOut, limitPrice, orderLegInstruction);
+            orders.push(order);
+        });
+
+        return orders;
+    };
+
     return {
         createMarketOrder,
-        createTestOrder
+        createTestOrder,
+        createBreakoutOrders,
     }
 })();
