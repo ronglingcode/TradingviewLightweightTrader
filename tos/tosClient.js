@@ -54,8 +54,8 @@ window.TradingApp.TOS = (function () {
         let url = "https://api.tdameritrade.com/v1/userprincipals";
         url += "?fields=streamerSubscriptionKeys,streamerConnectionInfo";
         return asyncGet(url).then(response => response.json())  // convert to json
-        .then(json => window.TradingApp.TOS.userPrincipal = json)
-        .catch(err => console.log('Request Failed', err)); //;
+            .then(json => window.TradingApp.TOS.userPrincipal = json)
+            .catch(err => console.log('Request Failed', err)); //;
     }
     /* #endregion */
     /* #region Account */
@@ -95,17 +95,20 @@ window.TradingApp.TOS = (function () {
     /* #endregion */
 
     /* #region Order */
-    const placeOrderBase = (order) => {
+    const placeOrderBase = async (order) => {
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
-        console.log(url);
-        sendJsonPostRequestWithAccessToken(url, order);
+        return sendJsonPostRequestWithAccessToken(url, order);
     };
 
     const testOrder = () => {
         let order = window.TradingApp.OrderFactory.createTestOrder();
-        console.log('test order');
-        placeOrderBase(order);
+        placeOrderBase(order).then(response => {
+            console.log(response);
+            if (response.status == 201) {
+                console.log("order success");
+            }
+        });
     };
     /* #endregion */
     return {
@@ -117,5 +120,6 @@ window.TradingApp.TOS = (function () {
         initialize,
         initialized,
         userPrincipal,
+        placeOrderBase,
     }
 })();

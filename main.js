@@ -37,7 +37,9 @@ const run = async () => {
     }
 };
 
+/*
 setTimeout(() => {
     run();
 }, 3000);
 
+*/
