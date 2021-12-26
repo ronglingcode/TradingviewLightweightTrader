@@ -2,7 +2,8 @@ window.TradingApp.Chart = (function () {
     const createChartWidget = (tabIndex, stock) => {
         let symbol = stock.symbol;
         let widget = {
-            stock: stock
+            stock: stock,
+            tabIndex: tabIndex
         };
         widget.htmlContents = {
             chart: document.getElementById("chart" + tabIndex),
@@ -16,11 +17,21 @@ window.TradingApp.Chart = (function () {
         var volumeSeries = widget.chart.addHistogramSeries(window.TradingApp.ChartSettings.volumeSeriesSettings);
         var candleSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.candlestickSeriesSettings);
         var vwapSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.vwapSettings);
-        // comment out because open range indicators are price levels instead of series. 
+        // comment out because open range indicators are price levels instead of series.
         // series affects the price scale
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
         function myClickHandler(param) {
+            for(let i = 0;i<window.TradingApp.Watchlist.length;i++){
+                let element = document.getElementById("chartContainer"+i);
+                if (i === widget.tabIndex) {
+                    element.classList.add("active");
+                    window.TradingApp.State.activeSymbol = widget.stock.symbol;
+                    window.TradingApp.State.activeTabIndex = widget.tabIndex;
+                } else {
+                    element.classList.remove("active");
+                }
+            }
             if (!param.point) {
                 return;
             }

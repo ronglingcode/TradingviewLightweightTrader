@@ -1,23 +1,8 @@
 window.TradingApp.TOS.initialize();
 
-let watchlist = [
-    {
-        symbol: 'SPY'
-    },
-    {
-        symbol: 'MSFT'
-    },
-    {
-        symbol: 'QQQ'
-    },
-    {
-        symbol: 'TSLA'
-    }
-];
-
 let mycharts = [];
-for (let i = 0; i < watchlist.length; i++) {
-    let chart = window.TradingApp.Chart.createChartWidget(i, watchlist[i]);
+for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+    let chart = window.TradingApp.Chart.createChartWidget(i, window.TradingApp.Watchlist[i]);
     mycharts.push(chart);
 }
 
