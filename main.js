@@ -1,5 +1,19 @@
 window.TradingApp.TOS.initialize();
-window.TradingApp.Chart.initialize();
+
+let watchlist = [
+    {
+        symbol: 'SPY'
+    },
+    {
+        symbol: 'MSFT'
+    }
+];
+
+let mycharts = [];
+for (let i = 0; i < watchlist.length; i++) {
+    let chart = window.TradingApp.Chart.createChartWidget(i, watchlist[i]);
+    mycharts.push(chart);
+}
 
 const run = async () => {
     if (!window.TradingApp.TOS.initialized) {
