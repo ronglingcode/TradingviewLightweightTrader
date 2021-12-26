@@ -1,21 +1,22 @@
 window.TradingApp.DB = (function () {
-    let candles = [];
-    let totalVolume = 0;
-    let totalTradingAmount = 0;
-    let vwap = [];
-    let openingCandle;
-    let openHigh = [];
-    let openLow = [];
-    let openPrice = [];
-    let openHigh1R = [];
-    let openHigh2R = [];
-    let openHigh3R = [];
-    let openLow1R = [];
-    let openLow2R = [];
-    let openLow3R = [];
-    let volumes = [];
+    let dataBySymbol = {};
+    const initialize = (symbol) => {
+        let candles = [];
+        let totalVolume = 0;
+        let totalTradingAmount = 0;
+        let vwap = [];
+        let openingCandle;
+        let openHigh = [];
+        let openLow = [];
+        let openPrice = [];
+        let openHigh1R = [];
+        let openHigh2R = [];
+        let openHigh3R = [];
+        let openLow1R = [];
+        let openLow2R = [];
+        let openLow3R = [];
+        let volumes = [];
 
-    const initialize = () => {
         data = window.sample_price_history.candles;
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
@@ -74,21 +75,27 @@ window.TradingApp.DB = (function () {
             }
         }
 
+        dataBySymbol[symbol] = {
+            candles: candles,
+            totalVolume: totalVolume,
+            totalTradingAmount: totalTradingAmount,
+            vwap: vwap,
+            openingCandle: openingCandle,
+            openHigh: openHigh,
+            openLow: openLow,
+            openPrice: openPrice,
+            openHigh1R: openHigh1R,
+            openHigh2R: openHigh2R,
+            openHigh3R: openHigh3R,
+            openLow1R: openLow1R,
+            openLow2R: openLow2R,
+            openLow3R: openLow3R,
+            volumes: volumes
+        };
     };
 
     return {
         initialize,
-        candles,
-        vwap,
-        openHigh3R,
-        openHigh2R,
-        openHigh1R,
-        openHigh,
-        openPrice,
-        openLow,
-        openLow1R,
-        openLow2R,
-        openLow3R,
-        volumes
-    }
+        dataBySymbol
+    };
 })();
