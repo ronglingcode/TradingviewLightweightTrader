@@ -62,5 +62,4 @@ window.TradingApp.ChartSettings = (function () {
         volumeSeriesSettings,
         vwapSettings
     };
-
 })();
