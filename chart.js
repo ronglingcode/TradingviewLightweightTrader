@@ -1,5 +1,6 @@
 window.TradingApp.Chart = (function () {
     const createChartWidget = (tabIndex, stock) => {
+        let symbol = stock.symbol;
         let widget = {
             stock: stock
         };
@@ -63,11 +64,11 @@ window.TradingApp.Chart = (function () {
 
         widget.chart.subscribeClick(myCrosshairMoveHandler);
         let openingCandle;
-        window.TradingApp.DB.initialize();
-        volumeSeries.setData(window.TradingApp.DB.volumes);
+        window.TradingApp.DB.initialize(stock.symbol);
+        volumeSeries.setData(window.TradingApp.DB.dataBySymbol[symbol].volumes);
 
-        let candles = window.TradingApp.DB.candles;
-        let vwap = window.TradingApp.DB.vwap;
+        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
+        let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
         /*
         openRangeSeriesList[0].setData(window.TradingApp.DB.openLow3R);
         openRangeSeriesList[1].setData(window.TradingApp.DB.openLow2R);
