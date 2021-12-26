@@ -9,12 +9,34 @@ window.TradingApp.OrderFactory = (function () {
         TRIGGER: "TRIGGER",
         OCO: "OCO"
     };
+    const OrderLegInstruction = {
+        BUY: "BUY",
+        SELL: "SELL",
+        BUY_TO_COVER: "BUY_TO_COVER",
+        SELL_SHORT: "SELL_SHORT",
+        BUY_TO_OPEN: "BUY_TO_OPEN",
+        BUY_TO_CLOSE: "BUY_TO_CLOSE",
+        SELL_TO_OPEN: "SELL_TO_OPEN",
+        SELL_TO_CLOSE: "SELL_TO_CLOSE",
+        EXCHANGE: "EXCHANGE"
+    };
     const createEquityInstrument = (symbol) => {
         return {
             assetType: "EQUITY",
             symbol: symbol
         };
     };
+
+    const getClosingOrderLegInstruction = (entryInstruction) => {
+        if (entryInstruction == OrderLegInstruction.BUY) {
+            return OrderLegInstruction.SELL;
+        }
+        else {
+            return OrderLegInstruction.BUY_TO_COVER;
+        }
+    };
+
+
     /* #region Basic Orders */
     const createDayOrder = function (symbol, quantity, orderLegInstruction) {
         let order = {
@@ -66,15 +88,17 @@ window.TradingApp.OrderFactory = (function () {
         let limitOrder = createLimitOrder(symbol, takeProfitQuantity, limitPrice, orderLegInstruction);
         mainOrder.childOrderStrategies = [stopOrder, limitOrder];
         return mainOrder;
-    }
-    const createOneTriggerOcoOrder = (symbol, entryInstruction, exitInstruction, orderType, triggerQuantity, triggerPrice, limitQuantity, limitPrice, stopQuantity, stopPrice) => {
+    };
+
+    const createOneEntryWithTwoExits = (symbol, entryInstruction, entryOrderType, entryQuantity, entryPrice, limitQuantity, limitPrice, stopQuantity, stopPrice) => {
+        let exitInstruction = getClosingOrderLegInstruction(entryInstruction);
         let entryOrder = null;
-        if (orderType == OrderType.STOP)
-            entryOrder = createStopOrder(symbol, triggerQuantity, triggerPrice, entryInstruction);
-        else if (orderType == OrderType.LIMIT)
-            entryOrder = createLimitOrder(symbol, triggerQuantity, triggerPrice, entryInstruction);
-        else if (orderType == OrderType.MARKET)
-            entryOrder = createMarketOrder(symbol, triggerQuantity, entryInstruction);
+        if (entryOrderType == OrderType.STOP)
+            entryOrder = createStopOrder(symbol, entryQuantity, entryPrice, entryInstruction);
+        else if (entryOrderType == OrderType.LIMIT)
+            entryOrder = createLimitOrder(symbol, entryQuantity, entryPrice, entryInstruction);
+        else if (entryOrderType == OrderType.MARKET)
+            entryOrder = createMarketOrder(symbol, entryQuantity, entryInstruction);
 
         entryOrder.orderStrategyType = OrderStrategyType.TRIGGER;
 
@@ -83,22 +107,25 @@ window.TradingApp.OrderFactory = (function () {
         return entryOrder;
     };
 
-    const createBreakoutOrders = (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
+    const createEntryOrdersWithFixedRisk = (symbol, orderType, entryPrice, stopOutPrice, setupQuality, multiplier) => {
         let RiskManager = window.TradingApp.Algo.RiskManager;
-        let riskPerShare = Math.abs(entryPrice - stopOut);
+        let riskPerShare = Math.abs(entryPrice - stopOutPrice);
         let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
         let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
         let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
         let totalShares = Math.min(totalShares1, totalShares2);
 
         let TakeProfit = window.TradingApp.Algo.TakeProfit;
-        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOut, setupQuality);
-
+        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
+        let entryInstruction = OrderLegInstruction.BUY;
+        if (entryPrice < stopOutPrice) {
+            entryInstruction = OrderLegInstruction.SELL_SHORT;
+        }
         let orders = [];
         profitTargets.forEach(profitTarget => {
-            let quantity = profitTarget.Quantity;
-            let limitPrice = profitTarget.Target;
-            let order = createOneTriggerOcoOrder(symbol, orderType, quantity, quantity, entryPrice, stopOut, limitPrice, orderLegInstruction);
+            let quantity = profitTarget.quantity;
+            let limitPrice = profitTarget.target;
+            let order = createOneEntryWithTwoExits(symbol, entryInstruction, orderType, quantity, entryPrice, quantity, limitPrice, quantity, stopOutPrice);
             orders.push(order);
         });
 
@@ -109,8 +136,9 @@ window.TradingApp.OrderFactory = (function () {
     return {
         createMarketOrder,
         createTestOrder,
-        createBreakoutOrders,
+        createEntryOrdersWithFixedRisk,
         OrderType,
-        OrderStrategyType
+        OrderStrategyType,
+        OrderLegInstruction
     }
 })();
