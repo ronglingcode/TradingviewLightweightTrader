@@ -6,6 +6,12 @@ let watchlist = [
     },
     {
         symbol: 'MSFT'
+    },
+    {
+        symbol: 'QQQ'
+    },
+    {
+        symbol: 'TSLA'
     }
 ];
 
