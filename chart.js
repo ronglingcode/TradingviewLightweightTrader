@@ -36,8 +36,23 @@ window.TradingApp.Chart = (function () {
 
         chart.subscribeClick(myClickHandler);
 
-        function myKeyDownHandler(param) {
-            console.log(param)
+        function myKeyDownHandler(keyboardEvent) {
+            let code = keyboardEvent.code;
+            if (keyboardEvent.shiftKey) {
+                // shift key maps to thinkorswim shortcuts
+                if (code === "KeyC") {
+                    // shift + c: cancel all
+                    console.log("cancel all");
+                } else if (code === "KeyF") {
+                    console.log("flatten");
+                }
+            } else {
+                if (code === "KeyB") {
+                    console.log("breakout buy");
+                } else if (code === "KeyS") {
+                    console.log("breakdown sell");
+                }
+            }
         }
 
         document.getElementById("chart").addEventListener('keydown', myKeyDownHandler);
