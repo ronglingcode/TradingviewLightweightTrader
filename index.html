@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>trading view</title>
+    <title>Tradingview Lightweight Trader</title>
     <link rel="stylesheet" type="text/css" href="mystyle.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <script src="init.js"></script>
@@ -20,21 +20,45 @@
 </head>
 
 <body>
-    <h1>Tradingview Lightweight Trader</h1>
-    <div id="chart" tabindex="3"></div>
-    <div id="chartContainer0" class="chartContainer">
-        <div id="topbar0">
-            <div id="symbol0"></div>
-        </div>
-        <div id="chart0" tabindex="0"></div>
-    </div>
-    <div id="chartContainer1" class="chartContainer">
-        <div id="topbar1">
-            <div id="symbol1"></div>
-        </div>
-        <div id="chart1" tabindex="1"></div>
-    </div>
+    <table>
+        <tr>
+            <td>
+                <div id="chartContainer0" class="chartContainer active">
+                    <div id="topbar0" class="topbar">
+                        <span id="symbol0"></span>
+                    </div>
+                    <div id="chart0" tabindex="0" class="tvchart"></div>
+                </div>
+            </td>
+            <td>
+                <div id="chartContainer1" class="chartContainer">
+                    <div id="topbar1" class="topbar">
+                        <div id="symbol1"></div>
+                    </div>
+                    <div id="chart1" tabindex="1" class="tvchart"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="chartContainer2" class="chartContainer">
+                    <div id="topbar2" class="topbar">
+                        <div id="symbol2"></div>
+                    </div>
+                    <div id="chart2" tabindex="2" class="tvchart"></div>
+                </div>
+            </td>
+            <td>
+                <div id="chartContainer3" class="chartContainer">
+                    <div id="topbar3" class="topbar">
+                        <div id="symbol3"></div>
+                    </div>
+                    <div id="chart3" tabindex="3" class="tvchart"></div>
+                </div>
+            </td>
+        </tr>
 
+    </table>
     <script src="main.js"></script>
 </body>
 

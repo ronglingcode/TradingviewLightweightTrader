@@ -1,6 +1,17 @@
+body {
+    font-family: Arial,Verdana,Tahoma;
+}
 .chartContainer {
-    border: 1px solid gray;
-    width: 520px;
+    border: 2px solid gray;
     margin: 0;
-    padding: 5px;
+}
+.tvchart {
+    padding: 5px 10px 5px 10px;
+}
+.chartContainer.active {
+    border-color: #0091ea;
+}
+
+.active .topbar {
+    background-color: #81d4fa;
 }

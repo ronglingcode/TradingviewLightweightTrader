@@ -4,7 +4,6 @@ window.TradingApp.Chart = (function () {
         let widget = {
             stock: stock
         };
-        let ChartSettings = window.TradingApp.ChartSettings;
         widget.htmlContents = {
             chart: document.getElementById("chart" + tabIndex),
             symbol: document.getElementById("symbol" + tabIndex)
@@ -12,11 +11,11 @@ window.TradingApp.Chart = (function () {
         widget.htmlContents.symbol.innerText = stock.symbol;
         widget.chart = LightweightCharts.createChart(
             widget.htmlContents.chart,
-            ChartSettings.chartSettings
+            window.TradingApp.ChartSettings.chartSettings
         );
-        var volumeSeries = widget.chart.addHistogramSeries(ChartSettings.volumeSeriesSettings);
-        var candleSeries = widget.chart.addCandlestickSeries(ChartSettings.candlestickSeriesSettings);
-        var vwapSeries = widget.chart.addLineSeries(ChartSettings.vwapSettings);
+        var volumeSeries = widget.chart.addHistogramSeries(window.TradingApp.ChartSettings.volumeSeriesSettings);
+        var candleSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.candlestickSeriesSettings);
+        var vwapSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.vwapSettings);
         // comment out because open range indicators are price levels instead of series. 
         // series affects the price scale
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
