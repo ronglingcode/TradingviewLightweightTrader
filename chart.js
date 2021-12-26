@@ -1,40 +1,36 @@
 window.TradingApp.Chart = (function () {
-    const initialize = () => {
-        var chart = LightweightCharts.createChart(
-            document.getElementById("chart"),
-            window.TradingApp_Settings_Tradingview.chartSettings
+    const createChartWidget = (tabIndex, stock) => {
+        let widget = {
+            stock: stock
+        };
+        let ChartSettings = window.TradingApp.ChartSettings;
+        widget.htmlContents = {
+            chart: document.getElementById("chart" + tabIndex),
+            symbol: document.getElementById("symbol" + tabIndex)
+        };
+        widget.htmlContents.symbol.innerText = stock.symbol;
+        widget.chart = LightweightCharts.createChart(
+            widget.htmlContents.chart,
+            ChartSettings.chartSettings
         );
-        var volumeSeries = chart.addHistogramSeries({
-            color: '#E1F5FE',
-            priceFormat: {
-                type: 'volume',
-            },
-            priceScaleId: '',
-            scaleMargins: {
-                top: 0.7,
-                bottom: 0,
-            },
-        });
-        var candleSeries = chart.addCandlestickSeries(window.TradingApp_Settings_Tradingview.candlestickSeriesSettings);
-        var vwapSeries = chart.addLineSeries({
-            color: '#6a1b9a',
-            lineWidth: 1,
-            crosshairMarkerVisible: false
-        });
-
-        let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
+        var volumeSeries = widget.chart.addHistogramSeries(ChartSettings.volumeSeriesSettings);
+        var candleSeries = widget.chart.addCandlestickSeries(ChartSettings.candlestickSeriesSettings);
+        var vwapSeries = widget.chart.addLineSeries(ChartSettings.vwapSettings);
+        // comment out because open range indicators are price levels instead of series. 
+        // series affects the price scale
+        //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
         function myClickHandler(param) {
             if (!param.point) {
                 return;
             }
 
-            console.log(`Click at ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
+            console.log(`${widget.stock.symbol}: click at ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
             console.log(param)
             console.log(candleSeries.coordinateToPrice(param.point.y));
         }
 
-        chart.subscribeClick(myClickHandler);
+        widget.chart.subscribeClick(myClickHandler);
 
         function myKeyDownHandler(keyboardEvent) {
             let code = keyboardEvent.code;
@@ -42,31 +38,30 @@ window.TradingApp.Chart = (function () {
                 // shift key maps to thinkorswim shortcuts
                 if (code === "KeyC") {
                     // shift + c: cancel all
-                    console.log("cancel all");
+                    console.log("cancel all for " + widget.stock.symbol);
                 } else if (code === "KeyF") {
-                    console.log("flatten");
+                    console.log("flatten for " + widget.stock.symbol);
                 }
             } else {
                 if (code === "KeyB") {
-                    console.log("breakout buy");
+                    console.log("breakout buy for " + widget.stock.symbol);
                 } else if (code === "KeyS") {
-                    console.log("breakdown sell");
+                    console.log("breakdown sell for " + widget.stock.symbol);
                 }
             }
         }
 
-        document.getElementById("chart").addEventListener('keydown', myKeyDownHandler);
+        widget.htmlContents.chart.addEventListener('keydown', myKeyDownHandler);
 
         function myCrosshairMoveHandler(param) {
             console.log(param);
             if (!param.point) {
                 return;
             }
-
             //console.log(`Crosshair moved to ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
         }
 
-        chart.subscribeClick(myCrosshairMoveHandler);
+        widget.chart.subscribeClick(myCrosshairMoveHandler);
         let openingCandle;
         window.TradingApp.DB.initialize();
         volumeSeries.setData(window.TradingApp.DB.volumes);
@@ -106,8 +101,9 @@ window.TradingApp.Chart = (function () {
             lastCandle.low = Math.min(lastCandle.low, lastCandle.close);
             candleSeries.update(lastCandle);
         }, 200);
+        return widget;
     };
     return {
-        initialize
+        createChartWidget
     }
 })();

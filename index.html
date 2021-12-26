@@ -2,6 +2,7 @@
 
 <head>
     <title>trading view</title>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <script src="init.js"></script>
     <script src="secrets.js"></script>
@@ -16,11 +17,25 @@
     <script src="tos/tosClient.js"></script>
     <script src="DB.js"></script>
     <script src="chart.js"></script>
+    <script src="chart1.js"></script>
 </head>
 
 <body>
-    <h1>chart</h1>
-    <div id="chart" tabindex="0"></div>
+    <h1>Tradingview Lightweight Trader</h1>
+    <div id="chart" tabindex="3"></div>
+    <div id="chartContainer0" class="chartContainer">
+        <div id="topbar0">
+            <div id="symbol0"></div>
+        </div>
+        <div id="chart0" tabindex="0"></div>
+    </div>
+    <div id="chartContainer1" class="chartContainer">
+        <div id="topbar1">
+            <div id="symbol1"></div>
+        </div>
+        <div id="chart1" tabindex="1"></div>
+    </div>
+
     <script src="main.js"></script>
 </body>
 
