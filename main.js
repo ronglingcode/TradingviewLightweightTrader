@@ -6,6 +6,30 @@ for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
     mycharts.push(chart);
 }
 
+document.getElementsByTagName("body")[0].addEventListener("keydown", function(keyboardEvent) {
+    if (!window.TradingApp.State.activeSymbol) {
+        console.log("no active symbol, skip");
+        return;
+    }
+    let symbol = window.TradingApp.State.activeSymbol;
+    let code = keyboardEvent.code;
+    if (keyboardEvent.shiftKey) {
+        // shift key maps to thinkorswim shortcuts
+        if (code === "KeyC") {
+            // shift + c: cancel all
+            console.log("cancel all for " + symbol);
+        } else if (code === "KeyF") {
+            console.log("flatten for " + symbol);
+        }
+    } else {
+        if (code === "KeyB") {
+            console.log("breakout buy for " + symbol);
+        } else if (code === "KeyS") {
+            console.log("breakdown sell for " + symbol);
+        }
+    }
+});
+
 const run = async () => {
     if (!window.TradingApp.TOS.initialized) {
         console.log('TOS not initialized, exiting');

@@ -34,26 +34,6 @@ window.TradingApp.Chart = (function () {
 
         widget.chart.subscribeClick(myClickHandler);
 
-        function myKeyDownHandler(keyboardEvent) {
-            let code = keyboardEvent.code;
-            if (keyboardEvent.shiftKey) {
-                // shift key maps to thinkorswim shortcuts
-                if (code === "KeyC") {
-                    // shift + c: cancel all
-                    console.log("cancel all for " + widget.stock.symbol);
-                } else if (code === "KeyF") {
-                    console.log("flatten for " + widget.stock.symbol);
-                }
-            } else {
-                if (code === "KeyB") {
-                    console.log("breakout buy for " + widget.stock.symbol);
-                } else if (code === "KeyS") {
-                    console.log("breakdown sell for " + widget.stock.symbol);
-                }
-            }
-        }
-
-        widget.htmlContents.chart.addEventListener('keydown', myKeyDownHandler);
         widget.htmlContents.container.addEventListener('mouseover', function(mouseEvent){
             for(let i = 0;i<window.TradingApp.Watchlist.length;i++){
                 let element = document.getElementById("chartContainer"+i);
