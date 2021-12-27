@@ -34,6 +34,12 @@ window.TradingApp.DB = (function () {
             candles.push(newCandle);
             volumes.push({ time: newD, value: element.volume });
 
+            // skip previous day's data, we are missing the 10PM - midnight data anyway
+            if (d.getFullYear() < window.TradingApp.Settings.currentDay.getFullYear() ||
+                d.getMonth() < window.TradingApp.Settings.currentDay.getMonth() ||
+                d.getDate() < window.TradingApp.Settings.currentDay.getDate()) {
+                continue;
+            }
             if (d.getFullYear() == window.TradingApp.Settings.currentDay.getFullYear() &&
                 d.getMonth() == window.TradingApp.Settings.currentDay.getMonth() &&
                 d.getDate() == window.TradingApp.Settings.currentDay.getDate() &&
