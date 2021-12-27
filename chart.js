@@ -7,7 +7,8 @@ window.TradingApp.Chart = (function () {
         };
         widget.htmlContents = {
             chart: document.getElementById("chart" + tabIndex),
-            symbol: document.getElementById("symbol" + tabIndex)
+            symbol: document.getElementById("symbol" + tabIndex),
+            container: document.getElementById("chartContainer" + tabIndex)
         };
         widget.htmlContents.symbol.innerText = stock.symbol;
         widget.chart = LightweightCharts.createChart(
@@ -22,16 +23,6 @@ window.TradingApp.Chart = (function () {
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
         function myClickHandler(param) {
-            for(let i = 0;i<window.TradingApp.Watchlist.length;i++){
-                let element = document.getElementById("chartContainer"+i);
-                if (i === widget.tabIndex) {
-                    element.classList.add("active");
-                    window.TradingApp.State.activeSymbol = widget.stock.symbol;
-                    window.TradingApp.State.activeTabIndex = widget.tabIndex;
-                } else {
-                    element.classList.remove("active");
-                }
-            }
             if (!param.point) {
                 return;
             }
@@ -63,7 +54,18 @@ window.TradingApp.Chart = (function () {
         }
 
         widget.htmlContents.chart.addEventListener('keydown', myKeyDownHandler);
-
+        widget.htmlContents.container.addEventListener('mouseover', function(mouseEvent){
+            for(let i = 0;i<window.TradingApp.Watchlist.length;i++){
+                let element = document.getElementById("chartContainer"+i);
+                if (i === widget.tabIndex) {
+                    element.classList.add("active");
+                    window.TradingApp.State.activeSymbol = widget.stock.symbol;
+                    window.TradingApp.State.activeTabIndex = widget.tabIndex;
+                } else {
+                    element.classList.remove("active");
+                }
+            }
+        });
         function myCrosshairMoveHandler(param) {
             console.log(param);
             if (!param.point) {
