@@ -6,7 +6,7 @@ for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
     mycharts.push(chart);
 }
 
-document.getElementsByTagName("body")[0].addEventListener("keydown", function(keyboardEvent) {
+document.getElementsByTagName("body")[0].addEventListener("keydown", function (keyboardEvent) {
     if (!window.TradingApp.State.activeSymbol) {
         console.log("no active symbol, skip");
         return;
@@ -39,7 +39,6 @@ const run = async () => {
     let socketUrl = "wss://" + window.TradingApp.TOS.userPrincipal.streamerInfo["streamerSocketUrl"] + "/ws";
     let websocket = new WebSocket(socketUrl);
     websocket.onmessage = function (messageEvent) {
-        console.log(messageEvent);
         let messageData = JSON.parse(messageEvent.data);
         // messageData can have either notify or response
         if (messageData.notify) {
@@ -51,11 +50,21 @@ const run = async () => {
                     // send more streaming requests
                     let mainRequest = window.TradingApp.Streaming.createMainRequest();
                     websocket.send(JSON.stringify(mainRequest));
+                } else {
+                    console.log(messageEvent);
                 }
-                else if (service in ["TIMESALE_EQUITY", "TIMESALE_FUTURES"]) {
-                    console.log(resp);
+            });
+        } else if (messageData.data) {
+            messageData.data.forEach(element => {
+                let service = element.service;
+                testData = service;
+                if (["TIMESALE_EQUITY", "TIMESALE_FUTURES"].includes(service)) {
+                    let contents = element.content;
+                    contents.forEach(content => {
+                        let timeSale = window.TradingApp.Streaming.createTimeSale(content);
+                        window.TradingApp.DB.updateFromTimeSale(timeSale);
+                    });
                 }
-                //console.log(resp);
             });
         }
     };
@@ -66,9 +75,8 @@ const run = async () => {
     }
 };
 
-/*
+
 setTimeout(() => {
     run();
 }, 3000);
 
-*/

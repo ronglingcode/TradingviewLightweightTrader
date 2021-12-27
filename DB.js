@@ -94,8 +94,56 @@ window.TradingApp.DB = (function () {
         };
     };
 
+    const updateFromTimeSale = (timesale) => {
+        console.log(timesale);
+        let symbol = timesale.symbol;
+        if (!(symbol in dataBySymbol)) {
+            console.log(`${symbol} not found in dataBySymbol`);
+            return;
+        }
+        let oneMinuteBucket = timesale.tradeDatetime;
+        oneMinuteBucket.setSeconds(0, 0);
+
+        dataBySymbol[symbol].totalVolume += timesale.lastSize;
+        dataBySymbol[symbol].totalTradingAmount += (timesale.lastPrice * timesale.lastSize);
+        let newVwapValue = dataBySymbol[symbol].totalTradingAmount / dataBySymbol[symbol].totalVolume;
+        if (oneMinuteBucket == lastCandle.time) {
+            // update current candle
+            let lastCandle = dataBySymbol[symbol].candles[dataBySymbol[symbol].candles.length - 1];
+            let lastVolume = dataBySymbol[symbol].volume[dataBySymbol[symbol].volume.length - 1];
+            lastVolume.value += timesale.lastSize;
+            if (timesale.lastPrice > lastCandle.high) {
+                lastCandle.high = timesale.lastPrice;
+            } else if (timesale.lastPrice < lastCandle.low) {
+                lastCandle.low = timesale.lastPrice;
+            }
+            lastCandle.close = timesale.lastPrice;
+            lastCandle.volume += lastCandle.lastSize;
+            let lastVwap = dataBySymbol[symbol].vwap[dataBySymbol[symbol].vwap.length - 1];
+            lastVwap.value = newVwapValue;
+        } else {
+            // create a new candle
+            dataBySymbol[symbol].candles.push({
+                open: timesale.lastPrice,
+                high: timesale.lastPrice,
+                low: timesale.lastPrice,
+                close: timesale.lastPrice,
+                time: oneMinuteBucket
+            });
+            dataBySymbol[symbol].volume.push({
+                time: oneMinuteBucket,
+                value: timesale.lastSize
+            });
+            dataBySymbol[symbol].vwap.push({
+                time: oneMinuteBucket,
+                value: newVwapValue
+            });
+        }
+    };
+
     return {
         initialize,
+        updateFromTimeSale,
         dataBySymbol
     };
 })();
