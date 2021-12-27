@@ -12,6 +12,9 @@ body {
     border-color: #0091ea;
 }
 
+.topbar {
+    padding: 5px;
+}
 .active .topbar {
     background-color: #81d4fa;
 }
