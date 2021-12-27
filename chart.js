@@ -41,6 +41,7 @@ window.TradingApp.Chart = (function () {
                     element.classList.add("active");
                     window.TradingApp.State.activeSymbol = widget.stock.symbol;
                     window.TradingApp.State.activeTabIndex = widget.tabIndex;
+                    widget.htmlContents.container.focus();
                 } else {
                     element.classList.remove("active");
                 }
