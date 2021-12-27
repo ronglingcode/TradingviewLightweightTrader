@@ -59,13 +59,14 @@ window.TradingApp.Chart = (function () {
         }
 
         widget.chart.subscribeClick(myCrosshairMoveHandler);
+        /*
         let openingCandle;
         window.TradingApp.DB.initialize(stock.symbol);
         volumeSeries.setData(window.TradingApp.DB.dataBySymbol[symbol].volumes);
 
         let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
         let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
-        /*
+
         openRangeSeriesList[0].setData(window.TradingApp.DB.openLow3R);
         openRangeSeriesList[1].setData(window.TradingApp.DB.openLow2R);
         openRangeSeriesList[2].setData(window.TradingApp.DB.openLow1R);
@@ -75,7 +76,7 @@ window.TradingApp.Chart = (function () {
         openRangeSeriesList[6].setData(window.TradingApp.DB.openHigh1R);
         openRangeSeriesList[7].setData(window.TradingApp.DB.openHigh2R);
         openRangeSeriesList[8].setData(window.TradingApp.DB.openHigh3R);
-        */
+        
         vwapSeries.setData(vwap);
         for (let i = 0; i < candles.length; i++) {
             let d = new Date(candles[i].time * 1000);
@@ -89,7 +90,7 @@ window.TradingApp.Chart = (function () {
         window.TradingApp.Indicators.openRangeBreakoutPriceLines(openingCandle).forEach(priceLine => {
             candleSeries.createPriceLine(priceLine);
         });
-
+        */
 
         return widget;
     };

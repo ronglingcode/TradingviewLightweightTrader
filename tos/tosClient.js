@@ -4,7 +4,6 @@ window.TradingApp.TOS = (function () {
     const initialize = async () => {
         await createAccessToken();
         await getUserPrincipal();
-        console.log('initialized');
         window.TradingApp.TOS.initialized = true;
     };
     /* #region Utils */
@@ -63,20 +62,18 @@ window.TradingApp.TOS = (function () {
     /* #endregion */
 
     /* #region Price history, Quote */
-    const getPriceHistory = (symbol) => {
+    const getPriceHistory = async (symbol) => {
         let date = new Date();
-        let end = date.getTime();
+        date.setDate(date.getDate() + 1);
+        let end = window.TradingApp.DB.jsDateToUTC(date) * 1000;
         // TODO: account for holidays
         date.setDate(date.getDate() - 4);
-        let start = date.getTime();
+        let start = window.TradingApp.DB.jsDateToUTC(date) * 1000;
         let clientId = window.TradingApp.Secrets.clientId
         let url = `https://api.tdameritrade.com/v1/marketdata/${symbol}/pricehistory?apikey=${clientId}&frequencyType=minute&frequency=1&startDate=${start}&endDate=${end}`;
+        //url = "https://api.tdameritrade.com/v1/marketdata/TSLA/pricehistory?apikey=GPH5HXCYICGCYMQWFGNZAGK8EQJIUX5N&frequencyType=minute&frequency=1&startDate=1640615400000&endDate=1640626681446";
 
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", url, false); // false for synchronous request
-        xmlHttp.send(null);
-        let json = JSON.parse(xmlHttp.responseText);
-        return json;
+        return asyncGet(url);
     };
 
     const getSamplePriceHistory = () => {
@@ -96,6 +93,23 @@ window.TradingApp.TOS = (function () {
         });
         return candles;
     };
+
+    const testPriceHistory = () => {
+        let date = new Date();
+        date.setDate(date.getDate() + 1);
+        let end = window.TradingApp.DB.jsDateToUTC(date) * 1000;
+        // TODO: account for holidays
+        date.setDate(date.getDate() - 4);
+        let start = window.TradingApp.DB.jsDateToUTC(date) * 1000;// date.getTime();
+        let clientId = window.TradingApp.Secrets.clientId
+        let url = `https://api.tdameritrade.com/v1/marketdata/TSLA/pricehistory?apikey=${clientId}&frequencyType=minute&frequency=1&startDate=${start}&endDate=${end}`;
+
+        asyncGet(url).then(response => response.json()).then(json => {
+            let lastCandle = json.candles[json.candles.length - 1];
+            let testTime = new Date(lastCandle.datetime);
+            console.log(testTime);
+        });
+    }
     /* #endregion */
 
     /* #region Order */
@@ -125,5 +139,6 @@ window.TradingApp.TOS = (function () {
         initialized,
         userPrincipal,
         placeOrderBase,
+        testPriceHistory
     }
 })();
