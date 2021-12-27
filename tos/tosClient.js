@@ -64,15 +64,19 @@ window.TradingApp.TOS = (function () {
 
     /* #region Price history, Quote */
     const getPriceHistory = (symbol) => {
-        console.log('get price history');
-        let url = "https://api.tdameritrade.com/v1/marketdata/SPY/pricehistory?apikey={client_id}&frequencyType=minute&frequency=1&startDate=1640010600000&endDate=1640297198351";
+        let date = new Date();
+        let end = date.getTime();
+        // TODO: account for holidays
+        date.setDate(date.getDate() - 4);
+        let start = date.getTime();
+        let clientId = window.TradingApp.Secrets.clientId
+        let url = `https://api.tdameritrade.com/v1/marketdata/${symbol}/pricehistory?apikey=${clientId}&frequencyType=minute&frequency=1&startDate=${start}&endDate=${end}`;
 
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", url, false); // false for synchronous request
         xmlHttp.send(null);
-        return xmlHttp.responseText;
-
-
+        let json = JSON.parse(xmlHttp.responseText);
+        return json;
     };
 
     const getSamplePriceHistory = () => {

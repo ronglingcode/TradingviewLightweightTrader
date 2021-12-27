@@ -1,9 +1,10 @@
 window.TradingApp.TOS.initialize();
 
-let mycharts = [];
+window.TradingApp.Main = { widgets: {} };
 for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+    let symbol = window.TradingApp.Watchlist[i].symbol;
     let chart = window.TradingApp.Chart.createChartWidget(i, window.TradingApp.Watchlist[i]);
-    mycharts.push(chart);
+    window.TradingApp.Main.widgets[symbol] = chart;
 }
 
 document.getElementsByTagName("body")[0].addEventListener("keydown", function (keyboardEvent) {

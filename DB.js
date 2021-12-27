@@ -17,7 +17,8 @@ window.TradingApp.DB = (function () {
         let openLow3R = [];
         let volumes = [];
 
-        data = window.sample_price_history.candles;
+        let priceHistory = window.TradingApp.TOS.getPriceHistory(symbol);
+        data = priceHistory.candles;
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
             const d = new Date(element.datetime);
@@ -95,22 +96,24 @@ window.TradingApp.DB = (function () {
     };
 
     const updateFromTimeSale = (timesale) => {
-        console.log(timesale);
+        let globalDatabySymbol = window.TradingApp.DB.dataBySymbol;
         let symbol = timesale.symbol;
-        if (!(symbol in dataBySymbol)) {
+        if (!(symbol in globalDatabySymbol)) {
             console.log(`${symbol} not found in dataBySymbol`);
             return;
         }
         let oneMinuteBucket = timesale.tradeDatetime;
         oneMinuteBucket.setSeconds(0, 0);
-
-        dataBySymbol[symbol].totalVolume += timesale.lastSize;
-        dataBySymbol[symbol].totalTradingAmount += (timesale.lastPrice * timesale.lastSize);
-        let newVwapValue = dataBySymbol[symbol].totalTradingAmount / dataBySymbol[symbol].totalVolume;
-        if (oneMinuteBucket == lastCandle.time) {
+        let newTime = oneMinuteBucket.getTime() / 1000;
+        let globalData = window.TradingApp.DB.dataBySymbol[symbol];
+        globalData.totalVolume += timesale.lastSize;
+        globalData.totalTradingAmount += (timesale.lastPrice * timesale.lastSize);
+        let newVwapValue = globalData.totalTradingAmount / globalData.totalVolume;
+        let lastCandle = globalData.candles[globalData.candles.length - 1];
+        let lastVolume = globalData.volumes[globalData.volumes.length - 1];
+        let lastVwap = globalData.vwap[globalData.vwap.length - 1];
+        if (newTime == lastCandle.time) {
             // update current candle
-            let lastCandle = dataBySymbol[symbol].candles[dataBySymbol[symbol].candles.length - 1];
-            let lastVolume = dataBySymbol[symbol].volume[dataBySymbol[symbol].volume.length - 1];
             lastVolume.value += timesale.lastSize;
             if (timesale.lastPrice > lastCandle.high) {
                 lastCandle.high = timesale.lastPrice;
@@ -119,26 +122,31 @@ window.TradingApp.DB = (function () {
             }
             lastCandle.close = timesale.lastPrice;
             lastCandle.volume += lastCandle.lastSize;
-            let lastVwap = dataBySymbol[symbol].vwap[dataBySymbol[symbol].vwap.length - 1];
             lastVwap.value = newVwapValue;
         } else {
             // create a new candle
-            dataBySymbol[symbol].candles.push({
+            lastCandle = {
+                time: newTime,
                 open: timesale.lastPrice,
                 high: timesale.lastPrice,
                 low: timesale.lastPrice,
-                close: timesale.lastPrice,
-                time: oneMinuteBucket
-            });
-            dataBySymbol[symbol].volume.push({
-                time: oneMinuteBucket,
+                close: timesale.lastPrice
+            };
+            globalData.candles.push(lastCandle);
+            lastVolume = {
+                time: newTime,
                 value: timesale.lastSize
-            });
-            dataBySymbol[symbol].vwap.push({
-                time: oneMinuteBucket,
+            };
+            globalData.volumes.push(lastVolume);
+            lastVwap = {
+                time: newTime,
                 value: newVwapValue
-            });
+            };
+            globalData.vwap.push(lastVwap);
         }
+        window.TradingApp.Main.widgets[symbol].candleSeries.update(lastCandle);
+        window.TradingApp.Main.widgets[symbol].volumeSeries.update(lastVolume);
+        window.TradingApp.Main.widgets[symbol].vwapSeries.update(lastVwap);
     };
 
     return {
