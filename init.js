@@ -4,7 +4,7 @@ window.TradingApp = {
     },
     'Algo': {},
     'Watchlist': [
-        /*
+
         {
             symbol: 'SPY'
         },
@@ -13,7 +13,7 @@ window.TradingApp = {
         },
         {
             symbol: 'QQQ'
-        },*/
+        },
         {
             symbol: 'TSLA'
         }

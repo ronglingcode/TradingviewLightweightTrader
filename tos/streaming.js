@@ -1,4 +1,5 @@
 window.TradingApp.Streaming = (function () {
+    let requestCounter = 0;
     function jsonToQueryString(json) {
         return Object.keys(json).map(function (key) {
             return encodeURIComponent(key) + '=' +
@@ -36,7 +37,7 @@ window.TradingApp.Streaming = (function () {
 
     const createRequestBase = (requestId, userPrincipal, service, command) => {
         return {
-            requestid: requestId,
+            requestid: window.TradingApp.Streaming.requestCounter++,
             account: userPrincipal.accounts[0].accountId,
             source: userPrincipal.streamerInfo.appId,
             service: service,
@@ -46,11 +47,9 @@ window.TradingApp.Streaming = (function () {
 
     const createMainRequest = () => {
         let userPrincipal = window.TradingApp.TOS.userPrincipal;
-        let requestId = 1;
         let requests = [];
-        requests.push(createQualityOfServiceRequest(requestId++, userPrincipal));
-        requests.push(createAccountActivityRequest(requestId++, userPrincipal));
-        requests.push(createStockTimeSaleRequest(requestId++, userPrincipal));
+        requests.push(createQualityOfServiceRequest(window.TradingApp.Streaming.requestCounter++, userPrincipal));
+        requests.push(createAccountActivityRequest(window.TradingApp.Streaming.requestCounter++, userPrincipal));
         let requestContainer = { requests: requests };
         return requestContainer;
     };
@@ -79,8 +78,8 @@ window.TradingApp.Streaming = (function () {
         return request;
     }
 
-    const createStockTimeSaleRequest = (requestId, userPrincipal) => {
-        let request = createRequestBase(requestId, userPrincipal, "TIMESALE_EQUITY", "SUBS");
+    const createStockTimeSaleRequest = () => {
+        let request = createRequestBase(window.TradingApp.Streaming.requestCounter++, window.TradingApp.TOS.userPrincipal, "TIMESALE_EQUITY", "SUBS");
         let symbols = "";
         for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
             let s = window.TradingApp.Watchlist[i].symbol;
@@ -95,6 +94,15 @@ window.TradingApp.Streaming = (function () {
             "fields": "0,1,2,3,4"
         };
         return request;
+    };
+
+    const sendStockTimeSaleRequest = (symbol) => {
+        let request = createRequestBase(window.TradingApp.Streaming.requestCounter++, window.TradingApp.TOS.userPrincipal, "TIMESALE_EQUITY", "SUBS");
+        request.parameters = {
+            "keys": symbol,
+            "fields": "0,1,2,3,4"
+        };
+        window.TradingApp.Streaming.socket.send(JSON.stringify(request));
     }
 
     const createTimeSale = (c) => {
@@ -116,9 +124,13 @@ window.TradingApp.Streaming = (function () {
         record.receivedTime = new Date;
         return record;
     };
+
     return {
+        requestCounter,
         createLoginRequest,
         createMainRequest,
+        createStockTimeSaleRequest,
+        sendStockTimeSaleRequest,
         createTimeSale
     }
 })();

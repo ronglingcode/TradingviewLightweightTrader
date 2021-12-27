@@ -1,10 +1,10 @@
 window.TradingApp.DB = (function () {
     let dataBySymbol = {};
 
-    const jsDateToTradingviewTime = (d) => {
-        return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()) / 1000;
+    const jsDateToUTC = (jsDateObj) => {
+        return Date.UTC(jsDateObj.getFullYear(), jsDateObj.getMonth(), jsDateObj.getDate(), jsDateObj.getHours(), jsDateObj.getMinutes(), jsDateObj.getSeconds(), jsDateObj.getMilliseconds()) / 1000;
     };
-    const initialize = (symbol) => {
+    const initialize = (symbol, priceHistory) => {
         let candles = [];
         let totalVolume = 0;
         let totalTradingAmount = 0;
@@ -21,12 +21,15 @@ window.TradingApp.DB = (function () {
         let openLow3R = [];
         let volumes = [];
 
-        let priceHistory = window.TradingApp.TOS.getPriceHistory(symbol);
         data = priceHistory.candles;
+        if (!data) {
+            console.log("no price history");
+            console.log(priceHistory);
+        }
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
             let d = new Date(element.datetime);
-            let newD = jsDateToTradingviewTime(d);
+            let newD = jsDateToUTC(d);
             let newCandle = {
                 time: newD,
                 open: element.open,
@@ -75,15 +78,13 @@ window.TradingApp.DB = (function () {
                 openLow3R.push({ time: newD, value: openingCandle.low3R });
             }
 
-            if (element.datetime > 1640233560000) {
-                totalVolume += element.volume;
-                totalTradingAmount += (element.volume * element.close);
+            totalVolume += element.volume;
+            totalTradingAmount += (element.volume * element.close);
 
-                vwap.push({
-                    time: newD,
-                    value: totalTradingAmount / totalVolume
-                });
-            }
+            vwap.push({
+                time: newD,
+                value: totalTradingAmount / totalVolume
+            });
         }
 
         dataBySymbol[symbol] = {
@@ -103,6 +104,16 @@ window.TradingApp.DB = (function () {
             openLow3R: openLow3R,
             volumes: volumes
         };
+
+        window.TradingApp.Main.widgets[symbol].volumeSeries.setData(volumes);
+        window.TradingApp.Main.widgets[symbol].vwapSeries.setData(vwap);
+        window.TradingApp.Main.widgets[symbol].candleSeries.setData(candles);
+
+        if (openingCandle) {
+            window.TradingApp.Indicators.openRangeBreakoutPriceLines(openingCandle).forEach(priceLine => {
+                window.TradingApp.Main.widgets[symbol].candleSeries.createPriceLine(priceLine);
+            });
+        }
     };
 
     const updateFromTimeSale = (timesale) => {
@@ -114,7 +125,7 @@ window.TradingApp.DB = (function () {
         }
         let oneMinuteBucket = new Date(timesale.tradeTime);
         oneMinuteBucket.setSeconds(0, 0);
-        let newTime = jsDateToTradingviewTime(oneMinuteBucket);
+        let newTime = jsDateToUTC(oneMinuteBucket);
         let globalData = window.TradingApp.DB.dataBySymbol[symbol];
         globalData.totalVolume += timesale.lastSize;
         globalData.totalTradingAmount += (timesale.lastPrice * timesale.lastSize);
@@ -162,6 +173,7 @@ window.TradingApp.DB = (function () {
     return {
         initialize,
         updateFromTimeSale,
-        dataBySymbol
+        dataBySymbol,
+        jsDateToUTC
     };
 })();
