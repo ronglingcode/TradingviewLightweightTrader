@@ -1,5 +1,9 @@
 window.TradingApp.DB = (function () {
     let dataBySymbol = {};
+
+    const jsDateToTradingviewTime = (d) => {
+        return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()) / 1000;
+    };
     const initialize = (symbol) => {
         let candles = [];
         let totalVolume = 0;
@@ -21,8 +25,8 @@ window.TradingApp.DB = (function () {
         data = priceHistory.candles;
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
-            const d = new Date(element.datetime);
-            const newD = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()) / 1000;
+            let d = new Date(element.datetime);
+            let newD = jsDateToTradingviewTime(d);
             let newCandle = {
                 time: newD,
                 open: element.open,
@@ -108,9 +112,9 @@ window.TradingApp.DB = (function () {
             console.log(`${symbol} not found in dataBySymbol`);
             return;
         }
-        let oneMinuteBucket = timesale.tradeDatetime;
+        let oneMinuteBucket = new Date(timesale.tradeTime);
         oneMinuteBucket.setSeconds(0, 0);
-        let newTime = oneMinuteBucket.getTime() / 1000;
+        let newTime = jsDateToTradingviewTime(oneMinuteBucket);
         let globalData = window.TradingApp.DB.dataBySymbol[symbol];
         globalData.totalVolume += timesale.lastSize;
         globalData.totalTradingAmount += (timesale.lastPrice * timesale.lastSize);

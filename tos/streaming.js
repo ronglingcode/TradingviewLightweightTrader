@@ -102,7 +102,7 @@ window.TradingApp.Streaming = (function () {
             symbol: c["key"]
         };
         if (c["1"] != null) {
-            record.tradeDatetime = new Date(c["1"]);
+            record.tradeTime = c["1"];
         }
         if (c["2"] != null)
             record.lastPrice = c["2"];
