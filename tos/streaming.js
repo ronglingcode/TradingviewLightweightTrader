@@ -50,7 +50,7 @@ window.TradingApp.Streaming = (function () {
         let requests = [];
         requests.push(createQualityOfServiceRequest(requestId++, userPrincipal));
         requests.push(createAccountActivityRequest(requestId++, userPrincipal));
-        requests.push(createESTimeSaleRequest(requestId++, userPrincipal));
+        requests.push(createStockTimeSaleRequest(requestId++, userPrincipal));
         let requestContainer = { requests: requests };
         return requestContainer;
     };
@@ -74,6 +74,24 @@ window.TradingApp.Streaming = (function () {
         let request = createRequestBase(requestId, userPrincipal, "TIMESALE_FUTURES", "SUBS");
         request.parameters = {
             "keys": "/ES",
+            "fields": "0,1,2,3,4"
+        };
+        return request;
+    }
+
+    const createStockTimeSaleRequest = (requestId, userPrincipal) => {
+        let request = createRequestBase(requestId, userPrincipal, "TIMESALE_EQUITY", "SUBS");
+        let symbols = "";
+        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+            let s = window.TradingApp.Watchlist[i].symbol;
+            if (i == 0) {
+                symbols += s;
+            } else {
+                symbols += ("," + s);
+            }
+        }
+        request.parameters = {
+            "keys": symbols,
             "fields": "0,1,2,3,4"
         };
         return request;

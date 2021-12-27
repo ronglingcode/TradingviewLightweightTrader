@@ -18,6 +18,9 @@ window.TradingApp.Chart = (function () {
         var volumeSeries = widget.chart.addHistogramSeries(window.TradingApp.ChartSettings.volumeSeriesSettings);
         var candleSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.candlestickSeriesSettings);
         var vwapSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.vwapSettings);
+        widget.volumeSeries = volumeSeries;
+        widget.candleSeries = candleSeries;
+        widget.vwapSeries = vwapSeries;
         // comment out because open range indicators are price levels instead of series.
         // series affects the price scale
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
@@ -34,9 +37,9 @@ window.TradingApp.Chart = (function () {
 
         widget.chart.subscribeClick(myClickHandler);
 
-        widget.htmlContents.container.addEventListener('mouseover', function(mouseEvent){
-            for(let i = 0;i<window.TradingApp.Watchlist.length;i++){
-                let element = document.getElementById("chartContainer"+i);
+        widget.htmlContents.container.addEventListener('mouseover', function (mouseEvent) {
+            for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+                let element = document.getElementById("chartContainer" + i);
                 if (i === widget.tabIndex) {
                     element.classList.add("active");
                     window.TradingApp.State.activeSymbol = widget.stock.symbol;
@@ -86,15 +89,8 @@ window.TradingApp.Chart = (function () {
         window.TradingApp.Indicators.openRangeBreakoutPriceLines(openingCandle).forEach(priceLine => {
             candleSeries.createPriceLine(priceLine);
         });
-        let lastCandle = candles[candles.length - 1];
-        let lastCandleClose = lastCandle.close;
 
-        setInterval(function () {
-            lastCandle.close = lastCandleClose + Math.random() - 0.5;
-            lastCandle.high = Math.max(lastCandle.high, lastCandle.close);
-            lastCandle.low = Math.min(lastCandle.low, lastCandle.close);
-            candleSeries.update(lastCandle);
-        }, 200);
+
         return widget;
     };
     return {
