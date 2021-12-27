@@ -79,8 +79,28 @@ window.TradingApp.Streaming = (function () {
         return request;
     }
 
+    const createTimeSale = (c) => {
+        let record = {
+            symbol: c["key"]
+        };
+        if (c["1"] != null) {
+            record.tradeDatetime = new Date(c["1"]);
+        }
+        if (c["2"] != null)
+            record.lastPrice = c["2"];
+        if (c["3"] != null)
+            record.lastSize = c["3"];
+        if (c["4"] != null)
+            record.lastSequence = c["4"];
+        if (c["seq"] != null) {
+            record.seq = c["seq"];
+        }
+        record.receivedTime = new Date;
+        return record;
+    };
     return {
         createLoginRequest,
-        createMainRequest
+        createMainRequest,
+        createTimeSale
     }
 })();
