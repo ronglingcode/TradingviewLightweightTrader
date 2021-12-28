@@ -1,4 +1,9 @@
 window.TradingApp.Chart = (function () {
+    const updateUI = (symbol, className, text) => {
+        let htmlContainter = window.TradingApp.Main.widgets[symbol].htmlContents.container;
+        let target = htmlContainter.getElementsByClassName(className)[0];
+        target.innerText = text;
+    };
     const createChartWidget = (tabIndex, stock) => {
         let symbol = stock.symbol;
         let widget = {
@@ -97,6 +102,7 @@ window.TradingApp.Chart = (function () {
         return widget;
     };
     return {
-        createChartWidget
+        createChartWidget,
+        updateUI
     }
 })();
