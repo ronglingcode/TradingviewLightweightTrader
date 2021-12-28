@@ -15,18 +15,7 @@ window.TradingApp.Chart = (function () {
             widget.htmlContents.chart,
             window.TradingApp.ChartSettings.chartSettings
         );
-        widget.orbSeries = widget.chart.addCandlestickSeries({
-            upColor: '#EFEBE9',
-            downColor: '#EFEBE9',// 'rgb(255,82,82)',
-            //wickUpColor: '#08b265',// '#26a69a',// 'rgb(38,166,154)',
-            //wickDownColor: '#fb3434',// '#ac2e2e',//'rgb(255,82,82)',
-            borderVisible: false,
-            scaleMargins: {
-                top: 0,
-                bottom: 0.3,
-            },
-            autoscaleInfoProvider: () => null,
-        });
+        widget.orbSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.cloudAreaCandleSettings);
         var volumeSeries = widget.chart.addHistogramSeries(window.TradingApp.ChartSettings.volumeSeriesSettings);
         var candleSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.candlestickSeriesSettings);
         var vwapSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.vwapSettings);

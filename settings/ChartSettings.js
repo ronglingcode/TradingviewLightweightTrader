@@ -65,10 +65,21 @@ window.TradingApp.ChartSettings = (function () {
         autoscaleInfoProvider: () => null,
     };
 
+    const cloudAreaCandleSettings = {
+        upColor: '#EFEBE9',
+        downColor: '#EFEBE9',
+        wickUpColor: '#EFEBE9',
+        wickDownColor: '#EFEBE9',
+        borderVisible: false,
+        lastValueVisible: false,
+        autoscaleInfoProvider: () => null,
+    }
+
     return {
         chartSettings,
         candlestickSeriesSettings,
         volumeSeriesSettings,
-        vwapSettings
+        vwapSettings,
+        cloudAreaCandleSettings
     };
 })();
