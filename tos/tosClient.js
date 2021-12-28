@@ -76,6 +76,16 @@ window.TradingApp.TOS = (function () {
         return asyncGet(url);
     };
 
+    const getQuote = async (symbol) => {
+        // took 0.1-0.2 seconds
+        let url = `https://api.tdameritrade.com/v1/marketdata/${symbol}/quotes`;
+        return asyncGet(url).then(response => response.json())  // convert to json
+            .then(json => {
+                return quote = json[symbol];
+            })
+            .catch(err => console.log('Request Failed', err)); //;
+    };
+
     const getSamplePriceHistory = () => {
         data = window.sample_price_history.candles;
         let candles = [];
@@ -132,6 +142,7 @@ window.TradingApp.TOS = (function () {
     return {
         createAccessToken,
         getPriceHistory,
+        getQuote,
         getSamplePriceHistory,
         testOrder,
         getUserPrincipal,
