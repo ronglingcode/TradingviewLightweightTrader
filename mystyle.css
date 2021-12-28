@@ -21,3 +21,6 @@ body {
 .currentPrice {
     margin: 0 10px;
 }
+.topBarRight {
+    float: right;
+}
