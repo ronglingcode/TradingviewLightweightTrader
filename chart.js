@@ -8,7 +8,8 @@ window.TradingApp.Chart = (function () {
         let symbol = stock.symbol;
         let widget = {
             stock: stock,
-            tabIndex: tabIndex
+            tabIndex: tabIndex,
+            crosshairPrice: 0
         };
         widget.htmlContents = {
             chart: document.getElementById("chart" + tabIndex),
@@ -58,14 +59,14 @@ window.TradingApp.Chart = (function () {
             }
         });
         function myCrosshairMoveHandler(param) {
-            console.log(param);
             if (!param.point) {
                 return;
             }
-            //console.log(`Crosshair moved to ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
+            let price = candleSeries.coordinateToPrice(param.point.y);
+            widget.crosshairPrice = price;
         }
 
-        widget.chart.subscribeClick(myCrosshairMoveHandler);
+        widget.chart.subscribeCrosshairMove(myCrosshairMoveHandler);
         /*
         let openingCandle;
         window.TradingApp.DB.initialize(stock.symbol);
