@@ -30,7 +30,7 @@ window.TradingApp.Indicators = (function () {
             ...commonPriceLineSettings
         });
         const dashLineSettings = {
-            lineWidth: 1,
+            lineWidth: 2,
             lineStyle: LightweightCharts.LineStyle.LargeDashed,
             axisLabelVisible: false
         };
