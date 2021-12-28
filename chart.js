@@ -15,12 +15,25 @@ window.TradingApp.Chart = (function () {
             widget.htmlContents.chart,
             window.TradingApp.ChartSettings.chartSettings
         );
+        widget.orbSeries = widget.chart.addCandlestickSeries({
+            upColor: '#EFEBE9',
+            downColor: '#EFEBE9',// 'rgb(255,82,82)',
+            //wickUpColor: '#08b265',// '#26a69a',// 'rgb(38,166,154)',
+            //wickDownColor: '#fb3434',// '#ac2e2e',//'rgb(255,82,82)',
+            borderVisible: false,
+            scaleMargins: {
+                top: 0,
+                bottom: 0.3,
+            },
+            autoscaleInfoProvider: () => null,
+        });
         var volumeSeries = widget.chart.addHistogramSeries(window.TradingApp.ChartSettings.volumeSeriesSettings);
         var candleSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.candlestickSeriesSettings);
         var vwapSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.vwapSettings);
         widget.volumeSeries = volumeSeries;
         widget.candleSeries = candleSeries;
         widget.vwapSeries = vwapSeries;
+
         // comment out because open range indicators are price levels instead of series.
         // series affects the price scale
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
