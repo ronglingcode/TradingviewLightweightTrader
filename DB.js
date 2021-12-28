@@ -49,8 +49,10 @@ window.TradingApp.DB = (function () {
         let openLow3R = [];
         let volumes = [];
         let orbArea = [];
-        let highOfDay;
-        let lowOfDay;
+        let highOfDay = 0;
+        let lowOfDay = 99999999;
+        let premktHigh = 0;
+        let premktLow = 99999999;
 
         data = priceHistory.candles;
         if (!data) {
@@ -78,6 +80,15 @@ window.TradingApp.DB = (function () {
                 d.getMonth() < window.TradingApp.Settings.currentDay.getMonth() ||
                 d.getDate() < window.TradingApp.Settings.currentDay.getDate()) {
                 continue;
+            }
+            if (d < window.TradingApp.Settings.marketOpenTime) {
+                // update pre-market indicators
+                premktLow = Math.min(premktLow, element.low);
+                premktHigh = Math.max(premktHigh, element.high);
+            } else {
+                // update in-market indicators
+                lowOfDay = Math.min(lowOfDay, element.low);
+                highOfDay = Math.max(highOfDay, element.high);
             }
             if (isMarketOpenTime(d) && i != data.length - 1) {
                 // only set opening candle when it's the not last candle
@@ -126,7 +137,11 @@ window.TradingApp.DB = (function () {
             openLow2R: openLow2R,
             openLow3R: openLow3R,
             volumes: volumes,
-            orbArea: orbArea
+            orbArea: orbArea,
+            highOfDay: highOfDay,
+            lowOfDay: lowOfDay,
+            premktHigh: premktHigh,
+            premktLow: premktLow
         };
 
         window.TradingApp.Main.widgets[symbol].volumeSeries.setData(volumes);
@@ -156,6 +171,23 @@ window.TradingApp.DB = (function () {
         let lastCandle = globalData.candles[globalData.candles.length - 1];
         let lastVolume = globalData.volumes[globalData.volumes.length - 1];
         let lastVwap = globalData.vwap[globalData.vwap.length - 1];
+        if (oneMinuteBucket < window.TradingApp.Settings.marketOpenTime) {
+            // update pre-market indicators
+            if (timesale.lastPrice > globalData.premktHigh) {
+                globalData.premktHigh = timesale.lastPrice;
+            }
+            if (timesale.lastPrice < globalData.premktLow) {
+                globalData.premktLow = timesale.lastPrice;
+            }
+        } else {
+            // update in-market indicators
+            if (timesale.lastPrice > globalData.highOfDay) {
+                globalData.highOfDay = timesale.lastPrice;
+            }
+            if (timesale.lastPrice < globalData.lowOfDay) {
+                globalData.lowOfDay = timesale.lastPrice;
+            }
+        }
         if (newTime == lastCandle.time) {
             // update current candle
             lastVolume.value += timesale.lastSize;

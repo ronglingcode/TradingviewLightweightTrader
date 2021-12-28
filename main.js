@@ -84,10 +84,16 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", function (k
             console.log("flatten for " + symbol);
         }
     } else {
+        let data = window.TradingApp.DB.dataBySymbol[symbol];
+        let highOfDay = parseInt(data.highOfDay * 100 + 1) / 100;
+        let lowOfDay = parseInt(data.lowOfDay * 100 - 1) / 100;
         if (code === "KeyB") {
             console.log("breakout buy for " + symbol);
+            window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, highOfDay, lowOfDay, "A", 1);
         } else if (code === "KeyS") {
             console.log("breakdown sell for " + symbol);
+            console.log(`${symbol} ${data.lowOfDay} ${data.highOfDay}`);
+            window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, lowOfDay, highOfDay, "A", 1);
         }
     }
 });
