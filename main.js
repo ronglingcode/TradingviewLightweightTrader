@@ -73,6 +73,7 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", function (k
         console.log("no active symbol, skip");
         return;
     }
+    //console.log(keyboardEvent);
     let symbol = window.TradingApp.State.activeSymbol;
     let code = keyboardEvent.code;
     if (keyboardEvent.shiftKey) {
@@ -85,10 +86,16 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", function (k
         }
     } else {
         let data = window.TradingApp.DB.dataBySymbol[symbol];
-        if (code === "KeyT" || code === "KeyE") {
+        if (code === "KeyT" || code === "KeyE" || code === 'Space') {
             let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
-            console.log(crosshairPrice);
-        } else if (code === "KeyB" || code === "KeyS") {
+            if (code === "KeyT")
+                window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
+            else if (code === "KeyE")
+                window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
+            else
+                window.TradingApp.Chart.clearPriceLines(symbol);
+        }
+        else if (code === "KeyB" || code === "KeyS") {
             let highOfDay = parseInt(data.highOfDay * 100 + 1) / 100;
             let lowOfDay = parseInt(data.lowOfDay * 100 - 1) / 100;
             if (code === "KeyB") {
@@ -96,7 +103,6 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", function (k
                 window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, highOfDay, lowOfDay, "A", 1);
             } else if (code === "KeyS") {
                 console.log("breakdown sell for " + symbol);
-                console.log(`${symbol} ${data.lowOfDay} ${data.highOfDay}`);
                 window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, lowOfDay, highOfDay, "A", 1);
             }
         }

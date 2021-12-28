@@ -4,6 +4,39 @@ window.TradingApp.Chart = (function () {
         let target = htmlContainter.getElementsByClassName(className)[0];
         target.innerText = text;
     };
+    const drawStopLoss = (symbol, price) => {
+        let widget = TradingApp.Main.widgets[symbol];
+        if (widget.stopLossPriceLine) {
+            widget.candleSeries.removePriceLine(widget.stopLossPriceLine);
+        }
+        widget.stopLossPriceLine = createPriceLine(widget.candleSeries, price, "S/L")
+    };
+    const drawEntry = (symbol, price) => {
+        let widget = TradingApp.Main.widgets[symbol];
+        if (widget.entryPriceLine) {
+            widget.candleSeries.removePriceLine(widget.entryPriceLine);
+        }
+        widget.entryPriceLine = createPriceLine(widget.candleSeries, price, "Entry")
+    };
+    const clearPriceLines = (symbol) => {
+        let widget = TradingApp.Main.widgets[symbol];
+        if (widget.entryPriceLine) {
+            widget.candleSeries.removePriceLine(widget.entryPriceLine);
+            widget.entryPriceLine = null;
+        }
+        if (widget.stopLossPriceLine) {
+            widget.candleSeries.removePriceLine(widget.stopLossPriceLine);
+            widget.stopLossPriceLine = null;
+        }
+    };
+    const createPriceLine = (series, price, title) => {
+        return series.createPriceLine({
+            price: price,
+            color: 'blue',
+            title: title,
+            lineStyle: LightweightCharts.LineStyle.Solid,
+        });
+    };
     const createChartWidget = (tabIndex, stock) => {
         let symbol = stock.symbol;
         let widget = {
@@ -104,6 +137,9 @@ window.TradingApp.Chart = (function () {
     };
     return {
         createChartWidget,
-        updateUI
+        updateUI,
+        drawStopLoss,
+        drawEntry,
+        clearPriceLines
     }
 })();
