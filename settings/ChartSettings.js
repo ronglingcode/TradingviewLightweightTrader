@@ -8,10 +8,10 @@ window.TradingApp.ChartSettings = (function () {
         },
         grid: {
             horzLines: {
-                color: '#F0F3FA',
+                //color: '#F0F3FA',
             },
             vertLines: {
-                color: '#F0F3FA',
+                //color: '#F0F3FA',
             },
         },
         /* comment out because LightweightCharts is not loaded
