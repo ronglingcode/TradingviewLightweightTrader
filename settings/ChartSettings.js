@@ -61,7 +61,8 @@ window.TradingApp.ChartSettings = (function () {
     const vwapSettings = {
         color: '#6a1b9a',
         lineWidth: 1,
-        crosshairMarkerVisible: false
+        crosshairMarkerVisible: false,
+        autoscaleInfoProvider: () => null,
     };
 
     return {
