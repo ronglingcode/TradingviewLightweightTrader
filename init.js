@@ -1,18 +1,11 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date("2021/12/27")
+        'currentDay': new Date()
     },
     'Algo': {},
     'Watchlist': [
-
         {
-            symbol: 'SPY'
-        },
-        {
-            symbol: 'MSFT'
-        },
-        {
-            symbol: 'QQQ'
+            symbol: 'APPS'
         },
         {
             symbol: 'TSLA'
