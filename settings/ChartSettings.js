@@ -18,21 +18,29 @@ window.TradingApp.ChartSettings = (function () {
         crosshair: {
             mode: LightweightCharts.CrosshairMode.Normal,
         },*/
-        crosshair: { mode: 0 },
+        crosshair: {
+            mode: 0,
+            vertLine: {
+                style: LightweightCharts.LineStyle.Solid
+            },
+            horzLine: {
+                style: LightweightCharts.LineStyle.Solid
+            }
+        },
         rightPriceScale: {
-            borderColor: 'rgba(197, 203, 206, 0.8)',
+            borderColor: 'rgba(197, 203, 206, 0.8)'
         },
         timeScale: {
             borderColor: 'rgba(197, 203, 206, 0.8)',
-            timeVisible: true
+            timeVisible: true,
         },
     };
 
     const candlestickSeriesSettings = {
-        upColor: '#08b265',
-        downColor: '#fb3434',// 'rgb(255,82,82)',
-        wickUpColor: '#08b265',// '#26a69a',// 'rgb(38,166,154)',
-        wickDownColor: '#fb3434',// '#ac2e2e',//'rgb(255,82,82)',
+        //upColor: '#08b265',
+        //downColor: '#fb3434',// 'rgb(255,82,82)',
+        //wickUpColor: '#08b265',// '#26a69a',// 'rgb(38,166,154)',
+        //wickDownColor: '#fb3434',// '#ac2e2e',//'rgb(255,82,82)',
         borderVisible: false,
         scaleMargins: {
             top: 0,
