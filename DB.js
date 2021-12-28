@@ -161,6 +161,8 @@ window.TradingApp.DB = (function () {
             console.log(`${symbol} not found in dataBySymbol`);
             return;
         }
+        window.TradingApp.Chart.updateUI(symbol, "currentPrice", timesale.lastPrice);
+
         let oneMinuteBucket = new Date(timesale.tradeTime);
         oneMinuteBucket.setSeconds(0, 0);
         let newTime = jsDateToUTC(oneMinuteBucket);
