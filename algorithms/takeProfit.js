@@ -30,7 +30,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
                 let i = 0;
                 while (leftOver > 0) {
                     results[i].quantity++;
-                    i = (i + 1) % results.Count;
+                    i = (i + 1) % results.length;
                     leftOver--;
                 }
             }
