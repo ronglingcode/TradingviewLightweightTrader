@@ -71,9 +71,8 @@ window.TradingApp.Chart = (function () {
                 return;
             }
 
-            console.log(`${widget.stock.symbol}: click at ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
-            console.log(param)
-            console.log(candleSeries.coordinateToPrice(param.point.y));
+            //console.log(`${widget.stock.symbol}: click at ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
+            //console.log(param)
         }
 
         widget.chart.subscribeClick(myClickHandler);
