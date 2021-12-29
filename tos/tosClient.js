@@ -54,11 +54,17 @@ window.TradingApp.TOS = (function () {
         url += "?fields=streamerSubscriptionKeys,streamerConnectionInfo";
         return asyncGet(url).then(response => response.json())  // convert to json
             .then(json => window.TradingApp.TOS.userPrincipal = json)
-            .catch(err => console.log('Request Failed', err)); //;
+            .catch(err => console.log('Request Failed', err));
     }
     /* #endregion */
     /* #region Account */
-
+    const getAccount = async () => {
+        let accountId = window.TradingApp.Secrets.accountId;
+        let url = `https://api.tdameritrade.com/v1/accounts/${accountId}`;
+        return asyncGet(url).then(response => response.json())  // convert to json
+            .then(json => console.log(json))
+            .catch(err => console.log('Request Failed', err));
+    }
     /* #endregion */
 
     /* #region Price history, Quote */
@@ -129,6 +135,25 @@ window.TradingApp.TOS = (function () {
         return sendJsonPostRequestWithAccessToken(url, order);
     };
 
+    const getOrders = async () => {
+        let accountId = window.TradingApp.Secrets.accountId;
+        let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
+        return asyncGet(url).then(response => response.json())  // convert to json
+            .then(json => { return json; })
+            .catch(err => console.log('Request Failed', err)); //;
+    };
+
+    const getWorkingOrders = async (symbol) => {
+        let workingOrders = [];
+        let orders = await getOrders();
+        orders.forEach(order => {
+            if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol &&
+                (order.status === "WORKING" || order.status == "QUEUED")) {
+                workingOrders.push(order);
+            }
+        });
+    };
+
     const testOrder = () => {
         let order = window.TradingApp.OrderFactory.createTestOrder();
         placeOrderBase(order).then(response => {
@@ -150,6 +175,9 @@ window.TradingApp.TOS = (function () {
         initialized,
         userPrincipal,
         placeOrderBase,
-        testPriceHistory
+        testPriceHistory,
+        getAccount,
+        getOrders,
+        getWorkingOrders
     }
 })();

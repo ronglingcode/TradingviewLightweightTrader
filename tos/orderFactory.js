@@ -36,6 +36,18 @@ window.TradingApp.OrderFactory = (function () {
         }
     };
 
+    const getOrderSymbol = (order) => {
+        if (order.orderLegCollection && order.orderLegCollection.length > 0) {
+            let orderLeg = order.orderLegCollection[0];
+            return orderLeg.instrument.symbol;
+        }
+        else if (order.childOrderStrategies && order.childOrderStrategies.Count > 0) {
+            let childOrder = order.childOrderStrategies[0];
+            return getOrderSymbol(childOrder);
+        }
+        return "";
+    }
+
 
     /* #region Basic Orders */
     const createDayOrder = function (symbol, quantity, orderLegInstruction) {
@@ -137,6 +149,7 @@ window.TradingApp.OrderFactory = (function () {
         createMarketOrder,
         createTestOrder,
         createEntryOrdersWithFixedRisk,
+        getOrderSymbol,
         OrderType,
         OrderStrategyType,
         OrderLegInstruction
