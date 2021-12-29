@@ -29,7 +29,18 @@ window.TradingApp.TOS = (function () {
             }
         };
         return fetch(url, config);
-    }
+    };
+    const asyncDelete = (url) => {
+        const config = {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.TradingApp.Secrets.accessToken
+            }
+        };
+        return fetch(url, config);
+    };
     /* #endregion */
 
     /* #region Access */
@@ -148,9 +159,21 @@ window.TradingApp.TOS = (function () {
         let orders = await getOrders();
         orders.forEach(order => {
             if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol &&
-                (order.status === "WORKING" || order.status == "QUEUED")) {
+                ["PENDING_ACTIVATION", "WORKING", "QUEUED"].includes(order.status)) {
+                console.log(order);
                 workingOrders.push(order);
             }
+        });
+        return workingOrders;
+    };
+
+    const cancelWorkingOrders = async (symbol) => {
+        let workingOrders = await getWorkingOrders(symbol);
+        let accountId = window.TradingApp.Secrets.accountId;
+        workingOrders.forEach(order => {
+            let orderId = order.orderId;
+            let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${orderId}`;
+            asyncDelete(url);
         });
     };
 
@@ -178,6 +201,7 @@ window.TradingApp.TOS = (function () {
         testPriceHistory,
         getAccount,
         getOrders,
-        getWorkingOrders
+        getWorkingOrders,
+        cancelWorkingOrders
     }
 })();
