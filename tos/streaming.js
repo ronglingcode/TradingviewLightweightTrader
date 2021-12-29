@@ -125,12 +125,23 @@ window.TradingApp.Streaming = (function () {
         return record;
     };
 
+    const createAccountActivity = (c) => {
+        let record = {};
+        if (c["2"] != null)
+            record.messageType = c["2"];
+        if (c["3"] != null) {
+            record.messageData = c["3"];
+        }
+        return record;
+    };
+
     return {
         requestCounter,
         createLoginRequest,
         createMainRequest,
         createStockTimeSaleRequest,
         sendStockTimeSaleRequest,
-        createTimeSale
-    }
+        createTimeSale,
+        createAccountActivity
+    };
 })();

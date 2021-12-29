@@ -50,11 +50,16 @@ const createWebSocket = () => {
             messageData.data.forEach(element => {
                 let service = element.service;
                 testData = service;
+                let contents = element.content;
                 if (["TIMESALE_EQUITY", "TIMESALE_FUTURES"].includes(service)) {
-                    let contents = element.content;
                     contents.forEach(content => {
                         let timeSale = window.TradingApp.Streaming.createTimeSale(content);
                         window.TradingApp.DB.updateFromTimeSale(timeSale);
+                    });
+                } else if (service === "ACCT_ACTIVITY") {
+                    contents.forEach(content => {
+                        let acct = window.TradingApp.Streaming.createAccountActivity(content);
+                        console.log(acct);
                     });
                 }
             });
@@ -76,6 +81,7 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", async funct
     //console.log(keyboardEvent);
     let symbol = window.TradingApp.State.activeSymbol;
     let code = keyboardEvent.code;
+    console.log(code);
 
     if (code === "KeyB" || code === "KeyS") {
         // shift key for market order
