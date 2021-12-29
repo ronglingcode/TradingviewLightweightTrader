@@ -62,6 +62,13 @@ window.TradingApp.DB = (function () {
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
             let d = new Date(element.datetime);
+            // skip previous day's data, we are missing the 10PM - midnight data anyway
+            if (d.getFullYear() < window.TradingApp.Settings.currentDay.getFullYear() ||
+                d.getMonth() < window.TradingApp.Settings.currentDay.getMonth() ||
+                d.getDate() < window.TradingApp.Settings.currentDay.getDate()) {
+                continue;
+            }
+
             let newD = jsDateToUTC(d);
             let newCandle = {
                 symbol: symbol,
@@ -75,12 +82,7 @@ window.TradingApp.DB = (function () {
             candles.push(newCandle);
             volumes.push({ time: newD, value: element.volume });
 
-            // skip previous day's data, we are missing the 10PM - midnight data anyway
-            if (d.getFullYear() < window.TradingApp.Settings.currentDay.getFullYear() ||
-                d.getMonth() < window.TradingApp.Settings.currentDay.getMonth() ||
-                d.getDate() < window.TradingApp.Settings.currentDay.getDate()) {
-                continue;
-            }
+
             if (d < window.TradingApp.Settings.marketOpenTime) {
                 // update pre-market indicators
                 if (element.low < premktLow) {

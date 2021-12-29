@@ -9,6 +9,12 @@ window.TradingApp = {
         },
         {
             symbol: 'TSLA'
+        },
+        {
+            symbol: 'QQQ'
+        },
+        {
+            symbol: 'SPY'
         }
     ],
     'State': {

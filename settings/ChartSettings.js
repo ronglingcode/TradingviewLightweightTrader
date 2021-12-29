@@ -1,7 +1,7 @@
 window.TradingApp.ChartSettings = (function () {
     const chartSettings = {
-        width: 1000,
-        height: 500,
+        width: 800,
+        height: 580,
         layout: {
             backgroundColor: '#ffffff',
             textColor: 'rgba(33, 56, 77, 1)',
@@ -33,6 +33,7 @@ window.TradingApp.ChartSettings = (function () {
         timeScale: {
             borderColor: 'rgba(197, 203, 206, 0.8)',
             timeVisible: true,
+            fixRightEdge: true
         },
     };
 

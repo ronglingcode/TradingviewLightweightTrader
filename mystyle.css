@@ -18,6 +18,9 @@ body {
 .active .topbar {
     background-color: #81d4fa;
 }
+.topbar {
+    background-color: #ECEFF1;
+}
 .currentPrice {
     margin: 0 10px;
 }
