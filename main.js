@@ -68,7 +68,7 @@ const createWebSocket = () => {
     return websocket;
 };
 
-document.getElementsByTagName("body")[0].addEventListener("keydown", function (keyboardEvent) {
+document.getElementsByTagName("body")[0].addEventListener("keydown", async function (keyboardEvent) {
     if (!window.TradingApp.State.activeSymbol) {
         console.log("no active symbol, skip");
         return;
@@ -76,35 +76,54 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", function (k
     //console.log(keyboardEvent);
     let symbol = window.TradingApp.State.activeSymbol;
     let code = keyboardEvent.code;
-    if (keyboardEvent.shiftKey) {
-        // shift key maps to thinkorswim shortcuts
-        if (code === "KeyC") {
-            // shift + c: cancel all
-            console.log("cancel all for " + symbol);
-        } else if (code === "KeyF") {
-            console.log("flatten for " + symbol);
-        }
-    } else {
-        let data = window.TradingApp.DB.dataBySymbol[symbol];
-        if (code === "KeyT" || code === "KeyE" || code === 'Space') {
-            let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
-            if (code === "KeyT")
-                window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
-            else if (code === "KeyE")
-                window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
-            else
-                window.TradingApp.Chart.clearPriceLines(symbol);
-        }
-        else if (code === "KeyB" || code === "KeyS") {
-            let highOfDay = parseInt(data.highOfDay * 100 + 1) / 100;
-            let lowOfDay = parseInt(data.lowOfDay * 100 - 1) / 100;
+
+    if (code === "KeyB" || code === "KeyS") {
+        // shift key for market order
+        // no shift key for breakout order
+        if (keyboardEvent.shiftKey) {
+            window.TradingApp.TOS.getQuote(symbol).then((quote) => {
+                let bid = quote.bidPrice;
+                let ask = quote.askPrice;
+                let spread = ask - bid;
+                let factory = window.TradingApp.OrderFactory;
+                let orders = [];
+                let stopOutPrice = window.TradingApp.Algo.Breakout.getStopLossPrice(symbol, code);
+                let estimatedEntryPrice = 0;
+                if (code === "KeyB") {
+                    console.log("market buy for " + symbol);
+                    estimatedEntryPrice = ask + spread;
+                } else if (code === "KeyS") {
+                    estimatedEntryPrice = bid - spread;
+                }
+                orders = factory.createEntryOrdersWithFixedRisk(
+                    symbol, factory.OrderType.MARKET, ask + spread, stopOutPrice, "A", 1
+                );
+                orders.forEach(order => {
+                    window.TradingApp.TOS.placeOrderBase(order);
+                });
+            });
+        } else {
+            let stopOutPrice = window.TradingApp.Algo.Breakout.getStopLossPrice(symbol, code);
+            let entryPrice = window.TradingApp.Algo.Breakout.getEntryPrice(symbol, code);
             if (code === "KeyB") {
                 console.log("breakout buy for " + symbol);
-                window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, highOfDay, lowOfDay, "A", 1);
             } else if (code === "KeyS") {
                 console.log("breakdown sell for " + symbol);
-                window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, lowOfDay, highOfDay, "A", 1);
             }
+            window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", 1);
         }
+    } else if (code === "KeyT" || code === "KeyE" || code === 'Space') {
+        let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
+        if (code === "KeyT")
+            window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
+        else if (code === "KeyE")
+            window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
+        else
+            window.TradingApp.Chart.clearPriceLines(symbol);
+    } else if (code === "KeyC") {
+        // shift + c: cancel all
+        console.log("cancel all for " + symbol);
+    } else if (code === "KeyF") {
+        console.log("flatten for " + symbol);
     }
 });
