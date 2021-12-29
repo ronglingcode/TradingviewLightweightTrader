@@ -68,11 +68,13 @@ window.TradingApp.Chart = (function () {
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
         function myClickHandler(param) {
+            /*
             if (!param.point) {
                 return;
             }
             let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
             window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
+            */
         }
 
         widget.chart.subscribeClick(myClickHandler);
@@ -81,6 +83,12 @@ window.TradingApp.Chart = (function () {
             event.preventDefault();
             let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
             window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
+        });
+
+        widget.htmlContents.chart.addEventListener('dblclick', event => {
+            console.log(event);
+            let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
+            window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
         });
 
         widget.htmlContents.container.addEventListener('mouseover', function (mouseEvent) {
@@ -105,6 +113,10 @@ window.TradingApp.Chart = (function () {
         }
 
         widget.chart.subscribeCrosshairMove(myCrosshairMoveHandler);
+        widget.htmlContents.container.addEventListener("blur", function (event) {
+            console.log('blur');
+            console.log(event);
+        });
         /*
         let openingCandle;
         window.TradingApp.DB.initialize(stock.symbol);
