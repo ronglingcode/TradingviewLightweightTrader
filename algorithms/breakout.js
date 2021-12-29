@@ -36,8 +36,8 @@ window.TradingApp.Algo.Breakout = (function () {
         // if entry price drawn, use entry price drawn on the chart
         // if not drawn, use high/low of the day
         let p = 0;
-        if (TradingApp.Main.widgets[symbol].entryPrice) {
-            p = TradingApp.Main.widgets[symbol].entryPrice.options().price;
+        if (TradingApp.Main.widgets[symbol].entryPriceLine) {
+            p = TradingApp.Main.widgets[symbol].entryPriceLine.options().price;
         } else {
             if (code === "KeyB") {
                 p = window.TradingApp.DB.dataBySymbol[symbol].highOfDay;
