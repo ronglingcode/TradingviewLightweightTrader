@@ -132,6 +132,23 @@ window.TradingApp.Streaming = (function () {
         if (c["3"] != null) {
             record.messageData = c["3"];
         }
+        if (record.messageType === 'OrderFill' && record.messageData) {
+            let parser = new DOMParser();
+            let xml = parser.parseFromString(record.messageData, 'text/xml');
+            let firstChild = xml.children[0];
+            if (!firstChild)
+                return record;
+            let orders = firstChild.getElementsByTagName('Order');
+            if (orders.length > 0) {
+                let security = orders[0].getElementsByTagName('Security');
+                if (security.length > 0) {
+                    let symbols = security[0].getElementsByTagName('Symbol');
+                    if (symbols.length > 0) {
+                        record.symbol = symbols[0].textContent;
+                    }
+                }
+            }
+        }
         return record;
     };
 
