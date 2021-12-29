@@ -1,6 +1,6 @@
 # Tradingview Lightweight Trader
-![image info](./docs/UI.png)
-![image info](./docs/UI2.png)
+![image info](./docs/UI5.png)
+![image info](./docs/UI4.png)
 
 ## Build custom ligthweight chart library
 1. Clone repo https://github.com/tradingview/lightweight-charts
