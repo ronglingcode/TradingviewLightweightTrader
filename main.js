@@ -73,7 +73,8 @@ const createWebSocket = () => {
     return websocket;
 };
 
-document.getElementsByTagName("body")[0].addEventListener("keydown", async function (keyboardEvent) {
+let htmlBody = document.getElementsByTagName("body")[0];
+htmlBody.addEventListener("keydown", async function (keyboardEvent) {
     if (!window.TradingApp.State.activeSymbol) {
         console.log("no active symbol, skip");
         return;
