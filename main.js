@@ -58,8 +58,10 @@ const createWebSocket = () => {
                     });
                 } else if (service === "ACCT_ACTIVITY") {
                     contents.forEach(content => {
-                        let acct = window.TradingApp.Streaming.createAccountActivity(content);
-                        console.log(acct);
+                        let act = window.TradingApp.Streaming.createAccountActivity(content);
+                        if (act && act.messageType === 'OrderFill') {
+                            window.TradingApp.Chart.drawFilledPrice(act.symbol);
+                        }
                     });
                 }
             });
