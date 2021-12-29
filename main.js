@@ -121,8 +121,9 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", async funct
         else
             window.TradingApp.Chart.clearPriceLines(symbol);
     } else if (code === "KeyC") {
-        // shift + c: cancel all
+        // shift + c or just c: cancel all
         console.log("cancel all for " + symbol);
+        window.TradingApp.TOS.cancelWorkingOrders(symbol);
     } else if (code === "KeyF") {
         console.log("flatten for " + symbol);
     }
