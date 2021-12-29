@@ -49,6 +49,7 @@ window.TradingApp.Chart = (function () {
             symbol: document.getElementById("symbol" + tabIndex),
             container: document.getElementById("chartContainer" + tabIndex)
         };
+
         widget.htmlContents.symbol.innerText = stock.symbol;
         widget.chart = LightweightCharts.createChart(
             widget.htmlContents.chart,
@@ -70,12 +71,17 @@ window.TradingApp.Chart = (function () {
             if (!param.point) {
                 return;
             }
-
-            //console.log(`${widget.stock.symbol}: click at ${param.point.x}, ${param.point.y}. The time is ${param.time}.`);
-            //console.log(param)
+            let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
+            window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
         }
 
         widget.chart.subscribeClick(myClickHandler);
+
+        widget.htmlContents.chart.addEventListener('contextmenu', event => {
+            event.preventDefault();
+            let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
+            window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
+        });
 
         widget.htmlContents.container.addEventListener('mouseover', function (mouseEvent) {
             for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
