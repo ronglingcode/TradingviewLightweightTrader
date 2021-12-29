@@ -217,7 +217,9 @@ window.TradingApp.DB = (function () {
             // moved to a new one minute
             // handle newly closed candle
             let newlyClosedCandle = lastCandle;
-            if (isMarketOpenTime(new Date(newlyClosedCandle.time))) {
+            let localJsDate = window.TradingApp.Helper.tvTimestampToLocalJsDate(newlyClosedCandle.time);
+
+            if (isMarketOpenTime(localJsDate)) {
                 globalData.openingCandle = createOpeningCandle(newlyClosedCandle);
                 drawOpenRangeLines(globalData.openingCandle);
                 addOrbAreaCandle(newlyClosedCandle.time, globalData.orbArea, globalData.openingCandle);
