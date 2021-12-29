@@ -122,9 +122,10 @@ document.getElementsByTagName("body")[0].addEventListener("keydown", async funct
             window.TradingApp.Chart.clearPriceLines(symbol);
     } else if (code === "KeyC") {
         // shift + c or just c: cancel all
-        console.log("cancel all for " + symbol);
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
+        console.log("cancel all for " + symbol);
     } else if (code === "KeyF") {
+        window.TradingApp.TOS.flatternPosition(symbol);
         console.log("flatten for " + symbol);
     }
 });

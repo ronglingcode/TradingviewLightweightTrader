@@ -71,11 +71,53 @@ window.TradingApp.TOS = (function () {
     /* #region Account */
     const getAccount = async () => {
         let accountId = window.TradingApp.Secrets.accountId;
-        let url = `https://api.tdameritrade.com/v1/accounts/${accountId}`;
+        let url = `https://api.tdameritrade.com/v1/accounts/${accountId}?fields=positions,orders`;
         return asyncGet(url).then(response => response.json())  // convert to json
-            .then(json => console.log(json))
+            .then(json => {
+                return json;
+            })
             .catch(err => console.log('Request Failed', err));
-    }
+    };
+    const getAccountBySymbol = async (symbol) => {
+        let account = await getAccount();
+        account = account.securitiesAccount;
+        let symbolAccount = {
+            orders: []
+        };
+        account.orderStrategies.forEach(order => {
+            if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol) {
+                symbolAccount.orders.push(order);
+            }
+        });
+        for (let i = 0; i < account.positions.length; i++) {
+            let p = account.positions[i];
+            if (p.instrument.symbol === symbol) {
+                symbolAccount.position = p;
+                break;
+            }
+        }
+        return symbolAccount;
+    };
+    const flatternPosition = async (symbol) => {
+        let account = await getAccountBySymbol(symbol);
+        let position = account.position;
+        let orderLegInstruction;
+        let quantity = 0;
+        if (position.longQuantity > 0) {
+            orderLegInstruction = window.TradingApp.OrderFactory.OrderLegInstruction.SELL;
+            quantity = position.longQuantity;
+        }
+        else if (position.shortQuantity > 0) {
+            orderLegInstruction = window.TradingApp.OrderFactory.OrderLegInstruction.BUY_TO_COVER;
+            quantity = position.shortQuantity;
+        }
+        else {
+            return;
+        }
+
+        let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
+        window.TradingApp.TOS.placeOrderBase(order);
+    };
     /* #endregion */
 
     /* #region Price history, Quote */
@@ -202,6 +244,8 @@ window.TradingApp.TOS = (function () {
         getAccount,
         getOrders,
         getWorkingOrders,
-        cancelWorkingOrders
+        cancelWorkingOrders,
+        getAccountBySymbol,
+        flatternPosition
     }
 })();
