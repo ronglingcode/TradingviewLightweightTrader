@@ -161,8 +161,11 @@ window.TradingApp.Chart = (function () {
     };
 
     const drawFilledPrice = async (symbol) => {
-        let account = await window.TradingApp.TOS.getAccountBySymbol(symbol);
         let widget = TradingApp.Main.widgets[symbol];
+        if (!widget) {
+            return;
+        }
+        let account = await window.TradingApp.TOS.getAccountBySymbol(symbol);
         if (!account || !account.position) {
             if (widget.filledPriceLine) {
                 widget.candleSeries.removePriceLine(widget.filledPriceLine);
