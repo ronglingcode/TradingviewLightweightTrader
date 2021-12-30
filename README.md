@@ -1,5 +1,5 @@
 # Tradingview Lightweight Trader
-![image info](./docs/UI5.png)
+![image info](./docs/UI1.png)
 ![image info](./docs/UI4.png)
 
 ## Build custom ligthweight chart library
