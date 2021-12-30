@@ -131,6 +131,24 @@ window.TradingApp.DB = (function () {
             });
         }
 
+        window.TradingApp.Main.widgets[symbol].volumeSeries.setData(volumes);
+        window.TradingApp.Main.widgets[symbol].vwapSeries.setData(vwap);
+        window.TradingApp.Main.widgets[symbol].candleSeries.setData(candles);
+        window.TradingApp.Main.widgets[symbol].orbSeries.setData(orbArea);
+        window.TradingApp.Chart.updateUI(symbol, "hod", highOfDay);
+        window.TradingApp.Chart.updateUI(symbol, "lod", lowOfDay);
+        window.TradingApp.Watchlist.forEach(stock => {
+            if (stock.symbol === symbol) {
+                if (stock.ajbuy)
+                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajbuy, "aj buy", "#16A085", 2);
+                if (stock.ajsell)
+                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajsell, "aj sell", "red", 2);
+            }
+        });
+
+        if (openingCandle) {
+            drawOpenRangeLines(openingCandle);
+        }
         dataBySymbol[symbol] = {
             candles: candles,
             totalVolume: totalVolume,
@@ -153,25 +171,6 @@ window.TradingApp.DB = (function () {
             premktHigh: premktHigh,
             premktLow: premktLow
         };
-
-        window.TradingApp.Main.widgets[symbol].volumeSeries.setData(volumes);
-        window.TradingApp.Main.widgets[symbol].vwapSeries.setData(vwap);
-        window.TradingApp.Main.widgets[symbol].candleSeries.setData(candles);
-        window.TradingApp.Main.widgets[symbol].orbSeries.setData(orbArea);
-        window.TradingApp.Chart.updateUI(symbol, "hod", highOfDay);
-        window.TradingApp.Chart.updateUI(symbol, "lod", lowOfDay);
-        window.TradingApp.Watchlist.forEach(stock => {
-            if (stock.symbol === symbol) {
-                if (stock.ajbuy)
-                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajbuy, "aj buy", "#16A085", 2);
-                if (stock.ajsell)
-                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajsell, "aj sell", "red", 2);
-            }
-        });
-
-        if (openingCandle) {
-            drawOpenRangeLines(openingCandle);
-        }
     };
 
     const updateFromTimeSale = (timesale) => {
@@ -187,6 +186,9 @@ window.TradingApp.DB = (function () {
         oneMinuteBucket.setSeconds(0, 0);
         let newTime = jsDateToUTC(oneMinuteBucket);
         let globalData = window.TradingApp.DB.dataBySymbol[symbol];
+        if (!globalData) {
+            return;
+        }
         globalData.totalVolume += timesale.lastSize;
         globalData.totalTradingAmount += (timesale.lastPrice * timesale.lastSize);
         let newVwapValue = globalData.totalTradingAmount / globalData.totalVolume;
