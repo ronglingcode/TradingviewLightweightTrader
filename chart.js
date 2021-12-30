@@ -47,6 +47,22 @@ window.TradingApp.Chart = (function () {
             lineWidth: lineWidth
         });
     };
+
+    const setupQuantityBar = (bar, input) => {
+        let buttons = bar.getElementsByTagName("button");
+        input.addEventListener("keydown", function (e) {
+            e.stopPropagation();
+        });
+        console.log(buttons);
+        for (let i = 0; i < buttons.length; i++) {
+            let button = buttons[i];
+            button.addEventListener("click", (pointerEvent) => {
+                console.log(input.value);
+
+                input.value = pointerEvent.target.innerText;
+            });
+        }
+    };
     const createChartWidget = (tabIndex, stock) => {
         let symbol = stock.symbol;
         let widget = {
@@ -59,7 +75,9 @@ window.TradingApp.Chart = (function () {
             symbol: document.getElementById("symbol" + tabIndex),
             container: document.getElementById("chartContainer" + tabIndex)
         };
-
+        widget.htmlContents.quantityBar = widget.htmlContents.container.getElementsByClassName("quantityBar")[0];
+        widget.htmlContents.quantityInput = widget.htmlContents.quantityBar.getElementsByTagName("input")[0];
+        setupQuantityBar(widget.htmlContents.quantityBar, widget.htmlContents.quantityInput);
         widget.htmlContents.symbol.innerText = stock.symbol;
         widget.chart = LightweightCharts.createChart(
             widget.htmlContents.chart,

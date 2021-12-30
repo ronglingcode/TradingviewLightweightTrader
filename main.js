@@ -21,7 +21,7 @@ window.TradingApp.TOS.initialize().then(() => {
 });
 
 
-const createWebSocket = () => {
+const createWebSocket = async () => {
     let socketUrl = "wss://" + window.TradingApp.TOS.userPrincipal.streamerInfo["streamerSocketUrl"] + "/ws";
     let websocket = new WebSocket(socketUrl);
     websocket.onmessage = function (messageEvent) {

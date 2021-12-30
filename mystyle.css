@@ -27,3 +27,14 @@ body {
 .topBarRight {
     float: right;
 }
+
+.quantityBar {
+    padding: 5px;
+    border-bottom: solid 1px black;
+}
+.quantityBar button {
+    margin: 0 2px;
+}
+.quantityBar input {
+    width: 80px;
+}
