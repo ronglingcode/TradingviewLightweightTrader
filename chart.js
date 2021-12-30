@@ -29,15 +29,19 @@ window.TradingApp.Chart = (function () {
             widget.stopLossPriceLine = null;
         }
     };
-    const createPriceLine = (series, price, title, color) => {
+    const createPriceLine = (series, price, title, color, lineWidth) => {
         if (!color) {
             color = 'blue';
+        }
+        if (!lineWidth) {
+            lineWidth = 1;
         }
         return series.createPriceLine({
             price: price,
             color: color,
             title: title,
             lineStyle: LightweightCharts.LineStyle.Solid,
+            lineWidth: lineWidth
         });
     };
     const createChartWidget = (tabIndex, stock) => {
@@ -157,8 +161,11 @@ window.TradingApp.Chart = (function () {
     };
 
     const drawFilledPrice = async (symbol) => {
-        let account = await window.TradingApp.TOS.getAccountBySymbol(symbol);
         let widget = TradingApp.Main.widgets[symbol];
+        if (!widget) {
+            return;
+        }
+        let account = await window.TradingApp.TOS.getAccountBySymbol(symbol);
         if (!account || !account.position) {
             if (widget.filledPriceLine) {
                 widget.candleSeries.removePriceLine(widget.filledPriceLine);
@@ -176,6 +183,7 @@ window.TradingApp.Chart = (function () {
     return {
         createChartWidget,
         updateUI,
+        createPriceLine,
         drawStopLoss,
         drawEntry,
         clearPriceLines,

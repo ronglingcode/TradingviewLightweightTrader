@@ -11,7 +11,9 @@ window.TradingApp = {
             symbol: 'TSP'
         },
         {
-            symbol: 'TSLA'
+            symbol: 'TSLA',
+            ajbuy: 1105,
+            ajsell: 1090
         },
         {
             symbol: 'VSCO'
