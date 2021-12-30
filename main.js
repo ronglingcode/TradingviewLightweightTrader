@@ -14,11 +14,8 @@ window.TradingApp.TOS.initialize().then(() => {
     for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
         let symbol = window.TradingApp.Watchlist[i].symbol;
         window.TradingApp.TOS.getPriceHistory(symbol).then(response => response.json()).then(json => {
-            console.log(json);
             // populate current chart
             window.TradingApp.DB.initialize(symbol, json);
-            // start streaming
-            window.TradingApp.Streaming.sendStockTimeSaleRequest(symbol);
         });
     }
 });
@@ -39,7 +36,7 @@ const createWebSocket = () => {
                     // send more streaming requests
                     let mainRequest = window.TradingApp.Streaming.createMainRequest();
                     websocket.send(JSON.stringify(mainRequest));
-                    // re-send in case previously dent when socket is not connected yet
+                    // the earliest time we can start streaming is right after 
                     let stockRequest = window.TradingApp.Streaming.createStockTimeSaleRequest();
                     websocket.send(JSON.stringify(stockRequest));
                 } else {
