@@ -160,6 +160,14 @@ window.TradingApp.DB = (function () {
         window.TradingApp.Main.widgets[symbol].orbSeries.setData(orbArea);
         window.TradingApp.Chart.updateUI(symbol, "hod", highOfDay);
         window.TradingApp.Chart.updateUI(symbol, "lod", lowOfDay);
+        window.TradingApp.Watchlist.forEach(stock => {
+            if (stock.symbol === symbol) {
+                if (stock.ajbuy)
+                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajbuy, "aj buy", "#16A085", 2);
+                if (stock.ajsell)
+                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajsell, "aj sell", "red", 2);
+            }
+        });
 
         if (openingCandle) {
             drawOpenRangeLines(openingCandle);
