@@ -1,7 +1,7 @@
 window.TradingApp.ChartSettings = (function () {
     const chartSettings = {
         width: 800,
-        height: 550,
+        height: 545,
         layout: {
             backgroundColor: '#ffffff',
             textColor: 'rgba(33, 56, 77, 1)',
