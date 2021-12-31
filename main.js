@@ -97,9 +97,9 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                 let estimatedEntryPrice = 0;
                 if (code === "KeyB") {
                     console.log("market buy for " + symbol);
-                    estimatedEntryPrice = ask + spread;
+                    estimatedEntryPrice = ask + 2 * spread;
                 } else if (code === "KeyS") {
-                    estimatedEntryPrice = bid - spread;
+                    estimatedEntryPrice = bid - 2 * spread;
                 }
                 orders = factory.createEntryOrdersWithFixedRisk(
                     symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.35
