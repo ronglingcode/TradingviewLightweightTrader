@@ -102,7 +102,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                     estimatedEntryPrice = bid - spread;
                 }
                 orders = factory.createEntryOrdersWithFixedRisk(
-                    symbol, factory.OrderType.MARKET, ask + spread, stopOutPrice, "A", 0.35
+                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.35
                 );
                 orders.forEach(order => {
                     window.TradingApp.TOS.placeOrderBase(order);
