@@ -1,6 +1,35 @@
 window.TradingApp.Algo.Breakout = (function () {
+    const checkRules = (symbol, entryPrice) => {
+        if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
+            return false;
+        }
+        return true;
+    };
+    const checkRuleForVwap = (symbol, entryPrice, stopOutPrice) => {
+        let minutesSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 60000;
+        if (minutesSinceMarketOpen >= 0 && minutesSinceMarketOpen <= 5) {
+            let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
+            let currentVwap = vwap[vwap.length - 1];
+            if (entryPrice > stopOutPrice) {
+                // buy orders
+                if (entryPrice < currentVwap) {
+                    return confirm("entry against vwap, still continue?");
+                }
+            } else {
+                // sell orders
+                if (entryPrice > currentVwap) {
+                    return confirm("entry against vwap, still continue?");
+                }
+            }
+        }
+        return true;
+    };
     const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
         let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
+        if (!checkRules(symbol, entryPrice, stopOut)) {
+            console.log("failed rule");
+            return;
+        }
         let orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
         console.log(orders[0]);
         orders.forEach(order => {
@@ -56,6 +85,7 @@ window.TradingApp.Algo.Breakout = (function () {
         submitBreakoutOrders,
         test,
         getStopLossPrice,
-        getEntryPrice
+        getEntryPrice,
+        checkRules
     };
 })();
