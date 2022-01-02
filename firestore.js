@@ -10,7 +10,7 @@ window.TradingApp.Firestore = (function () {
     const firebaseConfig = window.TradingApp.Secrets.firebaseConfig;
     let dateobj = new Date();
     let date = dateobj.getDate(), month = dateobj.getMonth() + 1, year = dateobj.getFullYear();
-    let collectionName = `${year}-${month}-${date}-Logs`;
+    let collectionNamePrefix = `${year}-${month}-${date}`;
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -24,15 +24,22 @@ window.TradingApp.Firestore = (function () {
         log('Error', msg);
     };
     const log = async (msgType, msg) => {
-        addDoc(collection(db, collectionName), {
+        addDoc(collection(db, `${collectionNamePrefix}-Logs`), {
             msg: msg,
             type: msgType,
             timestamp: new Date()
         });
 
     };
+    const logOrder = async (order) => {
+        addDoc(collection(db, `${collectionNamePrefix}-Orders`), {
+            timestamp: new Date(),
+            ...order
+        });
+    };
     return {
         logInfo,
-        logError
+        logError,
+        logOrder
     };
 })();

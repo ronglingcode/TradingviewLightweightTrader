@@ -132,7 +132,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
         window.TradingApp.Firestore.logInfo("cancel all for " + symbol);
     } else if (code === "KeyF") {
-        window.TradingApp.TOS.flatternPosition(symbol);
+        window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
     }
 });

@@ -84,11 +84,13 @@ window.TradingApp.TOS = (function () {
         let symbolAccount = {
             orders: []
         };
-        account.orderStrategies.forEach(order => {
-            if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol) {
-                symbolAccount.orders.push(order);
-            }
-        });
+        if (account && account.orderStrategies) {
+            account.orderStrategies.forEach(order => {
+                if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol) {
+                    symbolAccount.orders.push(order);
+                }
+            });
+        }
         for (let i = 0; i < account.positions.length; i++) {
             let p = account.positions[i];
             if (p.instrument.symbol === symbol) {
@@ -98,7 +100,7 @@ window.TradingApp.TOS = (function () {
         }
         return symbolAccount;
     };
-    const flatternPosition = async (symbol) => {
+    const flattenPosition = async (symbol) => {
         let account = await getAccountBySymbol(symbol);
         let position = account.position;
         let orderLegInstruction;
@@ -116,7 +118,7 @@ window.TradingApp.TOS = (function () {
         }
 
         let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
-        window.TradingApp.TOS.placeOrderBase(order);
+        placeOrderBase(order);
     };
     /* #endregion */
 
@@ -183,6 +185,7 @@ window.TradingApp.TOS = (function () {
 
     /* #region Order */
     const placeOrderBase = async (order) => {
+        window.TradingApp.Firestore.logOrder(order);
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
         return sendJsonPostRequestWithAccessToken(url, order);
@@ -246,6 +249,6 @@ window.TradingApp.TOS = (function () {
         getWorkingOrders,
         cancelWorkingOrders,
         getAccountBySymbol,
-        flatternPosition
+        flattenPosition
     }
 })();
