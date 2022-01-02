@@ -93,7 +93,7 @@ window.TradingApp.Indicators = (function () {
         }
         drawHigherLows(end, candles, widget);
         drawLowerHighs(end, candles, widget);
-
+        drawFirstTriangleConsolidation(end, candles, widget);
     }
 
     const drawHigherLows = (end, candles, widget) => {
@@ -161,6 +161,39 @@ window.TradingApp.Indicators = (function () {
             });
         }
     };
+
+    const drawFirstTriangleConsolidation = (end, candles, widget) => {
+        if (widget.firstTriangleConsolidationUpper) {
+            // already had a triangle consolidation
+            return;
+        }
+        if (end - 1 < 0) {
+            return;
+        }
+        let prev = candles[end - 1];
+        let current = candles[end];
+        if (prev.minutesSinceMarketOpen >= 0 &&
+            current.high <= prev.high &&
+            current.low >= prev.low) {
+            widget.firstTriangleConsolidationUpper = widget.chart.addLineSeries({
+                ...window.TradingApp.ChartSettings.cloudLineSettings,
+                lineStyle: LightweightCharts.LineStyle.Solid
+            });
+            widget.firstTriangleConsolidationUpper.setData([
+                { time: prev.time, value: prev.high },
+                { time: current.time, value: current.high }
+            ]);
+            widget.firstTriangleConsolidationLower = widget.chart.addLineSeries({
+                ...window.TradingApp.ChartSettings.cloudLineSettings,
+                color: 'black',
+                lineStyle: LightweightCharts.LineStyle.Solid
+            });
+            widget.firstTriangleConsolidationLower.setData([
+                { time: prev.time, value: prev.low },
+                { time: current.time, value: current.low }
+            ]);
+        }
+    }
 
     return {
         openRangeBreakoutPriceLines,
