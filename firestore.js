@@ -1,0 +1,38 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+window.TradingApp.Firestore = (function () {
+    const firebaseConfig = window.TradingApp.Secrets.firebaseConfig;
+    let dateobj = new Date();
+    let date = dateobj.getDate(), month = dateobj.getMonth() + 1, year = dateobj.getFullYear();
+    let collectionName = `${year}-${month}-${date}-Logs`;
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    var db = getFirestore(app);
+    const logInfo = async (msg) => {
+        console.log(msg);
+        log('Info', msg);
+    };
+    const logError = async (msg) => {
+        console.error(msg);
+        log('Error', msg);
+    };
+    const log = async (msgType, msg) => {
+        addDoc(collection(db, collectionName), {
+            msg: msg,
+            type: msgType,
+            timestamp: new Date()
+        });
+
+    };
+    return {
+        logInfo,
+        logError
+    };
+})();
