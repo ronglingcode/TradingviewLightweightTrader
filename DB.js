@@ -77,13 +77,13 @@ window.TradingApp.DB = (function () {
                 high: element.high,
                 low: element.low,
                 close: element.close,
-                volume: element.volume
+                volume: element.volume,
+                minutesSinceMarketOpen: (d - window.TradingApp.Settings.marketOpenTime) / 60000
             };
             candles.push(newCandle);
             volumes.push({ time: newD, value: element.volume });
 
-
-            if (d < window.TradingApp.Settings.marketOpenTime) {
+            if (newCandle.minutesSinceMarketOpen < 0) {
                 // update pre-market indicators
                 if (element.low < premktLow) {
                     premktLow = parseInt(element.low * 100 - 1) / 100;
@@ -171,6 +171,17 @@ window.TradingApp.DB = (function () {
             premktHigh: premktHigh,
             premktLow: premktLow
         };
+
+        for (let i = 0; i < dataBySymbol[symbol].candles.length; i++) {
+            // process newly closed candle
+            // skip last candle
+            if (i === dataBySymbol[symbol].candles.length - 1) {
+                continue;
+            }
+            window.TradingApp.Indicators.drawIndicatorsForNewlyClosedCandle(
+                i, dataBySymbol[symbol].candles, window.TradingApp.Main.widgets[symbol]
+            );
+        }
     };
 
     const updateFromTimeSale = (timesale) => {
@@ -242,7 +253,8 @@ window.TradingApp.DB = (function () {
                 open: timesale.lastPrice,
                 high: timesale.lastPrice,
                 low: timesale.lastPrice,
-                close: timesale.lastPrice
+                close: timesale.lastPrice,
+                minutesSinceMarketOpen: (localJsDate - window.TradingApp.Settings.marketOpenTime) / 60000
             };
             globalData.candles.push(lastCandle);
             lastVolume = {
@@ -257,11 +269,13 @@ window.TradingApp.DB = (function () {
             globalData.vwap.push(lastVwap);
             addOrbAreaCandle(newTime, globalData.orbArea, globalData.openingCandle);
             window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[globalData.orbArea.length - 1]);
+            window.TradingApp.Indicators.drawIndicatorsForNewlyClosedCandle(
+                globalData.candles.length - 1, globalData.candles, window.TradingApp.Main.widgets[symbol]
+            );
         }
         window.TradingApp.Main.widgets[symbol].candleSeries.update(lastCandle);
         window.TradingApp.Main.widgets[symbol].volumeSeries.update(lastVolume);
         window.TradingApp.Main.widgets[symbol].vwapSeries.update(lastVwap);
-
     };
 
     const addOrbAreaCandle = (newTime, orbArea, openingCandle) => {
