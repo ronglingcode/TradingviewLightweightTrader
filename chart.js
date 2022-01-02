@@ -53,7 +53,6 @@ window.TradingApp.Chart = (function () {
         input.addEventListener("keydown", function (e) {
             e.stopPropagation();
         });
-        console.log(buttons);
         for (let i = 0; i < buttons.length; i++) {
             let button = buttons[i];
             button.addEventListener("click", (pointerEvent) => {

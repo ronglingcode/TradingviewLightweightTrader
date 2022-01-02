@@ -245,6 +245,7 @@ window.TradingApp.DB = (function () {
                 drawOpenRangeLines(globalData.openingCandle);
                 addOrbAreaCandle(newlyClosedCandle.time, globalData.orbArea, globalData.openingCandle);
                 window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[0]);
+                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
             }
             // create a new candle
             lastCandle = {
