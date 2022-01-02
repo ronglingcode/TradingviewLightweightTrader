@@ -77,11 +77,20 @@ window.TradingApp.ChartSettings = (function () {
         autoscaleInfoProvider: () => null,
     }
 
+    const cloudLineSettings = {
+        color: 'rgba(17, 17 ,31,0.7)',
+        lineWidth: 4,
+        crosshairMarkerVisible: false,
+        autoscaleInfoProvider: () => null,
+        lastValueVisible: false,
+    };
+
     return {
         chartSettings,
         candlestickSeriesSettings,
         volumeSeriesSettings,
         vwapSettings,
-        cloudAreaCandleSettings
+        cloudAreaCandleSettings,
+        cloudLineSettings
     };
 })();

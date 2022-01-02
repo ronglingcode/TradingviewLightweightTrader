@@ -84,8 +84,45 @@ window.TradingApp.Indicators = (function () {
         return lineSeriesList;
     };
 
+    const drawIndicatorsForNewlyClosedCandle = (end, candles, widget) => {
+        let threshold = 3;
+        // only check after market open for now
+        if (candles[end].minutesSinceMarketOpen < 0 ||
+            candles[end].minutesSinceMarketOpen > 60) {
+            return;
+        }
+
+        let higherLowCount = 0;
+        let start = end;
+        while (start - 1 >= 0) {
+            if (candles[start - 1].minutesSinceMarketOpen >= 0 &&
+                candles[start].low > candles[start - 1].low) {
+                higherLowCount++;
+            } else {
+                break;
+            }
+            start--;
+        }
+        if (higherLowCount === threshold) {
+            // draw first time, start from beginning.
+            widget.higherLowSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.cloudLineSettings);
+            for (let i = start; i <= end; i++) {
+                widget.higherLowSeries.update({
+                    time: candles[i].time,
+                    value: candles[i].low
+                });
+            }
+        } else if (higherLowCount > threshold) {
+            widget.higherLowSeries.update({
+                time: candles[end].time,
+                value: candles[end].low
+            });
+        }
+    }
+
     return {
         openRangeBreakoutPriceLines,
-        createOpenRangeSeries
+        createOpenRangeSeries,
+        drawIndicatorsForNewlyClosedCandle
     }
 })();

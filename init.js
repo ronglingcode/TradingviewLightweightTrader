@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date()
+        'currentDay': new Date('2022-01-01')
     },
     'Algo': {},
     'Watchlist': [
@@ -10,6 +10,7 @@ window.TradingApp = {
             //            ajbuy: 246,
             //          ajsell: 240
         },
+        /*
         {
             symbol: 'XPEV',
             bias: 'long'
@@ -23,14 +24,14 @@ window.TradingApp = {
         {
             symbol: 'BABA',
             bias: 'long'
-        }
+        }*/
     ],
     'State': {
         activeSymbol: '',
         activeTabIndex: -1
     }
 };
-window.TradingApp.Settings.marketOpenTime = new Date();
+window.TradingApp.Settings.marketOpenTime = window.TradingApp.Settings.currentDay;
 window.TradingApp.Settings.marketOpenTime.setHours(6);
 window.TradingApp.Settings.marketOpenTime.setMinutes(30);
 window.TradingApp.Settings.marketOpenTime.setSeconds(0, 0);
