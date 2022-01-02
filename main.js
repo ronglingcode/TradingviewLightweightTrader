@@ -90,15 +90,18 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
             window.TradingApp.TOS.getQuote(symbol).then((quote) => {
                 let bid = quote.bidPrice;
                 let ask = quote.askPrice;
+                window.TradingApp.Firestore.logInfo(`${symbol} quote => bid: ${bid}, ask: ${ask}`);
+
                 let spread = ask - bid;
                 let factory = window.TradingApp.OrderFactory;
                 let orders = [];
                 let stopOutPrice = window.TradingApp.Algo.Breakout.getStopLossPrice(symbol, code);
                 let estimatedEntryPrice = 0;
                 if (code === "KeyB") {
-                    console.log("market buy for " + symbol);
+                    window.TradingApp.Firestore.logInfo("market buy for " + symbol);
                     estimatedEntryPrice = ask + 2 * spread;
                 } else if (code === "KeyS") {
+                    window.TradingApp.Firestore.logInfo("market sell for " + symbol);
                     estimatedEntryPrice = bid - 2 * spread;
                 }
                 if (!window.TradingApp.Algo.Breakout.checkRules(symbol, entryPrice, stopOut)) {
@@ -116,26 +119,20 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
             let stopOutPrice = window.TradingApp.Algo.Breakout.getStopLossPrice(symbol, code);
             let entryPrice = window.TradingApp.Algo.Breakout.getEntryPrice(symbol, code);
             if (code === "KeyB") {
-                console.log("breakout buy for " + symbol);
+                window.TradingApp.Firestore.logInfo("breakout buy for " + symbol);
             } else if (code === "KeyS") {
-                console.log("breakdown sell for " + symbol);
+                window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol);
             }
             window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", 1);
         }
-    } else if (code === "KeyT" || code === "KeyE" || code === 'Space') {
-        let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
-        if (code === "KeyT")
-            window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
-        else if (code === "KeyE")
-            window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
-        else
-            window.TradingApp.Chart.clearPriceLines(symbol);
+    } else if (code === 'Space') {
+        window.TradingApp.Chart.clearPriceLines(symbol);
     } else if (code === "KeyC") {
         // shift + c or just c: cancel all
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
-        console.log("cancel all for " + symbol);
+        window.TradingApp.Firestore.logInfo("cancel all for " + symbol);
     } else if (code === "KeyF") {
         window.TradingApp.TOS.flatternPosition(symbol);
-        console.log("flatten for " + symbol);
+        window.TradingApp.Firestore.logInfo("flatten for " + symbol);
     }
 });
