@@ -1,4 +1,6 @@
 window.TradingApp.ChartSettings = (function () {
+    const defaultRed = 'rgb(255,82,82)';
+    const defaultGreen = 'rgb(38,166,154)';
     const chartSettings = {
         width: 800,
         height: 545,
@@ -79,10 +81,11 @@ window.TradingApp.ChartSettings = (function () {
 
     const cloudLineSettings = {
         color: 'rgba(17, 17 ,31,0.7)',
-        lineWidth: 4,
+        lineWidth: 2,
         crosshairMarkerVisible: false,
         autoscaleInfoProvider: () => null,
         lastValueVisible: false,
+        lineStyle: LightweightCharts.LineStyle.SparseDotted
     };
 
     return {
@@ -91,6 +94,8 @@ window.TradingApp.ChartSettings = (function () {
         volumeSeriesSettings,
         vwapSettings,
         cloudAreaCandleSettings,
-        cloudLineSettings
+        cloudLineSettings,
+        defaultRed,
+        defaultGreen
     };
 })();

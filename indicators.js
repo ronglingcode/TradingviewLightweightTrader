@@ -86,39 +86,81 @@ window.TradingApp.Indicators = (function () {
 
     const drawIndicatorsForNewlyClosedCandle = (end, candles, widget) => {
         let threshold = 3;
-        // only check after market open for now
+        // only check within first hour after market open
         if (candles[end].minutesSinceMarketOpen < 0 ||
             candles[end].minutesSinceMarketOpen > 60) {
             return;
         }
+        drawHigherLows(end, candles, widget);
+        drawLowerHighs(end, candles, widget);
 
-        let higherLowCount = 0;
+    }
+
+    const drawHigherLows = (end, candles, widget) => {
+        let threshold = 3;
+        let count = 0;
         let start = end;
         while (start - 1 >= 0) {
             if (candles[start - 1].minutesSinceMarketOpen >= 0 &&
                 candles[start].low > candles[start - 1].low) {
-                higherLowCount++;
+                count++;
             } else {
                 break;
             }
             start--;
         }
-        if (higherLowCount === threshold) {
+        if (count === threshold) {
             // draw first time, start from beginning.
-            widget.higherLowSeries = widget.chart.addLineSeries(window.TradingApp.ChartSettings.cloudLineSettings);
+            widget.higherLowSeries = widget.chart.addLineSeries({
+                ...window.TradingApp.ChartSettings.cloudLineSettings,
+                color: window.TradingApp.ChartSettings.defaultGreen
+            });
             for (let i = start; i <= end; i++) {
                 widget.higherLowSeries.update({
                     time: candles[i].time,
                     value: candles[i].low
                 });
             }
-        } else if (higherLowCount > threshold) {
+        } else if (count > threshold) {
             widget.higherLowSeries.update({
                 time: candles[end].time,
                 value: candles[end].low
             });
         }
-    }
+    };
+
+    const drawLowerHighs = (end, candles, widget) => {
+        let threshold = 3;
+        let count = 0;
+        let start = end;
+        while (start - 1 >= 0) {
+            if (candles[start - 1].minutesSinceMarketOpen >= 0 &&
+                candles[start].high < candles[start - 1].high) {
+                count++;
+            } else {
+                break;
+            }
+            start--;
+        }
+        if (count === threshold) {
+            // draw first time, start from beginning.
+            widget.lowerHighSeries = widget.chart.addLineSeries({
+                ...window.TradingApp.ChartSettings.cloudLineSettings,
+                color: window.TradingApp.ChartSettings.defaultRed
+            });
+            for (let i = start; i <= end; i++) {
+                widget.lowerHighSeries.update({
+                    time: candles[i].time,
+                    value: candles[i].high
+                });
+            }
+        } else if (count > threshold) {
+            widget.lowerHighSeries.update({
+                time: candles[end].time,
+                value: candles[end].high
+            });
+        }
+    };
 
     return {
         openRangeBreakoutPriceLines,
