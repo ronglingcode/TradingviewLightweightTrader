@@ -1,5 +1,5 @@
 window.TradingApp.Algo.Breakout = (function () {
-    const checkRules = (symbol, entryPrice) => {
+    const checkRules = (symbol, entryPrice, stopOutPrice) => {
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
             return false;
         }
