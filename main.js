@@ -8,6 +8,9 @@ for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
 window.TradingApp.TOS.initialize().then(() => {
     console.log('initialized');
     // tos initialized with new access token
+    // access token expires in 30 minutes, so refresh before that
+    setInterval(window.TradingApp.TOS.createAccessToken, 1700 * 1000);
+
     // open web socket
     window.TradingApp.Streaming.socket = createWebSocket();
     // get price history
