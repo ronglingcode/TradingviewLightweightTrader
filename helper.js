@@ -5,7 +5,12 @@ window.TradingApp.Helper = (function () {
         d.setTime(d.getTime() + (offset * 60 * 1000));
         return d;
     };
+
+    const getMinutesSinceMarketOpen = (jsDate) => {
+        return (jsDate - window.TradingApp.Settings.marketOpenTime) / 60000;
+    };
     return {
-        tvTimestampToLocalJsDate
+        tvTimestampToLocalJsDate,
+        getMinutesSinceMarketOpen
     };
 })();

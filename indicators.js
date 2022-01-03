@@ -85,7 +85,6 @@ window.TradingApp.Indicators = (function () {
     };
 
     const drawIndicatorsForNewlyClosedCandle = (end, candles, widget) => {
-        let threshold = 3;
         // only check within first hour after market open
         if (candles[end].minutesSinceMarketOpen < 0 ||
             candles[end].minutesSinceMarketOpen > 60) {
