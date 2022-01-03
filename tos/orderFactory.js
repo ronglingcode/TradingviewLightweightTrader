@@ -121,6 +121,14 @@ window.TradingApp.OrderFactory = (function () {
 
     const createEntryOrdersWithFixedRisk = (symbol, orderType, entryPrice, stopOutPrice, setupQuality, multiplier) => {
         let RiskManager = window.TradingApp.Algo.RiskManager;
+        // add 1 cent for slippage
+        if (entryPrice > stopOutPrice) {
+            entryPrice += 0.01;
+            stopOutPrice -= 0.01;
+        } else {
+            entryPrice -= 0.01;
+            stopOutPrice += 0.01;
+        }
         let riskPerShare = Math.abs(entryPrice - stopOutPrice);
         let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
         let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
