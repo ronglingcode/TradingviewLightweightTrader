@@ -1,30 +1,29 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date('2022-01-01')
+        'currentDay': new Date()
     },
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'PTON',
-            bias: 'short',
+            symbol: 'TSLA',
+            bias: 'long',
             //            ajbuy: 246,
             //          ajsell: 240
         },
-        /*
         {
-            symbol: 'XPEV',
+            symbol: 'MRNA',
+            bias: 'short'
+        },
+        {
+            symbol: 'SE',
             bias: 'long'
             //            ajbuy: 1073,
             //          ajsell: 1060
         },
         {
-            symbol: 'KWEB',
-            bias: 'long'
-        },
-        {
-            symbol: 'BABA',
-            bias: 'long'
-        }*/
+            symbol: 'WOLF',
+            bias: 'short'
+        }
     ],
     'State': {
         activeSymbol: '',
