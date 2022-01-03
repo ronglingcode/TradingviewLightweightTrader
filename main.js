@@ -126,7 +126,8 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
             } else if (code === "KeyS") {
                 window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol);
             }
-            window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", 1);
+            let multiplier = window.TradingApp.Chart.getMultiplier(window.TradingApp.Main.widgets[symbol]);
+            window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", multiplier);
         }
     } else if (code === 'Space') {
         window.TradingApp.Chart.clearPriceLines(symbol);

@@ -62,6 +62,15 @@ window.TradingApp.Chart = (function () {
             });
         }
     };
+
+    const getMultiplier = (widget) => {
+        let qty = widget.htmlContents.quantityInput.value;
+        if (!qty || !qty.endsWith("%")) {
+            return 1;
+        }
+        let multiplier = parseFloat(qty.substring(0, qty.length - 1));
+        return multiplier / 100;
+    };
     const createChartWidget = (tabIndex, stock) => {
         let symbol = stock.symbol;
         let widget = {
@@ -207,6 +216,7 @@ window.TradingApp.Chart = (function () {
         drawStopLoss,
         drawEntry,
         clearPriceLines,
-        drawFilledPrice
+        drawFilledPrice,
+        getMultiplier
     }
 })();
