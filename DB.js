@@ -62,8 +62,16 @@ window.TradingApp.DB = (function () {
             console.log("no price history");
             console.log(priceHistory);
         }
+        data.sort(function (a, b) { return a.datetime - b.datetime });
+        let prevDatetime = 0;
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
+            // avoid duplicates
+            if (prevDatetime === element.datetime) {
+                continue;
+            } else {
+                prevDatetime = element.datetime;
+            }
             let d = new Date(element.datetime);
             // skip previous day's data, we are missing the 10PM - midnight data anyway
             if (d.getFullYear() < window.TradingApp.Settings.currentDay.getFullYear() ||
@@ -186,6 +194,8 @@ window.TradingApp.DB = (function () {
                 i, dataBySymbol[symbol].candles, window.TradingApp.Main.widgets[symbol]
             );
         }
+        window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
+
     };
 
     const updateFromTimeSale = (timesale) => {
