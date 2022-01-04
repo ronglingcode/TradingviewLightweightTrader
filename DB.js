@@ -31,6 +31,9 @@ window.TradingApp.DB = (function () {
             window.TradingApp.Main.widgets[symbol].candleSeries.createPriceLine(priceLine);
         });
     };
+    const getTypicalPrice = (candle) => {
+        return (candle.high + candle.low + candle.close) / 3;
+    };
 
     const initialize = (symbol, priceHistory) => {
         let candles = [];
@@ -124,7 +127,7 @@ window.TradingApp.DB = (function () {
             }
 
             totalVolume += element.volume;
-            totalTradingAmount += (element.volume * element.close);
+            totalTradingAmount += (element.volume * getTypicalPrice(element));
 
             vwap.push({
                 time: newD,
