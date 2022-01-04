@@ -85,7 +85,8 @@ window.TradingApp.ChartSettings = (function () {
         crosshairMarkerVisible: false,
         autoscaleInfoProvider: () => null,
         lastValueVisible: false,
-        lineStyle: LightweightCharts.LineStyle.SparseDotted
+        lineStyle: LightweightCharts.LineStyle.SparseDotted,
+        priceLineVisible: false
     };
 
     return {
