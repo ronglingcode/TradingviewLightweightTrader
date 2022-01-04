@@ -32,19 +32,24 @@ window.TradingApp.Chart = (function () {
             widget.stopLossPriceLine = null;
         }
     };
-    const createPriceLine = (series, price, title, color, lineWidth) => {
+    const createPriceLine = (series, price, title, color, lineWidth, noPriceLabel) => {
         if (!color) {
             color = 'blue';
         }
         if (!lineWidth) {
             lineWidth = 1;
         }
+        let axisLabelVisible = true;
+        if (noPriceLabel) {
+            axisLabelVisible = false;
+        }
         return series.createPriceLine({
             price: price,
             color: color,
             title: title,
             lineStyle: LightweightCharts.LineStyle.Solid,
-            lineWidth: lineWidth
+            lineWidth: lineWidth,
+            axisLabelVisible: axisLabelVisible
         });
     };
 
