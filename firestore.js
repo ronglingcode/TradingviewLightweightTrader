@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,6 +23,7 @@ window.TradingApp.Firestore = (function () {
         console.error(msg);
         log('Error', msg);
     };
+    /*
     const log = async (msgType, msg) => {
         addDoc(collection(db, `${collectionNamePrefix}-Logs`), {
             msg: msg,
@@ -30,6 +31,16 @@ window.TradingApp.Firestore = (function () {
             timestamp: new Date()
         });
 
+    };*/
+    const log = async (msgType, msg) => {
+        let now = new Date();
+        let docId = now.getTime();
+        let docRef = await doc(db, `${collectionNamePrefix}-Logs/${docId}`) // create this document newDoc at this path
+        await setDoc(docRef, {
+            msg: msg,
+            type: msgType,
+            timestamp: now
+        });
     };
     const logOrder = async (order) => {
         addDoc(collection(db, `${collectionNamePrefix}-Orders`), {
