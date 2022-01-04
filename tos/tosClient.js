@@ -103,6 +103,9 @@ window.TradingApp.TOS = (function () {
     const flattenPosition = async (symbol) => {
         let account = await getAccountBySymbol(symbol);
         let position = account.position;
+        if (!position) {
+            return;
+        }
         let orderLegInstruction;
         let quantity = 0;
         if (position.longQuantity > 0) {
