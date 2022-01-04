@@ -224,17 +224,21 @@ window.TradingApp.DB = (function () {
             // update pre-market indicators
             if (timesale.lastPrice > globalData.premktHigh) {
                 globalData.premktHigh = parseInt(timesale.lastPrice * 100 + 1) / 100;
+                // TODO: redraw lines
             }
             if (timesale.lastPrice < globalData.premktLow) {
                 globalData.premktLow = parseInt(timesale.lastPrice * 100 - 1) / 100;
+                // TODO: redraw lines
             }
         } else {
             // update in-market indicators
             if (timesale.lastPrice > globalData.highOfDay) {
                 globalData.highOfDay = parseInt(timesale.lastPrice * 100 + 1) / 100;
+                window.TradingApp.Chart.updateUI(symbol, "hod", globalData.highOfDay);
             }
             if (timesale.lastPrice < globalData.lowOfDay) {
                 globalData.lowOfDay = parseInt(timesale.lastPrice * 100 - 1) / 100;
+                window.TradingApp.Chart.updateUI(symbol, "lod", globalData.lowOfDay);
             }
         }
         if (newTime == lastCandle.time) {
