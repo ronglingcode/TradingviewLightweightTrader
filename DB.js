@@ -78,7 +78,8 @@ window.TradingApp.DB = (function () {
                 low: element.low,
                 close: element.close,
                 volume: element.volume,
-                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(d)
+                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(d),
+                firstTradeTime: element.datetime
             };
             candles.push(newCandle);
             volumes.push({ time: newD, value: element.volume });
@@ -226,6 +227,11 @@ window.TradingApp.DB = (function () {
         if (newTime == lastCandle.time) {
             // update current candle
             lastVolume.value += timesale.lastSize;
+            if (timesale.tradeTime < lastCandle.firstTradeTime) {
+                lastCandle.open = timesale.lastPrice;
+                lastCandle.firstTradeTime = timesale.tradeTime;
+                window.TradingApp.Firestore.logInfo("received out of order timesale " + symbol + ": " + timesale.tradeTime);
+            }
             if (timesale.lastPrice > lastCandle.high) {
                 lastCandle.high = timesale.lastPrice;
             } else if (timesale.lastPrice < lastCandle.low) {
@@ -264,7 +270,8 @@ window.TradingApp.DB = (function () {
                 high: timesale.lastPrice,
                 low: timesale.lastPrice,
                 close: timesale.lastPrice,
-                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(localJsDate)
+                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(localJsDate),
+                firstTradeTime: timesale.tradeTime
             };
             globalData.candles.push(lastCandle);
             lastVolume = {
