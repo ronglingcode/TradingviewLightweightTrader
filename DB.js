@@ -195,7 +195,7 @@ window.TradingApp.DB = (function () {
             );
         }
         window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
-
+        window.TradingApp.Indicators.drawPreMarketLow(dataBySymbol[symbol].premktLow, window.TradingApp.Main.widgets[symbol]);
     };
 
     const updateFromTimeSale = (timesale) => {
