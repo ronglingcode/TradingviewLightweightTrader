@@ -60,13 +60,15 @@ window.TradingApp.ChartSettings = (function () {
         scaleMargins: {
             top: 0.7,
             bottom: 0,
-        }
+        },
+        priceLineVisible: false
     };
     const vwapSettings = {
         color: '#6a1b9a',
         lineWidth: 1,
         crosshairMarkerVisible: false,
         autoscaleInfoProvider: () => null,
+        priceLineVisible: false
     };
 
     const cloudAreaCandleSettings = {
@@ -77,6 +79,7 @@ window.TradingApp.ChartSettings = (function () {
         borderVisible: false,
         lastValueVisible: false,
         autoscaleInfoProvider: () => null,
+        priceLineVisible: false
     }
 
     const cloudLineSettings = {
