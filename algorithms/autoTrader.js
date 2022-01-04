@@ -5,15 +5,18 @@ window.TradingApp.AutoTrader = (function () {
     });
 
     const getStockBias = (symbol) => {
-        window.TradingApp.Watchlist.forEach(element => {
+        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+            let element = window.TradingApp.Watchlist[i];
             if (element.symbol === symbol) {
                 return element.bias;
             }
-        });
+        }
         return '';
     };
     const onFirstMinuteClose = (symbol, candle, vwap) => {
+        window.TradingApp.Firestore.logInfo("onFirstMinuteClose " + symbol + ", vwap: " + vwap);
         let bias = getStockBias(symbol);
+        window.TradingApp.Firestore.logInfo("bias for " + symbol + bias);
         if (stateBySymbol[symbol].manualTriggered === true) {
             return;
         }
@@ -41,6 +44,7 @@ window.TradingApp.AutoTrader = (function () {
     return {
         stateBySymbol,
         manualTrigger,
+        getStockBias,
         onFirstMinuteClose,
         onSecondMinuteClose
     }
