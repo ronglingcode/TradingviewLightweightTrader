@@ -5,24 +5,24 @@ window.TradingApp = {
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'TSLA',
+            symbol: 'F',
             bias: 'long',
             //            ajbuy: 246,
             //          ajsell: 240
         },
         {
-            symbol: 'MRNA',
+            symbol: 'SE',
             bias: 'short'
         },
         {
-            symbol: 'SE',
+            symbol: 'TSLA',
             bias: 'long'
             //            ajbuy: 1073,
             //          ajsell: 1060
         },
         {
-            symbol: 'WOLF',
-            bias: 'short'
+            symbol: 'NVDA',
+            bias: ''
         }
     ],
     'State': {
