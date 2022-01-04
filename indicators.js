@@ -95,6 +95,13 @@ window.TradingApp.Indicators = (function () {
         drawFirstTriangleConsolidation(end, candles, widget);
     }
 
+    const drawPreMarketHigh = (price, widget) => {
+        if (widget.premktHigh) {
+            widget.candleSeries.removePriceLine(widget.premktHigh);
+        }
+        widget.premktHigh = window.TradingApp.Chart.createPriceLine(widget.candleSeries, price, "pm-hi", "black", 2, true);
+    };
+
     const drawHigherLows = (end, candles, widget) => {
         let threshold = 3;
         let count = 0;
@@ -197,6 +204,7 @@ window.TradingApp.Indicators = (function () {
     return {
         openRangeBreakoutPriceLines,
         createOpenRangeSeries,
-        drawIndicatorsForNewlyClosedCandle
+        drawIndicatorsForNewlyClosedCandle,
+        drawPreMarketHigh
     }
 })();
