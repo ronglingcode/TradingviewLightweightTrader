@@ -191,7 +191,11 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.Firestore.logOrder(order);
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
-        return sendJsonPostRequestWithAccessToken(url, order);
+        return sendJsonPostRequestWithAccessToken(url, order).then(response => console.log(response))
+            .catch(err => {
+                window.TradingApp.Firestore.logError('Order request Failed ' + err);
+                console.log(err);
+            }); // Catch errors;
     };
 
     const getOrders = async () => {

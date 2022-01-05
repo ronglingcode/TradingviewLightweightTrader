@@ -43,6 +43,7 @@ window.TradingApp.Firestore = (function () {
         });
     };
     const logOrder = async (order) => {
+        console.log(order);
         addDoc(collection(db, `${collectionNamePrefix}-Orders`), {
             timestamp: new Date(),
             ...order
