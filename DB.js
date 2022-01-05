@@ -118,10 +118,6 @@ window.TradingApp.DB = (function () {
                 openingCandle = createOpeningCandle(newCandle);
             }
             if (openingCandle) {
-                openHigh.push({
-                    time: newD,
-                    value: openingCandle.high
-                });
                 openHigh3R.push({ time: newD, value: openingCandle.high3R });
                 openHigh2R.push({ time: newD, value: openingCandle.high2R });
                 openHigh1R.push({ time: newD, value: openingCandle.high1R });
@@ -159,7 +155,19 @@ window.TradingApp.DB = (function () {
         });
 
         if (openingCandle) {
-            drawOpenRangeLines(openingCandle);
+            if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[0].setData(openLow3R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[1].setData(openLow2R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[2].setData(openLow1R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[3].setData(openLow);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[4].setData(openPrice);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[5].setData(openHigh);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[6].setData(openHigh1R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[7].setData(openHigh2R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[8].setData(openHigh3R);
+            } else {
+                drawOpenRangeLines(openingCandle);
+            }
         }
         dataBySymbol[symbol] = {
             candles: candles,
@@ -194,8 +202,12 @@ window.TradingApp.DB = (function () {
                 i, dataBySymbol[symbol].candles, window.TradingApp.Main.widgets[symbol]
             );
         }
-        window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
-        window.TradingApp.Indicators.drawPreMarketLow(dataBySymbol[symbol].premktLow, window.TradingApp.Main.widgets[symbol]);
+        if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+
+        } else {
+            window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
+            window.TradingApp.Indicators.drawPreMarketLow(dataBySymbol[symbol].premktLow, window.TradingApp.Main.widgets[symbol]);
+        }
     };
 
     const updateFromTimeSale = (timesale) => {
@@ -234,11 +246,19 @@ window.TradingApp.DB = (function () {
             // update in-market indicators
             if (timesale.lastPrice > globalData.highOfDay) {
                 globalData.highOfDay = parseInt(timesale.lastPrice * 100 + 1) / 100;
-                window.TradingApp.Chart.updateUI(symbol, "hod", globalData.highOfDay);
+                if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+
+                } else {
+                    window.TradingApp.Chart.updateUI(symbol, "hod", globalData.highOfDay);
+                }
             }
             if (timesale.lastPrice < globalData.lowOfDay) {
                 globalData.lowOfDay = parseInt(timesale.lastPrice * 100 - 1) / 100;
-                window.TradingApp.Chart.updateUI(symbol, "lod", globalData.lowOfDay);
+                if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+
+                } else {
+                    window.TradingApp.Chart.updateUI(symbol, "lod", globalData.lowOfDay);
+                }
             }
         }
         if (newTime == lastCandle.time) {
@@ -263,17 +283,48 @@ window.TradingApp.DB = (function () {
             let newlyClosedCandle = lastCandle;
             let localJsDate = window.TradingApp.Helper.tvTimestampToLocalJsDate(newlyClosedCandle.time);
 
+
             if (isMarketOpenTime(localJsDate)) {
+                // first minute just closed, create open range candle data
                 globalData.openingCandle = createOpeningCandle(newlyClosedCandle);
                 drawOpenRangeLines(globalData.openingCandle);
                 addOrbAreaCandle(newlyClosedCandle.time, globalData.orbArea, globalData.openingCandle);
                 window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[0]);
-                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
+            } else if (globalData.openingCandle) {
+                // after first minute, has open range candle data. 
+                // extend open range data
+                //addOrbAreaCandle(newTime, globalData.orbArea, globalData.openingCandle);
+                //window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[globalData.orbArea.length - 1]);
+
+                extendDataOnChart(newTime, globalData.orbArea, {
+                    open: globalData.openingCandle.high,
+                    high: globalData.openingCandle.high,
+                    low: globalData.openingCandle.low,
+                    close: globalData.openingCandle.low
+                }, window.TradingApp.Main.widgets[symbol].orbSeries);
+                if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+                    extendDataOnChart(newTime, globalData.openLow3R, globalData.openLow3R.slice(-1)[0], window.TradingApp.Main.widgets[symbol].openRangeSeriesList[0]);
+                    //globalData.openLow3R.push({ time: newTime, value: globalData.openLow3R.slice(-1)[0].value });
+                    //window.TradingApp.Main.widgets[symbol].openRangeSeriesList[0].update(globalData.openLow3R[globalData.openLow3R.length - 1]);
+                    /*window.TradingApp.Main.widgets[symbol].openRangeSeriesList[1].setData(openLow2R);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[2].setData(openLow1R);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[3].setData(openLow);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[4].setData(openPrice);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[5].setData(openHigh);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[6].setData(openHigh1R);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[7].setData(openHigh2R);
+                    window.TradingApp.Main.widgets[symbol].openRangeSeriesList[8].setData(openHigh3R);*/
+                }
             }
-            // second minute just closed
-            if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
+
+            if (isMarketOpenTime(localJsDate)) {
+                // first minute just closed
+                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
+            } else if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
+                // second minute just closed
                 window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
             }
+
 
             window.TradingApp.Indicators.drawIndicatorsForNewlyClosedCandle(
                 globalData.candles.length - 1, globalData.candles, window.TradingApp.Main.widgets[symbol]
@@ -301,8 +352,7 @@ window.TradingApp.DB = (function () {
                 value: newVwapValue
             };
             globalData.vwap.push(lastVwap);
-            addOrbAreaCandle(newTime, globalData.orbArea, globalData.openingCandle);
-            window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[globalData.orbArea.length - 1]);
+
 
         }
         window.TradingApp.Main.widgets[symbol].candleSeries.update(lastCandle);
@@ -322,7 +372,15 @@ window.TradingApp.DB = (function () {
             low: openingCandle.low,
             close: openingCandle.low
         });
-    }
+    };
+
+    const extendDataOnChart = (newTime, dataArray, newObj, series) => {
+        dataArray.push({
+            ...newObj,
+            time: newTime
+        });
+        series.update(dataArray.slice(-1)[0]);
+    };
     return {
         initialize,
         updateFromTimeSale,

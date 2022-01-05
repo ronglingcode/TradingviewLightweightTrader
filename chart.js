@@ -104,10 +104,9 @@ window.TradingApp.Chart = (function () {
         widget.candleSeries = candleSeries;
         widget.vwapSeries = vwapSeries;
 
-        // comment out because open range indicators are price levels instead of series.
-        // series affects the price scale
-        //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
-
+        if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+            widget.openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(widget.chart);
+        }
         function myClickHandler(param) {
             /*
             if (!param.point) {

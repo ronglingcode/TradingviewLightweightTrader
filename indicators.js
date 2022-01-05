@@ -55,7 +55,8 @@ window.TradingApp.Indicators = (function () {
         const lineSettings = {
             lineWidth: 1,
             crosshairMarkerVisible: false,
-            priceLineVisible: false
+            priceLineVisible: false,
+            autoscaleInfoProvider: () => null
         }
         for (let i = 0; i < 3; i++) {
             let s = chart.addLineSeries({
