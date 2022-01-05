@@ -9,7 +9,8 @@ window.TradingApp.Algo.Breakout = (function () {
         let minutesSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 60000;
         if (minutesSinceMarketOpen >= 0 && minutesSinceMarketOpen <= 5) {
             let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
-            let currentVwap = vwap[vwap.length - 1];
+            let currentVwap = vwap[vwap.length - 1].value;
+            window.TradingApp.Firestore.logInfo(`check vwap rule for ${symbol}, entry: ${entryPrice}, stop: ${stopOutPrice}, vwap ${currentVwap}`);
             if (entryPrice > stopOutPrice) {
                 // buy orders
                 if (entryPrice < currentVwap) {
@@ -31,7 +32,6 @@ window.TradingApp.Algo.Breakout = (function () {
             return;
         }
         let orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
-        console.log(orders[0]);
         orders.forEach(order => {
             window.TradingApp.TOS.placeOrderBase(order);
         });
