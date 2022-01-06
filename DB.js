@@ -118,10 +118,6 @@ window.TradingApp.DB = (function () {
                 openingCandle = createOpeningCandle(newCandle);
             }
             if (openingCandle) {
-                openHigh.push({
-                    time: newD,
-                    value: openingCandle.high
-                });
                 openHigh3R.push({ time: newD, value: openingCandle.high3R });
                 openHigh2R.push({ time: newD, value: openingCandle.high2R });
                 openHigh1R.push({ time: newD, value: openingCandle.high1R });
@@ -159,7 +155,19 @@ window.TradingApp.DB = (function () {
         });
 
         if (openingCandle) {
-            drawOpenRangeLines(openingCandle);
+            if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[0].setData(openLow3R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[1].setData(openLow2R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[2].setData(openLow1R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[3].setData(openLow);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[4].setData(openPrice);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[5].setData(openHigh);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[6].setData(openHigh1R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[7].setData(openHigh2R);
+                window.TradingApp.Main.widgets[symbol].openRangeSeriesList[8].setData(openHigh3R);
+            } else {
+                drawOpenRangeLines(openingCandle);
+            }
         }
         dataBySymbol[symbol] = {
             candles: candles,
@@ -194,8 +202,12 @@ window.TradingApp.DB = (function () {
                 i, dataBySymbol[symbol].candles, window.TradingApp.Main.widgets[symbol]
             );
         }
-        window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
-        window.TradingApp.Indicators.drawPreMarketLow(dataBySymbol[symbol].premktLow, window.TradingApp.Main.widgets[symbol]);
+        if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+
+        } else {
+            window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
+            window.TradingApp.Indicators.drawPreMarketLow(dataBySymbol[symbol].premktLow, window.TradingApp.Main.widgets[symbol]);
+        }
     };
 
     const updateFromTimeSale = (timesale) => {
@@ -263,15 +275,42 @@ window.TradingApp.DB = (function () {
             let newlyClosedCandle = lastCandle;
             let localJsDate = window.TradingApp.Helper.tvTimestampToLocalJsDate(newlyClosedCandle.time);
 
+            // update Open range price series
             if (isMarketOpenTime(localJsDate)) {
+                // first minute just closed, create open range candle data
                 globalData.openingCandle = createOpeningCandle(newlyClosedCandle);
-                drawOpenRangeLines(globalData.openingCandle);
-                addOrbAreaCandle(newlyClosedCandle.time, globalData.orbArea, globalData.openingCandle);
-                window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[0]);
-                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
+                if (!window.TradingApp.Settings.drawIndicatorsAsSeries) {
+                    drawOpenRangeLines(globalData.openingCandle);
+                }
             }
-            // second minute just closed
-            if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
+
+            // candle closed after market open
+            if (globalData.openingCandle) {
+                addDataAndUpdateChart(newTime, globalData.orbArea, {
+                    open: globalData.openingCandle.high,
+                    high: globalData.openingCandle.high,
+                    low: globalData.openingCandle.low,
+                    close: globalData.openingCandle.low
+                }, window.TradingApp.Main.widgets[symbol].orbSeries);
+
+                if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
+                    addDataAndUpdateChart(newTime, globalData.openLow3R, { value: globalData.openingCandle.low3R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[0]);
+                    addDataAndUpdateChart(newTime, globalData.openLow2R, { value: globalData.openingCandle.low2R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[1]);
+                    addDataAndUpdateChart(newTime, globalData.openLow1R, { value: globalData.openingCandle.low1R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[2]);
+                    addDataAndUpdateChart(newTime, globalData.openLow, { value: globalData.openingCandle.low }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[3]);
+                    addDataAndUpdateChart(newTime, globalData.openPrice, { value: globalData.openingCandle.open }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[4]);
+                    addDataAndUpdateChart(newTime, globalData.openHigh, { value: globalData.openingCandle.high }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[5]);
+                    addDataAndUpdateChart(newTime, globalData.openHigh1R, { value: globalData.openingCandle.high1R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[6]);
+                    addDataAndUpdateChart(newTime, globalData.openHigh2R, { value: globalData.openingCandle.high2R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[7]);
+                    addDataAndUpdateChart(newTime, globalData.openHigh3R, { value: globalData.openingCandle.high3R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[8]);
+                }
+            }
+
+            if (isMarketOpenTime(localJsDate)) {
+                // first minute just closed
+                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
+            } else if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
+                // second minute just closed
                 window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
             }
 
@@ -322,7 +361,17 @@ window.TradingApp.DB = (function () {
             low: openingCandle.low,
             close: openingCandle.low
         });
-    }
+    };
+
+    const addDataAndUpdateChart = (newTime, dataArray, newObj, series) => {
+        dataArray.push({
+            ...newObj,
+            time: newTime
+        });
+        series.update(dataArray.slice(-1)[0]);
+    };
+
+
     return {
         initialize,
         updateFromTimeSale,
