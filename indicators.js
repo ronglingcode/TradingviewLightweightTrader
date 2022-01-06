@@ -103,6 +103,31 @@ window.TradingApp.Indicators = (function () {
         widget.premktHigh = window.TradingApp.Chart.createPriceLine(widget.candleSeries, price, "pm-hi", "black", 2, true);
     };
 
+    const populatePreMarketLineSeries = (time, high, low, widget) => {
+        if (widget.premktHigh) {
+            widget.premktHigh.update({ time: time, value: high });
+        }
+        if (widget.premktLow) {
+            widget.premktLow.update({ time: time, value: low });
+        }
+    };
+
+    const resetPreMarketHighLineSeries = (widget) => {
+        if (widget.premktHigh) {
+            widget.chart.removeSeries(widget.premktHigh);
+        }
+        widget.premktHigh = widget.chart.addLineSeries(window.TradingApp.ChartSettings.preMarketLineSettings);
+    };
+
+    const resetPreMarketLowLineSeries = (widget) => {
+        if (widget.premktLow) {
+            widget.chart.removeSeries(widget.premktLow);
+        }
+        widget.premktLow = widget.chart.addLineSeries({
+            ...window.TradingApp.ChartSettings.preMarketLineSettings,
+        });
+    }
+
     const drawPreMarketLow = (price, widget) => {
         if (widget.premktLow) {
             widget.candleSeries.removePriceLine(widget.premktLow);
@@ -214,6 +239,9 @@ window.TradingApp.Indicators = (function () {
         createOpenRangeSeries,
         drawIndicatorsForNewlyClosedCandle,
         drawPreMarketHigh,
-        drawPreMarketLow
+        drawPreMarketLow,
+        populatePreMarketLineSeries,
+        resetPreMarketHighLineSeries,
+        resetPreMarketLowLineSeries
     }
 })();
