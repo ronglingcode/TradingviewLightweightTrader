@@ -3,6 +3,9 @@ window.TradingApp.Algo.Breakout = (function () {
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
             return false;
         }
+        if (!checkRuleForBias(symbol, entryPrice, stopOutPrice)) {
+            return false;
+        }
         return true;
     };
     const checkRuleForVwap = (symbol, entryPrice, stopOutPrice) => {
@@ -21,6 +24,19 @@ window.TradingApp.Algo.Breakout = (function () {
                 if (entryPrice > currentVwap) {
                     return confirm("entry against vwap, still continue?");
                 }
+            }
+        }
+        return true;
+    };
+    const checkRuleForBias = (symbol, entryPrice, stopOutPrice) => {
+        let bias = window.TradingApp.AutoTrader.getStockBias(symbol);
+        if (bias === 'long') {
+            if (entryPrice < stopOutPrice) {
+                return confirm("sell orders on long bias, still continue?");
+            }
+        } else if (bias === 'short') {
+            if (entryPrice > stopOutPrice) {
+                return confirm("buy orders on short bias, still continue?");
             }
         }
         return true;
