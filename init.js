@@ -6,15 +6,16 @@ window.TradingApp = {
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'F',
+            symbol: 'EAR',
             bias: 'long',
-            //            ajbuy: 246,
+            ajbuy: 9,
             //          ajsell: 240
-        }/*,
+        },
         {
-            symbol: 'SE',
-            bias: 'short'
-        }*/
+            symbol: 'DKS',
+            bias: 'long',
+            ajbuy: 113.5
+        }
     ],
     'State': {
         activeSymbol: '',
