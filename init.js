@@ -14,16 +14,6 @@ window.TradingApp = {
         {
             symbol: 'SE',
             bias: 'short'
-        },
-        {
-            symbol: 'TSLA',
-            bias: 'long'
-            //            ajbuy: 1073,
-            //          ajsell: 1060
-        },
-        {
-            symbol: 'NVDA',
-            bias: ''
         }*/
     ],
     'State': {
