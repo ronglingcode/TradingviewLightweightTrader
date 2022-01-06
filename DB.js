@@ -64,6 +64,7 @@ window.TradingApp.DB = (function () {
         }
         data.sort(function (a, b) { return a.datetime - b.datetime });
         let prevDatetime = 0;
+        let widget = window.TradingApp.Main.widgets[symbol];
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
             // avoid duplicates
@@ -98,10 +99,12 @@ window.TradingApp.DB = (function () {
             if (newCandle.minutesSinceMarketOpen < 0) {
                 // update pre-market indicators
                 if (element.low < premktLow) {
-                    premktLow = parseInt(element.low * 100 - 1) / 100;
+                    premktLow = element.low; // parseInt(element.low * 100 - 1) / 100;
+                    window.TradingApp.Indicators.resetPreMarketLowLineSeries(widget);
                 }
                 if (element.high > premktHigh) {
-                    premktHigh = parseInt(element.high * 100 + 1) / 100;
+                    premktHigh = element.high; // parseInt(element.high * 100 + 1) / 100;
+                    window.TradingApp.Indicators.resetPreMarketHighLineSeries(widget);
                 }
             } else {
                 // update in-market indicators
@@ -137,12 +140,15 @@ window.TradingApp.DB = (function () {
                 time: newD,
                 value: totalTradingAmount / totalVolume
             });
+            window.TradingApp.Indicators.populatePreMarketLineSeries(newD, premktHigh, premktLow, window.TradingApp.Main.widgets[symbol]);
+
         }
 
         window.TradingApp.Main.widgets[symbol].volumeSeries.setData(volumes);
         window.TradingApp.Main.widgets[symbol].vwapSeries.setData(vwap);
         window.TradingApp.Main.widgets[symbol].candleSeries.setData(candles);
         window.TradingApp.Main.widgets[symbol].orbSeries.setData(orbArea);
+
         window.TradingApp.Chart.updateUI(symbol, "hod", highOfDay);
         window.TradingApp.Chart.updateUI(symbol, "lod", lowOfDay);
         window.TradingApp.Watchlist.forEach(stock => {
@@ -202,9 +208,7 @@ window.TradingApp.DB = (function () {
                 i, dataBySymbol[symbol].candles, window.TradingApp.Main.widgets[symbol]
             );
         }
-        if (window.TradingApp.Settings.drawIndicatorsAsSeries) {
-
-        } else {
+        if (!window.TradingApp.Settings.drawIndicatorsAsSeries) {
             window.TradingApp.Indicators.drawPreMarketHigh(dataBySymbol[symbol].premktHigh, window.TradingApp.Main.widgets[symbol]);
             window.TradingApp.Indicators.drawPreMarketLow(dataBySymbol[symbol].premktLow, window.TradingApp.Main.widgets[symbol]);
         }

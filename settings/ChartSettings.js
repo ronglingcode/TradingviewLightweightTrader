@@ -36,6 +36,7 @@ window.TradingApp.ChartSettings = (function () {
             borderColor: 'rgba(197, 203, 206, 0.8)',
             timeVisible: true,
             //fixRightEdge: true,
+            //fixLeftEdge: true,
             rightOffset: 10
         },
     };
@@ -92,6 +93,15 @@ window.TradingApp.ChartSettings = (function () {
         priceLineVisible: false
     };
 
+    const preMarketLineSettings = {
+        color: 'black',
+        lineWidth: 1,
+        autoscaleInfoProvider: () => null,
+        crosshairMarkerVisible: false,
+        lastValueVisible: false,
+        priceLineVisible: false
+    }
+
     return {
         chartSettings,
         candlestickSeriesSettings,
@@ -100,6 +110,7 @@ window.TradingApp.ChartSettings = (function () {
         cloudAreaCandleSettings,
         cloudLineSettings,
         defaultRed,
-        defaultGreen
+        defaultGreen,
+        preMarketLineSettings
     };
 })();
