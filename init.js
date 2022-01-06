@@ -1,6 +1,7 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date()
+        'currentDay': new Date(),
+        'drawIndicatorsAsSeries': true
     },
     'Algo': {},
     'Watchlist': [
@@ -9,7 +10,7 @@ window.TradingApp = {
             bias: 'long',
             //            ajbuy: 246,
             //          ajsell: 240
-        },
+        }/*,
         {
             symbol: 'SE',
             bias: 'short'
@@ -23,7 +24,7 @@ window.TradingApp = {
         {
             symbol: 'NVDA',
             bias: ''
-        }
+        }*/
     ],
     'State': {
         activeSymbol: '',
