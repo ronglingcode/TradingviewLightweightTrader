@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
-import { getFirestore, collection, addDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -49,9 +49,42 @@ window.TradingApp.Firestore = (function () {
             ...order
         });
     };
+    const getAutoTraderStateWithoutRefresh = async () => {
+        const docRef = doc(db, "state", "autoTrader");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            logError("no autotrader state");
+            return null;
+        }
+    };
+    const setAutoTraderState = async (newState) => {
+        let docRef = await doc(db, "state/autoTrader")
+        await setDoc(docRef, newState);
+    };
+    const getAutoTraderStateWithRefresh = async () => {
+        let state = await getAutoTraderStateWithoutRefresh();
+        let currentDate = new Date();
+        let dateString = currentDate.toLocaleDateString();
+        if (dateString !== state.date) {
+            let result = await setAutoTraderState({ date: dateString });
+            state = await getAutoTraderStateWithoutRefresh();
+            console.log(state);
+            return state;
+        } else {
+            console.log(state);
+            return state;
+        }
+    };
+
     return {
         logInfo,
         logError,
-        logOrder
+        logOrder,
+        getAutoTraderStateWithoutRefresh,
+        setAutoTraderState,
+        getAutoTraderStateWithRefresh
     };
 })();
