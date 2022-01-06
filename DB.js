@@ -217,6 +217,7 @@ window.TradingApp.DB = (function () {
     const updateFromTimeSale = (timesale) => {
         let globalDatabySymbol = window.TradingApp.DB.dataBySymbol;
         let symbol = timesale.symbol;
+        let widget = window.TradingApp.Main.widgets[symbol];
         if (!(symbol in globalDatabySymbol)) {
             console.log(`${symbol} not found in dataBySymbol`);
             return;
@@ -239,12 +240,12 @@ window.TradingApp.DB = (function () {
         if (oneMinuteBucket < window.TradingApp.Settings.marketOpenTime) {
             // update pre-market indicators
             if (timesale.lastPrice > globalData.premktHigh) {
-                globalData.premktHigh = parseInt(timesale.lastPrice * 100 + 1) / 100;
-                // TODO: redraw lines
+                globalData.premktHigh = timesale.lastPrice;// parseInt(timesale.lastPrice * 100 + 1) / 100;
+                window.TradingApp.Indicators.resetPreMarketHighLineSeries(widget);
             }
             if (timesale.lastPrice < globalData.premktLow) {
-                globalData.premktLow = parseInt(timesale.lastPrice * 100 - 1) / 100;
-                // TODO: redraw lines
+                globalData.premktLow = timesale.lastPrice; // parseInt(timesale.lastPrice * 100 - 1) / 100;
+                window.TradingApp.Indicators.resetPreMarketLowLineSeries(widget);
             }
         } else {
             // update in-market indicators
@@ -257,6 +258,7 @@ window.TradingApp.DB = (function () {
                 window.TradingApp.Chart.updateUI(symbol, "lod", globalData.lowOfDay);
             }
         }
+
         if (newTime == lastCandle.time) {
             // update current candle
             lastVolume.value += timesale.lastSize;
@@ -346,6 +348,7 @@ window.TradingApp.DB = (function () {
             globalData.vwap.push(lastVwap);
             addOrbAreaCandle(newTime, globalData.orbArea, globalData.openingCandle);
             window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[globalData.orbArea.length - 1]);
+            window.TradingApp.Indicators.populatePreMarketLineSeries(newTime, globalData.premktHigh, globalData.premktLow, widget);
 
         }
         window.TradingApp.Main.widgets[symbol].candleSeries.update(lastCandle);
