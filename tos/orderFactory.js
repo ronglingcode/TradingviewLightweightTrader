@@ -123,11 +123,11 @@ window.TradingApp.OrderFactory = (function () {
         let RiskManager = window.TradingApp.Algo.RiskManager;
         // add 1 cent for slippage
         if (entryPrice > stopOutPrice) {
-            entryPrice += 0.01;
-            stopOutPrice -= 0.01;
+            entryPrice = RiskManager.addCents(entryPrice, 1);
+            stopOutPrice = RiskManager.minusCents(stopOutPrice, 1);
         } else {
-            entryPrice -= 0.01;
-            stopOutPrice += 0.01;
+            entryPrice = RiskManager.minusCents(entryPrice, 1);
+            stopOutPrice = RiskManager.addCents(stopOutPrice, 1);
         }
         let riskPerShare = Math.abs(entryPrice - stopOutPrice);
         let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);

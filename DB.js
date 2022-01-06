@@ -99,20 +99,20 @@ window.TradingApp.DB = (function () {
             if (newCandle.minutesSinceMarketOpen < 0) {
                 // update pre-market indicators
                 if (element.low < premktLow) {
-                    premktLow = element.low; // parseInt(element.low * 100 - 1) / 100;
+                    premktLow = Math.floor(element.low * 100) / 100;
                     window.TradingApp.Indicators.resetPreMarketLowLineSeries(widget);
                 }
                 if (element.high > premktHigh) {
-                    premktHigh = element.high; // parseInt(element.high * 100 + 1) / 100;
+                    premktHigh = Math.ceil(element.high * 100) / 100;
                     window.TradingApp.Indicators.resetPreMarketHighLineSeries(widget);
                 }
             } else {
                 // update in-market indicators
                 if (element.low < lowOfDay) {
-                    lowOfDay = parseInt(element.low * 100 - 1) / 100;
+                    lowOfDay = Math.floor(element.low * 100) / 100;
                 }
                 if (element.high > highOfDay) {
-                    highOfDay = parseInt(element.high * 100 + 1) / 100;
+                    highOfDay = Math.ceil(element.high * 100) / 100;
                 }
             }
             if (isMarketOpenTime(d) && i != data.length - 1) {
@@ -240,21 +240,21 @@ window.TradingApp.DB = (function () {
         if (oneMinuteBucket < window.TradingApp.Settings.marketOpenTime) {
             // update pre-market indicators
             if (timesale.lastPrice > globalData.premktHigh) {
-                globalData.premktHigh = timesale.lastPrice;// parseInt(timesale.lastPrice * 100 + 1) / 100;
+                globalData.premktHigh = Math.ceil(timesale.lastPrice * 100) / 100;
                 window.TradingApp.Indicators.resetPreMarketHighLineSeries(widget);
             }
             if (timesale.lastPrice < globalData.premktLow) {
-                globalData.premktLow = timesale.lastPrice; // parseInt(timesale.lastPrice * 100 - 1) / 100;
+                globalData.premktLow = Math.floor(timesale.lastPrice * 100) / 100;
                 window.TradingApp.Indicators.resetPreMarketLowLineSeries(widget);
             }
         } else {
             // update in-market indicators
             if (timesale.lastPrice > globalData.highOfDay) {
-                globalData.highOfDay = parseInt(timesale.lastPrice * 100 + 1) / 100;
+                globalData.highOfDay = Math.ceil(timesale.lastPrice * 100) / 100;
                 window.TradingApp.Chart.updateUI(symbol, "hod", globalData.highOfDay);
             }
             if (timesale.lastPrice < globalData.lowOfDay) {
-                globalData.lowOfDay = parseInt(timesale.lastPrice * 100 - 1) / 100;
+                globalData.lowOfDay = Math.floor(timesale.lastPrice * 100) / 100;
                 window.TradingApp.Chart.updateUI(symbol, "lod", globalData.lowOfDay);
             }
         }

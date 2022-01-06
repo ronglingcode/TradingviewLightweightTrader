@@ -37,13 +37,6 @@ window.TradingApp.Algo.Breakout = (function () {
         });
     };
 
-    const roundPrice = (price, up) => {
-        if (up) {
-            return parseInt(price * 100 + 1) / 100;
-        } else {
-            return parseInt(price * 100 - 1) / 100;
-        }
-    };
     const getStopLossPrice = (symbol, code) => {
         // if stop loss drawn, use stop loss drawn on the chart
         // if not drawn, use high/low of the day
@@ -57,8 +50,12 @@ window.TradingApp.Algo.Breakout = (function () {
                 p = window.TradingApp.DB.dataBySymbol[symbol].highOfDay;
             }
         }
-
-        return roundPrice(p, code === "KeyS");
+        if (code === "KeyB") {
+            p = Math.floor(p * 100) / 100;
+        } else if (code === "KeyS") {
+            p = math.ceil(p * 100) / 100;
+        }
+        return p;
     };
 
     const getEntryPrice = (symbol, code) => {
@@ -75,7 +72,13 @@ window.TradingApp.Algo.Breakout = (function () {
             }
         }
 
-        return roundPrice(p, code === "KeyB");
+        if (code === "KeyB") {
+            p = Math.ceil(p * 100) / 100;
+        } else if (code === "KeyS") {
+            p = math.floor(p * 100) / 100;
+        }
+
+        return p;
     };
 
     const test = () => {
