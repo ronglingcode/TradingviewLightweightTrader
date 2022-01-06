@@ -37,7 +37,53 @@ window.TradingApp.AutoTrader = (function () {
         if (candle0.high >= candle1.high && candle0.low <= candle1.low) {
             window.TradingApp.Firestore.logInfo("onSecondMinuteClose: triangle consolidation for " + symbol);
         }
+        let bias = getStockBias(symbol);
+        if (bias === 'long') {
+            checkFalseBreakdown(symbol, candle0.low, candle1);
+        } else if (bias === 'short') {
+            checkFalseBreakout(symbol, candle0.high, candle1);
+        }
     };
+
+    const onThirdMinuteClose = (symbol, candle0, candle1, candle2) => {
+        // second minute close, check for triangle consolidation
+        if (candle0.high >= candle1.high && candle0.low <= candle1.low) {
+            window.TradingApp.Firestore.logInfo("onSecondMinuteClose: triangle consolidation for " + symbol);
+        }
+        let bias = getStockBias(symbol);
+        // if long bias, check for false breakdown open range low
+        if (bias === 'long') {
+            checkFalseBreakdown(symbol, candle0.low, candle2);
+        } else if (bias === 'short') {
+            checkFalseBreakout(symbol, candle0.high, candle2);
+        }
+    };
+    const checkFalseBreakdown = (symbol, breakdownLevel, candle) => {
+        if (candle.low < breakdownLevel && candle.close > breakdownLevel) {
+            window.TradingApp.Firestore.logInfo('draw false breakdown marker for ' + symbol);
+            window.TradingApp.Chart.addMarker(symbol, {
+                time: candle.time,
+                position: 'belowBar',
+                color: 'green',
+                shape: 'arrowUp',
+                text: 'false breakdown'
+            });
+        }
+    };
+
+    const checkFalseBreakout = (symbol, breakoutLevel, candle) => {
+        if (candle.high > breakoutLevel && candle.close < breakoutLevel) {
+            window.TradingApp.Firestore.logInfo('draw false breakout marker for ' + symbol);
+            window.TradingApp.Chart.addMarker(symbol, {
+                time: candle.time,
+                position: 'aboveBar',
+                color: 'red',
+                shape: 'arrowDown',
+                text: 'false breakout'
+            });
+        }
+    }
+
     const manualTrigger = (symbol, trigger) => {
         stateBySymbol[symbol].manualTriggered = trigger;
     };
@@ -46,6 +92,7 @@ window.TradingApp.AutoTrader = (function () {
         manualTrigger,
         getStockBias,
         onFirstMinuteClose,
-        onSecondMinuteClose
+        onSecondMinuteClose,
+        onThirdMinuteClose
     }
 })();

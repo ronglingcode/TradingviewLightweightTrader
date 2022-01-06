@@ -76,12 +76,18 @@ window.TradingApp.Chart = (function () {
         let multiplier = parseFloat(qty.substring(0, qty.length - 1));
         return multiplier / 100;
     };
+    const addMarker = (symbol, marker) => {
+        let widget = window.TradingApp.Main.widgets[symbol];
+        widget.markers.push(marker);
+        widget.candleSeries.setMarkers(widget.markers);
+    };
     const createChartWidget = (tabIndex, stock) => {
         let symbol = stock.symbol;
         let widget = {
             stock: stock,
             tabIndex: tabIndex,
-            crosshairPrice: 0
+            crosshairPrice: 0,
+            markers: []
         };
         widget.htmlContents = {
             chart: document.getElementById("chart" + tabIndex),
@@ -226,6 +232,7 @@ window.TradingApp.Chart = (function () {
         drawEntry,
         clearPriceLines,
         drawFilledPrice,
-        getMultiplier
+        getMultiplier,
+        addMarker
     }
 })();

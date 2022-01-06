@@ -142,6 +142,17 @@ window.TradingApp.DB = (function () {
             });
             window.TradingApp.Indicators.populatePreMarketLineSeries(newD, premktHigh, premktLow, window.TradingApp.Main.widgets[symbol]);
 
+            // simulate auto trader
+            if (isMarketOpenTime(d)) {
+                // first minute just closed
+                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newCandle, vwap.slice(-1)[0].value);
+            } else if (newCandle.minutesSinceMarketOpen === 1) {
+                // second minute just closed
+                window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, candles[candles.length - 2], newCandle);
+            } else if (newCandle.minutesSinceMarketOpen === 2) {
+                // third minute just closed
+                window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, candles[candles.length - 3], candles[candles.length - 2], newCandle);
+            }
         }
 
         window.TradingApp.Main.widgets[symbol].volumeSeries.setData(volumes);
@@ -318,6 +329,9 @@ window.TradingApp.DB = (function () {
             } else if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
                 // second minute just closed
                 window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
+            } else if (newCandle.minutesSinceMarketOpen === 2) {
+                // third minute just closed
+                window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, globalData.candles[candles.length - 3], globalData.candles[candles.length - 2], newlyClosedCandle);
             }
 
             window.TradingApp.Indicators.drawIndicatorsForNewlyClosedCandle(
