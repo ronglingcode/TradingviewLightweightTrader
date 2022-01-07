@@ -331,7 +331,7 @@ window.TradingApp.DB = (function () {
                 window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
             } else if (newlyClosedCandle.minutesSinceMarketOpen === 2) {
                 // third minute just closed
-                window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, globalData.candles[candles.length - 3], globalData.candles[candles.length - 2], newlyClosedCandle);
+                window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, globalData.candles[globalData.candles.length - 3], globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
             }
 
             window.TradingApp.Indicators.drawIndicatorsForNewlyClosedCandle(

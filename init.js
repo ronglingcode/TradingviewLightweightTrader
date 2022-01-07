@@ -6,13 +6,13 @@ window.TradingApp = {
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'EAR',
+            symbol: 'DWAC',
             bias: 'long',
             ajbuy: 9,
             //          ajsell: 240
         },
         {
-            symbol: 'DKS',
+            symbol: 'GME',
             bias: 'long',
             ajbuy: 113.5
         }
