@@ -69,7 +69,7 @@ window.TradingApp.Algo.Breakout = (function () {
         if (code === "KeyB") {
             p = Math.floor(p * 100) / 100;
         } else if (code === "KeyS") {
-            p = math.ceil(p * 100) / 100;
+            p = Math.ceil(p * 100) / 100;
         }
         return p;
     };
@@ -91,7 +91,7 @@ window.TradingApp.Algo.Breakout = (function () {
         if (code === "KeyB") {
             p = Math.ceil(p * 100) / 100;
         } else if (code === "KeyS") {
-            p = math.floor(p * 100) / 100;
+            p = Math.floor(p * 100) / 100;
         }
 
         return p;
