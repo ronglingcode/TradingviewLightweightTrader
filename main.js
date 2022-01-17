@@ -20,8 +20,6 @@ window.TradingApp.TOS.initialize().then(() => {
             // populate current chart
             window.TradingApp.DB.initialize(symbol, json);
             let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, window.TradingApp.TOS.initialAccount);
-            console.log(symbolAccount);
-            console.log('call');
             window.TradingApp.Chart.updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
     }

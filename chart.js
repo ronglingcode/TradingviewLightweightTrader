@@ -206,10 +206,6 @@ window.TradingApp.Chart = (function () {
         return widget;
     };
 
-    const test = () => {
-        console.log("test");
-    };
-
     const updateAccountUIStatus = async (symbolList) => {
         let account = await window.TradingApp.TOS.getAccount();
         symbolList.forEach(symbol => {
@@ -219,17 +215,12 @@ window.TradingApp.Chart = (function () {
     };
 
     const updateAccountUIStatusForSymbol = (symbol, account) => {
-        alert("1");
-        console.log("good");
-        return 1;
-        /*
         let widget = TradingApp.Main.widgets[symbol];
-        console.log(widget);
         if (!widget) {
             return;
         }
         drawFilledPrice(symbol, account, widget);
-        showPositionSize(symbol, account, widget);*/
+        showPositionSize(symbol, account, widget);
     };
 
 
@@ -237,16 +228,19 @@ window.TradingApp.Chart = (function () {
         let html = widget.htmlContents.positionCount;
         if (!account || !account.position) {
             html.innerText = 'Pos: 0';
+            html.style.color = 'black';
             return;
         }
-
-        if (account.longQuantity) {
-            html.innerText = `Pos: ${account.longQuantity}`;
+        let position = account.position;
+        if (position.longQuantity) {
+            html.innerText = `Pos: +${position.longQuantity}`;
+            html.style.color = 'green';
+            return;
+        } else if (position.shortQuantity) {
+            html.innerText = `Pos: -${position.shortQuantity}`;
+            html.style.color = 'red';
             return;
         }
-
-        console.log(account);
-
     };
 
     const drawFilledPrice = async (symbol, account, widget) => {
@@ -262,7 +256,6 @@ window.TradingApp.Chart = (function () {
             widget.candleSeries.removePriceLine(widget.filledPriceLine);
         }
         widget.filledPriceLine = createPriceLine(widget.candleSeries, price, "Filled", "black");
-        console.log(account.position);
     };
     return {
         createChartWidget,
@@ -273,7 +266,6 @@ window.TradingApp.Chart = (function () {
         clearPriceLines,
         updateAccountUIStatus,
         updateAccountUIStatusForSymbol,
-        test,
         getMultiplier,
         addMarker
     }

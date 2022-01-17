@@ -9,7 +9,7 @@ window.TradingApp = {
             symbol: 'IPOD',
         },
         {
-            symbol: 'IPOF',
+            symbol: 'MSFT',
         }
 
     ],
