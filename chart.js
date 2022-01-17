@@ -170,38 +170,6 @@ window.TradingApp.Chart = (function () {
             console.log('blur');
             console.log(event);
         });
-        /*
-        let openingCandle;
-        window.TradingApp.DB.initialize(stock.symbol);
-        volumeSeries.setData(window.TradingApp.DB.dataBySymbol[symbol].volumes);
-
-        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
-        let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
-
-        openRangeSeriesList[0].setData(window.TradingApp.DB.openLow3R);
-        openRangeSeriesList[1].setData(window.TradingApp.DB.openLow2R);
-        openRangeSeriesList[2].setData(window.TradingApp.DB.openLow1R);
-        openRangeSeriesList[3].setData(window.TradingApp.DB.openLow);
-        openRangeSeriesList[4].setData(window.TradingApp.DB.openPrice);
-        openRangeSeriesList[5].setData(window.TradingApp.DB.openHigh);
-        openRangeSeriesList[6].setData(window.TradingApp.DB.openHigh1R);
-        openRangeSeriesList[7].setData(window.TradingApp.DB.openHigh2R);
-        openRangeSeriesList[8].setData(window.TradingApp.DB.openHigh3R);
-
-        vwapSeries.setData(vwap);
-        for (let i = 0; i < candles.length; i++) {
-            let d = new Date(candles[i].time * 1000);
-            // UTC 22:30 is market open time
-            if (d.getHours() == 22 && d.getMinutes() == 30) {
-                openingCandle = candles[i];
-            }
-        }
-
-        candleSeries.setData(candles);
-        window.TradingApp.Indicators.openRangeBreakoutPriceLines(openingCandle).forEach(priceLine => {
-            candleSeries.createPriceLine(priceLine);
-        });
-        */
 
         return widget;
     };

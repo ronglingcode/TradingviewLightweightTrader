@@ -6,12 +6,8 @@ window.TradingApp = {
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'IPOD',
-        },
-        {
             symbol: 'MSFT',
         }
-
     ],
     'State': {
         activeSymbol: '',
