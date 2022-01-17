@@ -61,8 +61,8 @@ const createWebSocket = async () => {
                 } else if (service === "ACCT_ACTIVITY") {
                     contents.forEach(content => {
                         let act = window.TradingApp.Streaming.createAccountActivity(content);
-                        if (act && act.messageType === 'OrderFill') {
-                            //window.TradingApp.Chart.drawFilledPrice(act.symbol);
+                        console.log(act.messageType);
+                        if (act && ['OrderEntryRequest', 'OrderCancelRequest', 'OrderFill'].includes(act.messageType)) {
                             window.TradingApp.Chart.updateAccountUIStatus([act.symbol]);
                         }
                     });

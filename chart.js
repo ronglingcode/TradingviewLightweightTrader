@@ -209,7 +209,7 @@ window.TradingApp.Chart = (function () {
     const updateAccountUIStatus = async (symbolList) => {
         let account = await window.TradingApp.TOS.getAccount();
         symbolList.forEach(symbol => {
-            let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol);
+            let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, account);
             updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
     };
@@ -221,6 +221,7 @@ window.TradingApp.Chart = (function () {
         }
         drawFilledPrice(symbol, account, widget);
         showPositionSize(symbol, account, widget);
+        drawWorkingOrders(symbol, account, widget);
     };
 
 
@@ -256,6 +257,36 @@ window.TradingApp.Chart = (function () {
             widget.candleSeries.removePriceLine(widget.filledPriceLine);
         }
         widget.filledPriceLine = createPriceLine(widget.candleSeries, price, "Filled", "black");
+    };
+
+    const drawWorkingOrders = async (symbol, account, widget) => {
+        if (account.orders.length === 0)
+            return;
+        let orders = window.TradingApp.OrderFactory.filterWorkingOrders(account.orders);
+        if (orders.length === 0)
+            return;
+
+        // clear previous orders, re-draw every order
+        if (widget.workingOrdersPriceLine && widget.workingOrdersPriceLine.length > 0) {
+            widget.workingOrdersPriceLine.forEach(l => {
+                widget.candleSeries.removePriceLine(l);
+            });
+        }
+        widget.workingOrdersPriceLine = [];
+
+        for (let i = 0; i < orders.length; i++) {
+            let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i]);
+            let orderInstruction = orders[i].orderLegCollection[0].instruction;
+            let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
+            let color = 'green';
+            let orderTypeString = window.TradingApp.OrderFactory.getOrderTypeShortString(orders[i].orderType);
+            if (!isBuyOrder) {
+                color = 'red';
+            }
+            let l = createPriceLine(widget.candleSeries, price, `${i + 1}:${orderTypeString}`, color);
+            widget.workingOrdersPriceLine.push(l);
+        }
+        console.log(orders);
     };
     return {
         createChartWidget,
