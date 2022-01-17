@@ -20,6 +20,7 @@ window.TradingApp.OrderFactory = (function () {
         SELL_TO_CLOSE: "SELL_TO_CLOSE",
         EXCHANGE: "EXCHANGE"
     };
+    const WorkingOrdersStatus = ["PENDING_ACTIVATION", "QUEUED", "WORKING"];
     const createEquityInstrument = (symbol) => {
         return {
             assetType: "EQUITY",
@@ -153,6 +154,45 @@ window.TradingApp.OrderFactory = (function () {
     };
 
     /* #endregion */
+
+    /* #region Read Orders */
+    // if OTO is not triggered, return the parent order of OTO
+    // if OTO is triggered, return the child orders.
+    // For OCO orders, always return the 2 child orders
+    const filterWorkingOrders = (orders) => {
+        let workingOrders = [];
+        orders.forEach(order => {
+            if (order.orderStrategyType === "TRIGGER") {
+                if (WorkingOrdersStatus.includes(order.status)) {
+                    workingOrders.push(order);
+                }
+            } else if (order.orderStrategyType === "OCO") {
+                //workingOrders.push(order);
+            } else {
+
+            }
+        });
+        return workingOrders;
+    };
+
+    const extractOrderPrice = (order) => {
+        if (order.orderType === OrderType.STOP) {
+            return order.stopPrice;
+        }
+    };
+    const isBuyOrder = (orderInstruction) => {
+        return [OrderLegInstruction.BUY, OrderLegInstruction.BUY_TO_COVER].includes(orderInstruction);
+    };
+    const getOrderTypeShortString = (orderType) => {
+        if (orderType === OrderType.STOP)
+            return 'STP';
+        else if (orderType === OrderType.LIMIT)
+            return 'LMT';
+        else if (orderType === OrderType.MARKET)
+            return 'MKT';
+    }
+    /* #endregion */
+
     return {
         createMarketOrder,
         createTestOrder,
@@ -160,6 +200,10 @@ window.TradingApp.OrderFactory = (function () {
         getOrderSymbol,
         OrderType,
         OrderStrategyType,
-        OrderLegInstruction
+        OrderLegInstruction,
+        filterWorkingOrders,
+        extractOrderPrice,
+        isBuyOrder,
+        getOrderTypeShortString
     }
 })();
