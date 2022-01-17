@@ -162,14 +162,18 @@ window.TradingApp.OrderFactory = (function () {
     const filterWorkingOrders = (orders) => {
         let workingOrders = [];
         orders.forEach(order => {
-            if (order.orderStrategyType === "TRIGGER") {
+            if (order.orderStrategyType === OrderStrategyType.TRIGGER) {
                 if (WorkingOrdersStatus.includes(order.status)) {
                     workingOrders.push(order);
                 }
-            } else if (order.orderStrategyType === "OCO") {
+            } else if (order.orderStrategyType === OrderStrategyType.OCO) {
                 //workingOrders.push(order);
-            } else {
-
+            } else if (order.orderStrategyType === OrderStrategyType.SINGLE) {
+                if (order.orderType != OrderType.MARKET) {
+                    if (WorkingOrdersStatus.includes(order.status)) {
+                        workingOrders.push(order);
+                    }
+                }
             }
         });
         return workingOrders;
@@ -178,6 +182,9 @@ window.TradingApp.OrderFactory = (function () {
     const extractOrderPrice = (order) => {
         if (order.orderType === OrderType.STOP) {
             return order.stopPrice;
+        } else if (order.orderType === OrderType.LIMIT) {
+            console.log(order);
+            return order.price;
         }
     };
     const isBuyOrder = (orderInstruction) => {
