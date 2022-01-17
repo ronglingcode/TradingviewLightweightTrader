@@ -78,7 +78,7 @@ window.TradingApp.DB = (function () {
             if (d.getFullYear() < window.TradingApp.Settings.currentDay.getFullYear() ||
                 d.getMonth() < window.TradingApp.Settings.currentDay.getMonth() ||
                 d.getDate() < window.TradingApp.Settings.currentDay.getDate()) {
-                continue;
+                //continue;
             }
 
             let newD = jsDateToUTC(d);

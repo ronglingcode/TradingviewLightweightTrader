@@ -1,9 +1,11 @@
 window.TradingApp.TOS = (function () {
     let initialized = false;
     let userPrincipal = {};
+    let initialAccount = {};
     const initialize = async () => {
         await createAccessToken();
         await getUserPrincipal();
+        await setInitialAccount();
         window.TradingApp.TOS.initialized = true;
     };
     /* #region Utils */
@@ -78,8 +80,8 @@ window.TradingApp.TOS = (function () {
             })
             .catch(err => console.log('Request Failed', err));
     };
-    const getAccountBySymbol = async (symbol) => {
-        let account = await getAccount();
+
+    const filterAccountBySymbol = (symbol, account) => {
         account = account.securitiesAccount;
         let symbolAccount = {
             orders: []
@@ -99,6 +101,14 @@ window.TradingApp.TOS = (function () {
             }
         }
         return symbolAccount;
+    };
+    const getAccountBySymbol = async (symbol) => {
+        let account = await getAccount();
+        return filterAccountBySymbol(symbol, account);
+    };
+    const setInitialAccount = async () => {
+        let account = await getAccount();
+        window.TradingApp.TOS.initialAccount = account;
     };
     const flattenPosition = async (symbol) => {
         let account = await getAccountBySymbol(symbol);
@@ -251,11 +261,13 @@ window.TradingApp.TOS = (function () {
         userPrincipal,
         placeOrderBase,
         testPriceHistory,
+        initialAccount,
         getAccount,
         getOrders,
         getWorkingOrders,
         cancelWorkingOrders,
         getAccountBySymbol,
+        filterAccountBySymbol,
         flattenPosition
     }
 })();

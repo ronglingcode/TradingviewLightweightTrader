@@ -98,6 +98,7 @@ window.TradingApp.Chart = (function () {
         widget.htmlContents.quantityInput = widget.htmlContents.quantityBar.getElementsByTagName("input")[0];
         setupQuantityBar(widget.htmlContents.quantityBar, widget.htmlContents.quantityInput);
         widget.htmlContents.symbol.innerText = stock.symbol;
+        widget.htmlContents.positionCount = widget.htmlContents.container.getElementsByClassName("positionCount")[0];
         widget.chart = LightweightCharts.createChart(
             widget.htmlContents.chart,
             window.TradingApp.ChartSettings.chartSettings
@@ -119,6 +120,7 @@ window.TradingApp.Chart = (function () {
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
         function myClickHandler(param) {
+            console.log(param)
             /*
             if (!param.point) {
                 return;
@@ -204,12 +206,50 @@ window.TradingApp.Chart = (function () {
         return widget;
     };
 
-    const drawFilledPrice = async (symbol) => {
+    const test = () => {
+        console.log("test");
+    };
+
+    const updateAccountUIStatus = async (symbolList) => {
+        let account = await window.TradingApp.TOS.getAccount();
+        symbolList.forEach(symbol => {
+            let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol);
+            updateAccountUIStatusForSymbol(symbol, symbolAccount);
+        });
+    };
+
+    const updateAccountUIStatusForSymbol = (symbol, account) => {
+        alert("1");
+        console.log("good");
+        return 1;
+        /*
         let widget = TradingApp.Main.widgets[symbol];
+        console.log(widget);
         if (!widget) {
             return;
         }
-        let account = await window.TradingApp.TOS.getAccountBySymbol(symbol);
+        drawFilledPrice(symbol, account, widget);
+        showPositionSize(symbol, account, widget);*/
+    };
+
+
+    const showPositionSize = async (symbol, account, widget) => {
+        let html = widget.htmlContents.positionCount;
+        if (!account || !account.position) {
+            html.innerText = 'Pos: 0';
+            return;
+        }
+
+        if (account.longQuantity) {
+            html.innerText = `Pos: ${account.longQuantity}`;
+            return;
+        }
+
+        console.log(account);
+
+    };
+
+    const drawFilledPrice = async (symbol, account, widget) => {
         if (!account || !account.position) {
             if (widget.filledPriceLine) {
                 widget.candleSeries.removePriceLine(widget.filledPriceLine);
@@ -231,7 +271,9 @@ window.TradingApp.Chart = (function () {
         drawStopLoss,
         drawEntry,
         clearPriceLines,
-        drawFilledPrice,
+        updateAccountUIStatus,
+        updateAccountUIStatusForSymbol,
+        test,
         getMultiplier,
         addMarker
     }
