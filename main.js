@@ -19,6 +19,8 @@ window.TradingApp.TOS.initialize().then(() => {
         window.TradingApp.TOS.getPriceHistory(symbol).then(response => response.json()).then(json => {
             // populate current chart
             window.TradingApp.DB.initialize(symbol, json);
+            let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, window.TradingApp.TOS.initialAccount);
+            window.TradingApp.Chart.updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
     }
 });
@@ -60,7 +62,8 @@ const createWebSocket = async () => {
                     contents.forEach(content => {
                         let act = window.TradingApp.Streaming.createAccountActivity(content);
                         if (act && act.messageType === 'OrderFill') {
-                            window.TradingApp.Chart.drawFilledPrice(act.symbol);
+                            //window.TradingApp.Chart.drawFilledPrice(act.symbol);
+                            window.TradingApp.Chart.updateAccountUIStatus([act.symbol]);
                         }
                     });
                 }
