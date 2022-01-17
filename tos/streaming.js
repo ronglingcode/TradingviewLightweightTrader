@@ -1,4 +1,5 @@
 window.TradingApp.Streaming = (function () {
+    const OrderChangeMessageTypes = ['OrderEntryRequest', 'OrderCancelRequest', 'OrderFill'];
     let requestCounter = 0;
     function jsonToQueryString(json) {
         return Object.keys(json).map(function (key) {
@@ -132,7 +133,7 @@ window.TradingApp.Streaming = (function () {
         if (c["3"] != null) {
             record.messageData = c["3"];
         }
-        if (record.messageType === 'OrderFill' && record.messageData) {
+        if (OrderChangeMessageTypes.includes(record.messageType) && record.messageData) {
             let parser = new DOMParser();
             let xml = parser.parseFromString(record.messageData, 'text/xml');
             let firstChild = xml.children[0];
@@ -159,6 +160,7 @@ window.TradingApp.Streaming = (function () {
         createStockTimeSaleRequest,
         sendStockTimeSaleRequest,
         createTimeSale,
-        createAccountActivity
+        createAccountActivity,
+        OrderChangeMessageTypes
     };
 })();

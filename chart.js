@@ -260,19 +260,19 @@ window.TradingApp.Chart = (function () {
     };
 
     const drawWorkingOrders = async (symbol, account, widget) => {
-        if (account.orders.length === 0)
-            return;
-        let orders = window.TradingApp.OrderFactory.filterWorkingOrders(account.orders);
-        if (orders.length === 0)
-            return;
-
-        // clear previous orders, re-draw every order
+        // clear previous orders before re-draw every order
         if (widget.workingOrdersPriceLine && widget.workingOrdersPriceLine.length > 0) {
             widget.workingOrdersPriceLine.forEach(l => {
                 widget.candleSeries.removePriceLine(l);
             });
         }
         widget.workingOrdersPriceLine = [];
+
+        if (account.orders.length === 0)
+            return;
+        let orders = window.TradingApp.OrderFactory.filterWorkingOrders(account.orders);
+        if (orders.length === 0)
+            return;
 
         for (let i = 0; i < orders.length; i++) {
             let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i]);
