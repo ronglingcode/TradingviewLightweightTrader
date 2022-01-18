@@ -64,6 +64,8 @@ const createWebSocket = async () => {
                         //console.log(act);
                         console.log(act.messageType);
                         if (act && window.TradingApp.Streaming.OrderChangeMessageTypes.includes(act.messageType)) {
+                            //let d = new Date();
+                            //console.log(d.toISOString());
                             window.TradingApp.Chart.updateAccountUIStatus([act.symbol]);
                         }
                     });
@@ -142,5 +144,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
     } else if (code === "KeyF") {
         window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
+    } else if (["Digit1", "Digit2", "Digit3"].includes(code)) {
+        console.log("replace orders");
     }
 });

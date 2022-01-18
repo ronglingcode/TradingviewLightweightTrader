@@ -6,7 +6,7 @@ window.TradingApp = {
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'MSFT',
+            symbol: 'F',
         }
     ],
     'State': {

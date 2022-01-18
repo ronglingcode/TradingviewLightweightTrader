@@ -90,8 +90,7 @@ window.TradingApp.OrderFactory = (function () {
     /* #endregion */
 
     const createTestOrder = () => {
-        // market order to buy 1 share of MSFT
-        return createMarketOrder("MSFT", 1, "BUY");
+        return createLimitOrder("F", 1, 25.24, "SELL");
     };
 
     /* #region Advanced Orders */
@@ -165,9 +164,17 @@ window.TradingApp.OrderFactory = (function () {
             if (order.orderStrategyType === OrderStrategyType.TRIGGER) {
                 if (WorkingOrdersStatus.includes(order.status)) {
                     workingOrders.push(order);
+                } else if (order.status === "FILLED") {
+                    // for OTO, assume there's only one child order
+                    let childOrder = order.childOrderStrategies[0];
+                    if (childOrder.orderStrategyType === OrderStrategyType.OCO) {
+                        let children = extractWorkingChildOrdersFromOCO(childOrder);
+                        workingOrders.push(...children);
+                    }
                 }
             } else if (order.orderStrategyType === OrderStrategyType.OCO) {
-                //workingOrders.push(order);
+                let children = extractWorkingChildOrdersFromOCO(order);
+                workingOrders.push(...children);
             } else if (order.orderStrategyType === OrderStrategyType.SINGLE) {
                 if (order.orderType != OrderType.MARKET) {
                     if (WorkingOrdersStatus.includes(order.status)) {
@@ -178,7 +185,17 @@ window.TradingApp.OrderFactory = (function () {
         });
         return workingOrders;
     };
-
+    const extractWorkingChildOrdersFromOCO = (oco) => {
+        if (oco.status != "WORKING")
+            return;
+        let workingChildOrders = [];
+        oco.childOrderStrategies.forEach(order => {
+            if (order.status === "WORKING") {
+                workingChildOrders.push(order);
+            }
+        });
+        return workingChildOrders;
+    };
     const extractOrderPrice = (order) => {
         if (order.orderType === OrderType.STOP) {
             return order.stopPrice;
