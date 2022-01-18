@@ -21,6 +21,20 @@ window.TradingApp.TOS = (function () {
         };
         return fetch(url, config);
     };
+
+    const sendJsonPutRequestWithAccessToken = (url, data) => {
+        const config = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.TradingApp.Secrets.accessToken
+            },
+            body: JSON.stringify(data)
+        };
+        return fetch(url, config);
+    };
+
     const asyncGet = (url) => {
         const config = {
             method: 'GET',
@@ -208,6 +222,17 @@ window.TradingApp.TOS = (function () {
             }); // Catch errors;
     };
 
+    const replaceOrderBase = async (newOrder, oldOrderId) => {
+        window.TradingApp.Firestore.logOrder(newOrder);
+        let accountId = window.TradingApp.Secrets.accountId;
+        let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${oldOrderId}`;
+        return sendJsonPutRequestWithAccessToken(url, newOrder).then(response => console.log(response))
+            .catch(err => {
+                window.TradingApp.Firestore.logError('Order request Failed ' + err);
+                console.log(err);
+            }); // Catch errors;
+    };
+
     const getOrders = async () => {
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
@@ -241,7 +266,8 @@ window.TradingApp.TOS = (function () {
 
     const testOrder = () => {
         let order = window.TradingApp.OrderFactory.createTestOrder();
-        placeOrderBase(order).then(response => {
+        let oldOrderId = 5963841125;
+        replaceOrderBase(order, oldOrderId).then(response => {
             console.log(response);
             if (response.status == 201) {
                 console.log("order success");
