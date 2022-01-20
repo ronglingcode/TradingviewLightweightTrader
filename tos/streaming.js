@@ -1,5 +1,6 @@
 window.TradingApp.Streaming = (function () {
-    const OrderChangeMessageTypes = ['OrderEntryRequest', 'OrderCancelRequest', 'OrderFill'];
+    // UROUT happens for cancel orders, replace orders
+    const OrderChangeMessageTypes = ['OrderEntryRequest', 'UROUT', 'OrderFill'];
     let requestCounter = 0;
     function jsonToQueryString(json) {
         return Object.keys(json).map(function (key) {

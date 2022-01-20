@@ -86,7 +86,7 @@ window.TradingApp.OrderFactory = (function () {
         order.orderStrategyType = OrderStrategyType.SINGLE;
         order.price = limitPrice;
         return order;
-    }
+    };
     /* #endregion */
 
     const createTestOrder = () => {
@@ -209,11 +209,26 @@ window.TradingApp.OrderFactory = (function () {
     };
     const getOrderTypeShortString = (orderType) => {
         if (orderType === OrderType.STOP)
-            return 'STP';
+            return 'Stp';
         else if (orderType === OrderType.LIMIT)
-            return 'LMT';
+            return 'Lmt';
         else if (orderType === OrderType.MARKET)
-            return 'MKT';
+            return 'Mkt';
+    }
+    /* #endregion */
+    /* #region Replicate Orders */
+    const replicateOrderWithNewPrice = (order, newPrice) => {
+        if (order.orderStrategyType === OrderStrategyType.SINGLE)
+            return replicateSingleOrderWithNewPrice(order, newPrice);
+    };
+    const replicateSingleOrderWithNewPrice = (order, newPrice) => {
+        let symbol = order.orderLegCollection[0].instrument.symbol;
+        let instruction = order.orderLegCollection[0].instruction;
+        let q = order.quantity;
+        if (order.orderType === OrderType.LIMIT)
+            return createLimitOrder(symbol, q, newPrice, instruction);
+        else if (order.orderType === OrderType.STOP)
+            return createStopOrder(symbol, q, newPrice, instruction);
     }
     /* #endregion */
 
@@ -228,6 +243,7 @@ window.TradingApp.OrderFactory = (function () {
         filterWorkingOrders,
         extractOrderPrice,
         isBuyOrder,
-        getOrderTypeShortString
+        getOrderTypeShortString,
+        replicateOrderWithNewPrice
     }
 })();

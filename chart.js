@@ -229,12 +229,12 @@ window.TradingApp.Chart = (function () {
 
     const drawWorkingOrders = async (symbol, account, widget) => {
         // clear previous orders before re-draw every order
-        if (widget.workingOrdersPriceLine && widget.workingOrdersPriceLine.length > 0) {
-            widget.workingOrdersPriceLine.forEach(l => {
+        if (widget.workingOrdersPriceLines && widget.workingOrdersPriceLines.length > 0) {
+            widget.workingOrdersPriceLines.forEach(l => {
                 widget.candleSeries.removePriceLine(l);
             });
         }
-        widget.workingOrdersPriceLine = [];
+        widget.workingOrdersPriceLines = [];
 
         if (account.orders.length === 0)
             return;
@@ -251,8 +251,9 @@ window.TradingApp.Chart = (function () {
             if (!isBuyOrder) {
                 color = 'red';
             }
-            let l = createPriceLine(widget.candleSeries, price, `${i + 1}:${orderTypeString}`, color);
-            widget.workingOrdersPriceLine.push(l);
+            let l = createPriceLine(widget.candleSeries, price, `${i + 1}-${orderTypeString}(${orders[i].quantity})`, color);
+            l.orderData = orders[i];
+            widget.workingOrdersPriceLines.push(l);
         }
         console.log(orders);
     };
