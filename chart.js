@@ -248,14 +248,15 @@ window.TradingApp.Chart = (function () {
             let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
             let color = 'green';
             let orderTypeString = window.TradingApp.OrderFactory.getOrderTypeShortString(orders[i].orderType);
+            let q = orders[i].quantity;
             if (!isBuyOrder) {
                 color = 'red';
+                q = -q;
             }
-            let l = createPriceLine(widget.candleSeries, price, `${i + 1}-${orderTypeString}(${orders[i].quantity})`, color);
+            let l = createPriceLine(widget.candleSeries, price, `${i + 1}: ${orderTypeString}(${q})`, color);
             l.orderData = orders[i];
             widget.workingOrdersPriceLines.push(l);
         }
-        console.log(orders);
     };
     return {
         createChartWidget,
