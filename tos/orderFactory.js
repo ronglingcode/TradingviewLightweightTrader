@@ -42,7 +42,7 @@ window.TradingApp.OrderFactory = (function () {
             let orderLeg = order.orderLegCollection[0];
             return orderLeg.instrument.symbol;
         }
-        else if (order.childOrderStrategies && order.childOrderStrategies.Count > 0) {
+        else if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
             let childOrder = order.childOrderStrategies[0];
             return getOrderSymbol(childOrder);
         }
@@ -91,6 +91,13 @@ window.TradingApp.OrderFactory = (function () {
 
     const createTestOrder = () => {
         return createLimitOrder("F", 1, 25.24, "SELL");
+    };
+    const createTestOcoOrder = () => {
+        let mainOrder = { orderStrategyType: OrderStrategyType.OCO };
+        let o1 = createLimitOrder("GXC", 1, 104.7, "SELL");
+        let o2 = createStopOrder("GXC", 1, 103.8, "SELL");
+        mainOrder.childOrderStrategies = [o1, o2];
+        return mainOrder;
     };
 
     /* #region Advanced Orders */
@@ -187,10 +194,10 @@ window.TradingApp.OrderFactory = (function () {
     };
     const extractWorkingChildOrdersFromOCO = (oco) => {
         if (oco.status != "WORKING")
-            return;
+            return [];
         let workingChildOrders = [];
         oco.childOrderStrategies.forEach(order => {
-            if (order.status === "WORKING") {
+            if (WorkingOrdersStatus.includes(order.status)) {
                 workingChildOrders.push(order);
             }
         });
@@ -235,6 +242,7 @@ window.TradingApp.OrderFactory = (function () {
     return {
         createMarketOrder,
         createTestOrder,
+        createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
         getOrderSymbol,
         OrderType,

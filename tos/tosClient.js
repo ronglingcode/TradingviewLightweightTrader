@@ -282,9 +282,8 @@ window.TradingApp.TOS = (function () {
     };
 
     const testOrder = () => {
-        let order = window.TradingApp.OrderFactory.createTestOrder();
-        let oldOrderId = 5963841125;
-        replaceOrderBase(order, oldOrderId).then(response => {
+        let order = window.TradingApp.OrderFactory.createTestOcoOrder();
+        placeOrderBase(order).then(response => {
             console.log(response);
             if (response.status == 201) {
                 console.log("order success");
