@@ -134,6 +134,16 @@ window.TradingApp.OrderFactory = (function () {
         return entryOrder;
     };
 
+    const calculateTotalShares = (entryPrice, stopOutPrice, setupQuality, multiplier) => {
+        let RiskManager = window.TradingApp.Algo.RiskManager;
+        let riskPerShare = Math.abs(entryPrice - stopOutPrice);
+        let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
+        let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
+        let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
+        let totalShares = Math.min(totalShares1, totalShares2);
+        return totalShares;
+    };
+
     const createEntryOrdersWithFixedRisk = (symbol, orderType, entryPrice, stopOutPrice, setupQuality, multiplier) => {
         let RiskManager = window.TradingApp.Algo.RiskManager;
         // add 1 cent for slippage
@@ -144,11 +154,7 @@ window.TradingApp.OrderFactory = (function () {
             entryPrice = RiskManager.minusCents(entryPrice, 1);
             stopOutPrice = RiskManager.addCents(stopOutPrice, 1);
         }
-        let riskPerShare = Math.abs(entryPrice - stopOutPrice);
-        let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
-        let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
-        let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
-        let totalShares = Math.min(totalShares1, totalShares2);
+        let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
 
         let TakeProfit = window.TradingApp.Algo.TakeProfit;
         let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
