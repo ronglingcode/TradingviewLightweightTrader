@@ -215,6 +215,18 @@ window.TradingApp.OrderFactory = (function () {
     /* #endregion */
 
     /* #region Read Orders */
+    const extractTopLevelCancellableOrdersIds = (orders) => {
+        let ids = [];
+        orders.forEach(order => {
+            if (order.cancellable) {
+                ids.push(order.orderId);
+            } else if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
+                let childOrderIds = extractTopLevelCancellableOrdersIds(order.childOrderStrategies);
+                ids.push(...childOrderIds);
+            }
+        });
+        return ids;
+    };
     // if OTO is not triggered, return the parent order of OTO
     // if OTO is triggered, return the child orders.
     // For OCO orders, always return the 2 child orders
@@ -304,6 +316,7 @@ window.TradingApp.OrderFactory = (function () {
         OrderStrategyType,
         OrderLegInstruction,
         filterWorkingOrders,
+        extractTopLevelCancellableOrdersIds,
         extractOrderPrice,
         isBuyOrder,
         getOrderTypeShortString,
