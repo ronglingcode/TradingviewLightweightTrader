@@ -147,6 +147,23 @@ window.TradingApp.TOS = (function () {
         let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
         placeOrderBase(order);
     };
+    const adjustOrder = async (symbol, keyCode) => {
+        // "Digit1" -> 1, "Digit2" -> 2
+        let orderNumber = parseInt(keyCode[5]);
+
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let orderPriceLines = widget.workingOrdersPriceLines;
+        if (orderPriceLines.length < orderNumber)
+            return;
+        let order = orderPriceLines[orderNumber - 1].orderData;
+        let oldOrderId = order.orderId;
+        order.orderId = null;
+        let newPrice = widget.crosshairPrice;
+        newPrice = Math.round(newPrice * 100) / 100;
+        let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
+        console.log(newOrder);
+        replaceOrderBase(newOrder, oldOrderId);
+    };
     /* #endregion */
 
     /* #region Price history, Quote */
@@ -286,6 +303,7 @@ window.TradingApp.TOS = (function () {
         initialized,
         userPrincipal,
         placeOrderBase,
+        adjustOrder,
         testPriceHistory,
         initialAccount,
         getAccount,
