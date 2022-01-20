@@ -113,7 +113,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                     window.TradingApp.Firestore.logInfo("market sell for " + symbol);
                     estimatedEntryPrice = bid - 2 * spread;
                 }
-                if (!window.TradingApp.Algo.Breakout.checkRules(symbol, entryPrice, stopOut)) {
+                if (!window.TradingApp.Algo.Breakout.checkRules(symbol, estimatedEntryPrice, stopOutPrice)) {
                     console.log("failed rule");
                     return;
                 }
