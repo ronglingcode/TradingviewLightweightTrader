@@ -257,25 +257,22 @@ window.TradingApp.TOS = (function () {
             .then(json => { return json; })
             .catch(err => console.log('Request Failed', err)); //;
     };
-
-    const getWorkingOrders = async (symbol) => {
-        let workingOrders = [];
+    const getOrdersForSymbol = async (symbol) => {
+        let ordersForSymbol = [];
         let orders = await getOrders();
         orders.forEach(order => {
-            if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol &&
-                ["PENDING_ACTIVATION", "WORKING", "QUEUED"].includes(order.status)) {
-                console.log(order);
-                workingOrders.push(order);
+            if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol) {
+                ordersForSymbol.push(order);
             }
         });
-        return workingOrders;
+        return ordersForSymbol;
     };
 
     const cancelWorkingOrders = async (symbol) => {
-        let workingOrders = await getWorkingOrders(symbol);
+        let orders = await getOrdersForSymbol(symbol);
+        let ids = window.TradingApp.OrderFactory.extractTopLevelCancellableOrdersIds(orders);
         let accountId = window.TradingApp.Secrets.accountId;
-        workingOrders.forEach(order => {
-            let orderId = order.orderId;
+        ids.forEach(orderId => {
             let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${orderId}`;
             asyncDelete(url);
         });
@@ -307,7 +304,6 @@ window.TradingApp.TOS = (function () {
         initialAccount,
         getAccount,
         getOrders,
-        getWorkingOrders,
         cancelWorkingOrders,
         getAccountBySymbol,
         filterAccountBySymbol,
