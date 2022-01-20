@@ -134,7 +134,7 @@ window.TradingApp.OrderFactory = (function () {
         return entryOrder;
     };
 
-    const createPreMarketOneEntryWithProfitTakingExit = (symbol, entryInstruction, quantity, entryPrice, takeProfitPrice) => {
+    const createPreMarketEntryWithProfitTakingExit = (symbol, entryInstruction, quantity, entryPrice, takeProfitPrice) => {
         let exitInstruction = getClosingOrderLegInstruction(entryInstruction);
         let entryOrder = createPreMarketOrder(symbol, quantity, entryPrice, entryInstruction);
         entryOrder.orderStrategyType = OrderStrategyType.TRIGGER;
@@ -205,7 +205,7 @@ window.TradingApp.OrderFactory = (function () {
         profitTargets.forEach(profitTarget => {
             let quantity = profitTarget.quantity;
             let limitPrice = profitTarget.target;
-            let order = createOneEntryWithTwoExits(symbol, entryInstruction, orderType, quantity, entryPrice, quantity, limitPrice, quantity, stopOutPrice);
+            let order = createPreMarketEntryWithProfitTakingExit(symbol, entryInstruction, quantity, entryPrice, limitPrice);
             orders.push(order);
         });
 
