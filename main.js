@@ -41,7 +41,7 @@ const createWebSocket = async () => {
                     // send more streaming requests
                     let mainRequest = window.TradingApp.Streaming.createMainRequest();
                     websocket.send(JSON.stringify(mainRequest));
-                    // the earliest time we can start streaming is right after 
+                    // the earliest time we can start streaming is right after
                     let stockRequest = window.TradingApp.Streaming.createStockTimeSaleRequest();
                     websocket.send(JSON.stringify(stockRequest));
                 } else {
@@ -144,7 +144,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
     } else if (code === "KeyF") {
         window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
-    } else if (["Digit1", "Digit2", "Digit3"].includes(code)) {
-        console.log("replace orders");
+    } else if (["Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6"].includes(code)) {
+        window.TradingApp.TOS.adjustOrder(symbol, code);
     }
 });

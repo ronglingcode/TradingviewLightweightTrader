@@ -1,7 +1,8 @@
 window.TradingApp = {
     'Settings': {
         'currentDay': new Date(),
-        'drawIndicatorsAsSeries': true
+        'drawIndicatorsAsSeries': true,
+        'preMarketTrading': false
     },
     'Algo': {},
     'Watchlist': [

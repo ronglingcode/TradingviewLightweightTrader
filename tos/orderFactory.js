@@ -42,7 +42,7 @@ window.TradingApp.OrderFactory = (function () {
             let orderLeg = order.orderLegCollection[0];
             return orderLeg.instrument.symbol;
         }
-        else if (order.childOrderStrategies && order.childOrderStrategies.Count > 0) {
+        else if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
             let childOrder = order.childOrderStrategies[0];
             return getOrderSymbol(childOrder);
         }
@@ -86,11 +86,26 @@ window.TradingApp.OrderFactory = (function () {
         order.orderStrategyType = OrderStrategyType.SINGLE;
         order.price = limitPrice;
         return order;
-    }
+    };
+    const createPreMarketOrder = (symbol, quantity, limitPrice, orderLegInstruction) => {
+        // pre-market order must be limit order
+        let order = createLimitOrder(symbol, quantity, limitPrice, orderLegInstruction);
+        order.session = 'SEAMLESS';
+        order.orderStrategyType = "SINGLE";
+        return order;
+    };
+
     /* #endregion */
 
     const createTestOrder = () => {
-        return createLimitOrder("F", 1, 25.24, "SELL");
+        return createPreMarketOrder("GXC", 1, 104.7, "SELL");
+    };
+    const createTestOcoOrder = () => {
+        let mainOrder = { orderStrategyType: OrderStrategyType.OCO };
+        let o1 = createLimitOrder("GXC", 1, 104.7, "SELL");
+        let o2 = createStopOrder("GXC", 1, 103.8, "SELL");
+        mainOrder.childOrderStrategies = [o1, o2];
+        return mainOrder;
     };
 
     /* #region Advanced Orders */
@@ -119,6 +134,26 @@ window.TradingApp.OrderFactory = (function () {
         return entryOrder;
     };
 
+    const createPreMarketEntryWithProfitTakingExit = (symbol, entryInstruction, quantity, entryPrice, takeProfitPrice) => {
+        let exitInstruction = getClosingOrderLegInstruction(entryInstruction);
+        let entryOrder = createPreMarketOrder(symbol, quantity, entryPrice, entryInstruction);
+        entryOrder.orderStrategyType = OrderStrategyType.TRIGGER;
+
+        let exitOrder = createPreMarketOrder(symbol, quantity, takeProfitPrice, exitInstruction);
+        entryOrder.childOrderStrategies = [exitOrder];
+        return entryOrder;
+    };
+
+    const calculateTotalShares = (entryPrice, stopOutPrice, setupQuality, multiplier) => {
+        let RiskManager = window.TradingApp.Algo.RiskManager;
+        let riskPerShare = Math.abs(entryPrice - stopOutPrice);
+        let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
+        let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
+        let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
+        let totalShares = Math.min(totalShares1, totalShares2);
+        return totalShares;
+    };
+
     const createEntryOrdersWithFixedRisk = (symbol, orderType, entryPrice, stopOutPrice, setupQuality, multiplier) => {
         let RiskManager = window.TradingApp.Algo.RiskManager;
         // add 1 cent for slippage
@@ -129,11 +164,7 @@ window.TradingApp.OrderFactory = (function () {
             entryPrice = RiskManager.minusCents(entryPrice, 1);
             stopOutPrice = RiskManager.addCents(stopOutPrice, 1);
         }
-        let riskPerShare = Math.abs(entryPrice - stopOutPrice);
-        let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
-        let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
-        let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
-        let totalShares = Math.min(totalShares1, totalShares2);
+        let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
 
         let TakeProfit = window.TradingApp.Algo.TakeProfit;
         let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
@@ -146,6 +177,35 @@ window.TradingApp.OrderFactory = (function () {
             let quantity = profitTarget.quantity;
             let limitPrice = profitTarget.target;
             let order = createOneEntryWithTwoExits(symbol, entryInstruction, orderType, quantity, entryPrice, quantity, limitPrice, quantity, stopOutPrice);
+            orders.push(order);
+        });
+
+        return orders;
+    };
+
+    const createPreMarketOrderWithFixedRisk = (symbol, entryPrice, stopOutPrice, setupQuality, multiplier) => {
+        let RiskManager = window.TradingApp.Algo.RiskManager;
+        // add 1 cent for slippage
+        if (entryPrice > stopOutPrice) {
+            entryPrice = RiskManager.addCents(entryPrice, 1);
+            stopOutPrice = RiskManager.minusCents(stopOutPrice, 1);
+        } else {
+            entryPrice = RiskManager.minusCents(entryPrice, 1);
+            stopOutPrice = RiskManager.addCents(stopOutPrice, 1);
+        }
+        let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
+
+        let TakeProfit = window.TradingApp.Algo.TakeProfit;
+        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
+        let entryInstruction = OrderLegInstruction.BUY;
+        if (entryPrice < stopOutPrice) {
+            entryInstruction = OrderLegInstruction.SELL_SHORT;
+        }
+        let orders = [];
+        profitTargets.forEach(profitTarget => {
+            let quantity = profitTarget.quantity;
+            let limitPrice = profitTarget.target;
+            let order = createPreMarketEntryWithProfitTakingExit(symbol, entryInstruction, quantity, entryPrice, limitPrice);
             orders.push(order);
         });
 
@@ -186,11 +246,12 @@ window.TradingApp.OrderFactory = (function () {
         return workingOrders;
     };
     const extractWorkingChildOrdersFromOCO = (oco) => {
+        console.log(oco);
         if (oco.status != "WORKING")
-            return;
+            return [];
         let workingChildOrders = [];
         oco.childOrderStrategies.forEach(order => {
-            if (order.status === "WORKING") {
+            if (WorkingOrdersStatus.includes(order.status)) {
                 workingChildOrders.push(order);
             }
         });
@@ -200,7 +261,6 @@ window.TradingApp.OrderFactory = (function () {
         if (order.orderType === OrderType.STOP) {
             return order.stopPrice;
         } else if (order.orderType === OrderType.LIMIT) {
-            console.log(order);
             return order.price;
         }
     };
@@ -209,18 +269,36 @@ window.TradingApp.OrderFactory = (function () {
     };
     const getOrderTypeShortString = (orderType) => {
         if (orderType === OrderType.STOP)
-            return 'STP';
+            return 'Stp';
         else if (orderType === OrderType.LIMIT)
-            return 'LMT';
+            return 'Lmt';
         else if (orderType === OrderType.MARKET)
-            return 'MKT';
+            return 'Mkt';
+    }
+    /* #endregion */
+    /* #region Replicate Orders */
+    const replicateOrderWithNewPrice = (order, newPrice) => {
+        if (order.orderStrategyType === OrderStrategyType.SINGLE)
+            return replicateSingleOrderWithNewPrice(order, newPrice);
+    };
+    const replicateSingleOrderWithNewPrice = (order, newPrice) => {
+        let symbol = order.orderLegCollection[0].instrument.symbol;
+        let instruction = order.orderLegCollection[0].instruction;
+        let q = order.quantity;
+        if (order.orderType === OrderType.LIMIT)
+            return createLimitOrder(symbol, q, newPrice, instruction);
+        else if (order.orderType === OrderType.STOP)
+            return createStopOrder(symbol, q, newPrice, instruction);
     }
     /* #endregion */
 
     return {
         createMarketOrder,
+        createPreMarketOrder,
         createTestOrder,
+        createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
+        createPreMarketOrderWithFixedRisk,
         getOrderSymbol,
         OrderType,
         OrderStrategyType,
@@ -228,6 +306,7 @@ window.TradingApp.OrderFactory = (function () {
         filterWorkingOrders,
         extractOrderPrice,
         isBuyOrder,
-        getOrderTypeShortString
+        getOrderTypeShortString,
+        replicateOrderWithNewPrice
     }
 })();
