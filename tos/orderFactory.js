@@ -134,6 +134,16 @@ window.TradingApp.OrderFactory = (function () {
         return entryOrder;
     };
 
+    const createPreMarketEntryWithProfitTakingExit = (symbol, entryInstruction, quantity, entryPrice, takeProfitPrice) => {
+        let exitInstruction = getClosingOrderLegInstruction(entryInstruction);
+        let entryOrder = createPreMarketOrder(symbol, quantity, entryPrice, entryInstruction);
+        entryOrder.orderStrategyType = OrderStrategyType.TRIGGER;
+
+        let exitOrder = createPreMarketOrder(symbol, quantity, takeProfitPrice, exitInstruction);
+        entryOrder.childOrderStrategies = [exitOrder];
+        return entryOrder;
+    };
+
     const calculateTotalShares = (entryPrice, stopOutPrice, setupQuality, multiplier) => {
         let RiskManager = window.TradingApp.Algo.RiskManager;
         let riskPerShare = Math.abs(entryPrice - stopOutPrice);
@@ -167,6 +177,35 @@ window.TradingApp.OrderFactory = (function () {
             let quantity = profitTarget.quantity;
             let limitPrice = profitTarget.target;
             let order = createOneEntryWithTwoExits(symbol, entryInstruction, orderType, quantity, entryPrice, quantity, limitPrice, quantity, stopOutPrice);
+            orders.push(order);
+        });
+
+        return orders;
+    };
+
+    const createPreMarketOrderWithFixedRisk = (symbol, entryPrice, stopOutPrice, setupQuality, multiplier) => {
+        let RiskManager = window.TradingApp.Algo.RiskManager;
+        // add 1 cent for slippage
+        if (entryPrice > stopOutPrice) {
+            entryPrice = RiskManager.addCents(entryPrice, 1);
+            stopOutPrice = RiskManager.minusCents(stopOutPrice, 1);
+        } else {
+            entryPrice = RiskManager.minusCents(entryPrice, 1);
+            stopOutPrice = RiskManager.addCents(stopOutPrice, 1);
+        }
+        let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
+
+        let TakeProfit = window.TradingApp.Algo.TakeProfit;
+        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
+        let entryInstruction = OrderLegInstruction.BUY;
+        if (entryPrice < stopOutPrice) {
+            entryInstruction = OrderLegInstruction.SELL_SHORT;
+        }
+        let orders = [];
+        profitTargets.forEach(profitTarget => {
+            let quantity = profitTarget.quantity;
+            let limitPrice = profitTarget.target;
+            let order = createPreMarketEntryWithProfitTakingExit(symbol, entryInstruction, quantity, entryPrice, limitPrice);
             orders.push(order);
         });
 
@@ -259,6 +298,7 @@ window.TradingApp.OrderFactory = (function () {
         createTestOrder,
         createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
+        createPreMarketOrderWithFixedRisk,
         getOrderSymbol,
         OrderType,
         OrderStrategyType,
