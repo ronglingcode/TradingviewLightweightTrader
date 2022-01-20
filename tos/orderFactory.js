@@ -87,10 +87,18 @@ window.TradingApp.OrderFactory = (function () {
         order.price = limitPrice;
         return order;
     };
+    const createPreMarketOrder = (symbol, quantity, limitPrice, orderLegInstruction) => {
+        // pre-market order must be limit order
+        let order = createLimitOrder(symbol, quantity, limitPrice, orderLegInstruction);
+        order.session = 'SEAMLESS';
+        order.orderStrategyType = "SINGLE";
+        return order;
+    };
+
     /* #endregion */
 
     const createTestOrder = () => {
-        return createLimitOrder("F", 1, 25.24, "SELL");
+        return createPreMarketOrder("GXC", 1, 104.7, "SELL");
     };
     const createTestOcoOrder = () => {
         let mainOrder = { orderStrategyType: OrderStrategyType.OCO };
@@ -193,6 +201,7 @@ window.TradingApp.OrderFactory = (function () {
         return workingOrders;
     };
     const extractWorkingChildOrdersFromOCO = (oco) => {
+        console.log(oco);
         if (oco.status != "WORKING")
             return [];
         let workingChildOrders = [];
@@ -207,7 +216,6 @@ window.TradingApp.OrderFactory = (function () {
         if (order.orderType === OrderType.STOP) {
             return order.stopPrice;
         } else if (order.orderType === OrderType.LIMIT) {
-            console.log(order);
             return order.price;
         }
     };
@@ -241,6 +249,7 @@ window.TradingApp.OrderFactory = (function () {
 
     return {
         createMarketOrder,
+        createPreMarketOrder,
         createTestOrder,
         createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
