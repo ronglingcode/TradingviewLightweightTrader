@@ -7,7 +7,23 @@ window.TradingApp = {
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'GXC',
+            symbol: 'SOFI',
+            bias: 'long',
+            ajbuy: 14.5,
+            ajsell: 13.9
+        },
+        {
+            symbol: 'LCID',
+            bias: 'short'
+        },
+        {
+            symbol: 'AMD',
+            bias: 'long',
+            ajbuy: 134
+        }, {
+            symbol: 'NVDA',
+            bias: 'long',
+            ajbuy: 263
         }
     ],
     'State': {
