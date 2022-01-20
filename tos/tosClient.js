@@ -232,7 +232,7 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.Firestore.logOrder(order);
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
-        return sendJsonPostRequestWithAccessToken(url, order).then(response => console.log(response))
+        return sendJsonPostRequestWithAccessToken(url, order)//.then(response => console.log(response))
             .catch(err => {
                 window.TradingApp.Firestore.logError('Order request Failed ' + err);
                 console.log(err);
@@ -243,7 +243,7 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.Firestore.logOrder(newOrder);
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${oldOrderId}`;
-        return sendJsonPutRequestWithAccessToken(url, newOrder).then(response => console.log(response))
+        return sendJsonPutRequestWithAccessToken(url, newOrder)//.then(response => console.log(response))
             .catch(err => {
                 window.TradingApp.Firestore.logError('Order request Failed ' + err);
                 console.log(err);
@@ -282,10 +282,10 @@ window.TradingApp.TOS = (function () {
     };
 
     const testOrder = () => {
-        let order = window.TradingApp.OrderFactory.createTestOcoOrder();
+        let order = window.TradingApp.OrderFactory.createTestOrder();
         placeOrderBase(order).then(response => {
             console.log(response);
-            if (response.status == 201) {
+            if (response && response.status == 201) {
                 console.log("order success");
             }
         });
