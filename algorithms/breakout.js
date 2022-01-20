@@ -42,15 +42,19 @@ window.TradingApp.Algo.Breakout = (function () {
         return true;
     };
     const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
-        let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
-        if (!checkRules(symbol, entryPrice, stopOut)) {
-            console.log("failed rule");
-            return;
+        if (window.TradingApp.Settings.preMarketTrading) {
+            //
+        } else {
+            let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
+            if (!checkRules(symbol, entryPrice, stopOut)) {
+                console.log("failed rule");
+                return;
+            }
+            let orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
+            orders.forEach(order => {
+                window.TradingApp.TOS.placeOrderBase(order);
+            });
         }
-        let orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
-        orders.forEach(order => {
-            window.TradingApp.TOS.placeOrderBase(order);
-        });
     };
 
     const getStopLossPrice = (symbol, code) => {
