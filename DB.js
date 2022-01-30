@@ -37,8 +37,6 @@ window.TradingApp.DB = (function () {
 
     const initialize = (symbol, priceHistory) => {
         let candles = [];
-        let totalVolume = 0;
-        let totalTradingAmount = 0;
         let vwap = [];
         let openingCandle;
         let openHigh = [];
@@ -56,6 +54,16 @@ window.TradingApp.DB = (function () {
         let lowOfDay = 99999999;
         let premktHigh = 0;
         let premktLow = 99999999;
+
+        let totalVolume = 0;
+        let totalTradingAmount = 0;
+        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+            if (window.TradingApp.Watchlist[i].symbol === symbol) {
+                totalVolume = window.TradingApp.Watchlist[i].initialVolume;
+                totalTradingAmount = window.TradingApp.Watchlist[i].initialTradingAmount;
+                break;
+            }
+        }
 
         data = priceHistory.candles;
         if (!data) {
