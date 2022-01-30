@@ -74,12 +74,8 @@ window.TradingApp.DB = (function () {
                 prevDatetime = element.datetime;
             }
             let d = new Date(element.datetime);
-            // skip previous day's data, we are missing the 10PM - midnight data anyway
-            if (d.getFullYear() < window.TradingApp.Settings.currentDay.getFullYear() ||
-                d.getMonth() < window.TradingApp.Settings.currentDay.getMonth() ||
-                d.getDate() < window.TradingApp.Settings.currentDay.getDate()) {
+            if (d < window.TradingApp.Settings.dtStartTime)
                 continue;
-            }
 
             let newD = jsDateToUTC(d);
             let newCandle = {

@@ -1,41 +1,49 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date(),
+        'currentDay': new Date('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false
     },
     'Algo': {},
     'Watchlist': [
         {
-            symbol: 'SOFI',
-            bias: 'long',
-            ajbuy: 14.5,
-            ajsell: 13.9
+            symbol: 'SPY',
+            //bias: 'short',
+            //ajbuy: 380,
+            //ajsell: 375
         },
         {
-            symbol: 'LCID',
-            bias: 'short'
+            symbol: 'AAPL',
+            //ajsell: 540,
+            //ajbuy: 550
+            //            bias: 'short'
         },
+        /*
         {
-            symbol: 'AMD',
-            bias: 'long',
-            ajbuy: 134
+            symbol: 'TSLA',
+            //            bias: 'long',
+            //ajbuy: 950,
+            //ajsell: 930
         }, {
-            symbol: 'NVDA',
-            bias: 'long',
-            ajbuy: 263
-        }
+            symbol: 'V',
+            bias: 'short',
+            //ajbuy: 192,
+            //ajsell: 184
+        }*/
     ],
     'State': {
         activeSymbol: '',
         activeTabIndex: -1
     }
 };
-window.TradingApp.Settings.marketOpenTime = window.TradingApp.Settings.currentDay;
-window.TradingApp.Settings.marketOpenTime.setHours(6);
-window.TradingApp.Settings.marketOpenTime.setMinutes(30);
-window.TradingApp.Settings.marketOpenTime.setSeconds(0, 0);
+let currentDay = window.TradingApp.Settings.currentDay;
+let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
 
+let dtStartTime = new Date(`${currentDayStr} 01:00`);
+dtStartTime.setTime(dtStartTime.getTime() + ((-3) * 60 * 60 * 1000)); // new york 1:00:00 AM
+window.TradingApp.Settings.dtStartTime = dtStartTime;
+
+window.TradingApp.Settings.marketOpenTime = new Date(`${currentDayStr} 06:30:00`);
 // setup reminder for first minute close
 let now = new Date();
 let rightBeforeFirstMinuteClose = new Date();
