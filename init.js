@@ -8,12 +8,16 @@ window.TradingApp = {
     'Watchlist': [
         {
             symbol: 'SPY',
+            initialVolume: 0,
+            initialTradingAmount: 0,
             //bias: 'short',
             //ajbuy: 380,
             //ajsell: 375
         },
         {
             symbol: 'AAPL',
+            initialVolume: 0,
+            initialTradingAmount: 0,
             //ajsell: 540,
             //ajbuy: 550
             //            bias: 'short'
@@ -21,11 +25,15 @@ window.TradingApp = {
         /*
         {
             symbol: 'TSLA',
+                        initialVolume: 0,
+            initialTradingAmount: 0,
             //            bias: 'long',
             //ajbuy: 950,
             //ajsell: 930
         }, {
             symbol: 'V',
+                        initialVolume: 0,
+            initialTradingAmount: 0,
             bias: 'short',
             //ajbuy: 192,
             //ajsell: 184
