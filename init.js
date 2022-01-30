@@ -10,6 +10,8 @@ window.TradingApp = {
             symbol: 'SPY',
             initialVolume: 0,
             initialTradingAmount: 0,
+            premktHigh: 0,
+            premktLow: 99999999,
             //bias: 'short',
             //ajbuy: 380,
             //ajsell: 375
@@ -18,6 +20,8 @@ window.TradingApp = {
             symbol: 'AAPL',
             initialVolume: 0,
             initialTradingAmount: 0,
+            premktHigh: 0,
+            premktLow: 99999999,
             //ajsell: 540,
             //ajbuy: 550
             //            bias: 'short'
@@ -27,6 +31,8 @@ window.TradingApp = {
             symbol: 'TSLA',
                         initialVolume: 0,
             initialTradingAmount: 0,
+                        premktHigh: 0,
+            premktLow: 99999999,
             //            bias: 'long',
             //ajbuy: 950,
             //ajsell: 930
@@ -34,6 +40,8 @@ window.TradingApp = {
             symbol: 'V',
                         initialVolume: 0,
             initialTradingAmount: 0,
+                        premktHigh: 0,
+            premktLow: 99999999,
             bias: 'short',
             //ajbuy: 192,
             //ajsell: 184
