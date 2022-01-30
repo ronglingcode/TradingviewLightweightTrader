@@ -52,15 +52,18 @@ window.TradingApp.DB = (function () {
         let orbArea = [];
         let highOfDay = 0;
         let lowOfDay = 99999999;
+
         let premktHigh = 0;
         let premktLow = 99999999;
-
         let totalVolume = 0;
         let totalTradingAmount = 0;
         for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
             if (window.TradingApp.Watchlist[i].symbol === symbol) {
-                totalVolume = window.TradingApp.Watchlist[i].initialVolume;
-                totalTradingAmount = window.TradingApp.Watchlist[i].initialTradingAmount;
+                let item = window.TradingApp.Watchlist[i];
+                totalVolume = item.initialVolume;
+                totalTradingAmount = item.initialTradingAmount;
+                premktHigh = item.premktHigh;
+                premktLow = item.premktLow;
                 break;
             }
         }
