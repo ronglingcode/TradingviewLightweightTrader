@@ -37,8 +37,14 @@ window.TradingApp.ChartSettings = (function () {
             timeVisible: true,
             //fixRightEdge: true,
             //fixLeftEdge: true,
-            rightOffset: 10
+            rightOffset: 10,
+            barSpacing: 10
         },
+        /*
+        grid: {
+            vertLines: { visible: false },
+            horzLines: { visible: false }
+        }*/
     };
 
     const candlestickSeriesSettings = {
