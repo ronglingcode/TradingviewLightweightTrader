@@ -148,7 +148,6 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         window.TradingApp.TOS.adjustOrder(symbol, code);
     } else if (code === 'KeyT') {
         // move stop orders
-        console.log('hi');
         window.TradingApp.TOS.adjustStopOrders(symbol);
     }
 });
