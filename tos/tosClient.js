@@ -284,7 +284,7 @@ window.TradingApp.TOS = (function () {
 
     const cancelWorkingOrders = async (symbol) => {
         let orders = await getOrdersForSymbol(symbol);
-        let ids = window.TradingApp.OrderFactory.extractTopLevelCancellableOrdersIds(orders);
+        let ids = window.TradingApp.OrderFactory.extractTopLevelCancelableOrdersIds(orders);
         let accountId = window.TradingApp.Secrets.accountId;
         ids.forEach(orderId => {
             let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${orderId}`;
