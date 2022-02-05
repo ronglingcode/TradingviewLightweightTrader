@@ -215,13 +215,13 @@ window.TradingApp.OrderFactory = (function () {
     /* #endregion */
 
     /* #region Read Orders */
-    const extractTopLevelCancellableOrdersIds = (orders) => {
+    const extractTopLevelCancelableOrdersIds = (orders) => {
         let ids = [];
         orders.forEach(order => {
-            if (order.cancellable) {
+            if (order.cancelable) {
                 ids.push(order.orderId);
             } else if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
-                let childOrderIds = extractTopLevelCancellableOrdersIds(order.childOrderStrategies);
+                let childOrderIds = extractTopLevelCancelableOrdersIds(order.childOrderStrategies);
                 ids.push(...childOrderIds);
             }
         });
@@ -316,7 +316,7 @@ window.TradingApp.OrderFactory = (function () {
         OrderStrategyType,
         OrderLegInstruction,
         filterWorkingOrders,
-        extractTopLevelCancellableOrdersIds,
+        extractTopLevelCancelableOrdersIds,
         extractOrderPrice,
         isBuyOrder,
         getOrderTypeShortString,
