@@ -174,6 +174,7 @@ window.TradingApp.TOS = (function () {
         newPrice = Math.round(newPrice * 100) / 100;
 
         stopOrders.forEach(order => {
+            let oldOrderId = order.orderId;
             let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
             replaceOrderBase(newOrder, oldOrderId);
         });

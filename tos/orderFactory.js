@@ -230,9 +230,7 @@ window.TradingApp.OrderFactory = (function () {
     const extractStopOrders = (orders) => {
         let stopOrders = [];
         orders.forEach(order => {
-            console.log(order.cancellable);
-            if (order.cancellable && order.orderType === OrderType.STOP) {
-                console.log('yes');
+            if (order.cancelable && order.orderType === OrderType.STOP) {
                 stopOrders.push(order);
             } else if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
                 let childStopOrders = extractStopOrders(order.childOrderStrategies);
@@ -331,6 +329,7 @@ window.TradingApp.OrderFactory = (function () {
         OrderLegInstruction,
         filterWorkingOrders,
         extractTopLevelCancelableOrdersIds,
+        extractStopOrders,
         extractOrderPrice,
         isBuyOrder,
         getOrderTypeShortString,
