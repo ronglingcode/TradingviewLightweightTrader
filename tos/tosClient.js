@@ -164,6 +164,20 @@ window.TradingApp.TOS = (function () {
         console.log(newOrder);
         replaceOrderBase(newOrder, oldOrderId);
     };
+
+    const adjustStopOrders = async (symbol) => {
+        let orders = await getOrdersForSymbol(symbol);
+        let stopOrders = window.TradingApp.OrderFactory.extractStopOrders(orders);
+
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let newPrice = widget.crosshairPrice;
+        newPrice = Math.round(newPrice * 100) / 100;
+
+        stopOrders.forEach(order => {
+            let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
+            replaceOrderBase(newOrder, oldOrderId);
+        });
+    };
     /* #endregion */
 
     /* #region Price history, Quote */
@@ -300,6 +314,7 @@ window.TradingApp.TOS = (function () {
         userPrincipal,
         placeOrderBase,
         adjustOrder,
+        adjustStopOrders,
         testPriceHistory,
         initialAccount,
         getAccount,

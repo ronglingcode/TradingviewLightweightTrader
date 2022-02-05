@@ -146,5 +146,9 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
     } else if (["Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6"].includes(code)) {
         window.TradingApp.TOS.adjustOrder(symbol, code);
+    } else if (code === 'KeyT') {
+        // move stop orders
+        console.log('hi');
+        window.TradingApp.TOS.adjustStopOrders(symbol);
     }
 });
