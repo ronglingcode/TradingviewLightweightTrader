@@ -305,6 +305,17 @@ window.TradingApp.DB = (function () {
                 globalData.openingCandle = createOpeningCandle(newlyClosedCandle);
                 if (!window.TradingApp.Settings.drawIndicatorsAsSeries) {
                     drawOpenRangeLines(globalData.openingCandle);
+                } else {
+                    let closedCandleTime = newlyClosedCandle.time;
+                    addDataAndUpdateChart(closedCandleTime, globalData.openLow3R, { value: globalData.openingCandle.low3R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[0]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openLow2R, { value: globalData.openingCandle.low2R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[1]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openLow1R, { value: globalData.openingCandle.low1R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[2]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openLow, { value: globalData.openingCandle.low }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[3]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openPrice, { value: globalData.openingCandle.open }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[4]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openHigh, { value: globalData.openingCandle.high }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[5]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openHigh1R, { value: globalData.openingCandle.high1R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[6]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openHigh2R, { value: globalData.openingCandle.high2R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[7]);
+                    addDataAndUpdateChart(closedCandleTime, globalData.openHigh3R, { value: globalData.openingCandle.high3R }, window.TradingApp.Main.widgets[symbol].openRangeSeriesList[8]);
                 }
             }
 
