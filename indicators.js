@@ -232,7 +232,15 @@ window.TradingApp.Indicators = (function () {
                 { time: current.time, value: current.low }
             ]);
         }
-    }
+    };
+
+    const runPostCandleCloseIndicators = (newlyClosedCandle) => {
+        let localTime = window.TradingApp.Helper.tvTimestampToLocalJsDate(newlyClosedCandle.time);
+        checkVwapBeforeOpen(newlyClosedCandle, localTime);
+    };
+    const checkVwapBeforeOpen = (newlyClosedCandle, localTime) => {
+        // check when 6:29 AM is closed.
+    };
 
     return {
         openRangeBreakoutPriceLines,
@@ -242,6 +250,7 @@ window.TradingApp.Indicators = (function () {
         drawPreMarketLow,
         populatePreMarketLineSeries,
         resetPreMarketHighLineSeries,
-        resetPreMarketLowLineSeries
+        resetPreMarketLowLineSeries,
+        runPostCandleCloseIndicators
     }
 })();
