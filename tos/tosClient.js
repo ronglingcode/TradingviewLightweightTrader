@@ -152,10 +152,9 @@ window.TradingApp.TOS = (function () {
         let orderNumber = parseInt(keyCode[5]);
 
         let widget = window.TradingApp.Main.widgets[symbol];
-        let orderPriceLines = widget.workingOrdersPriceLines;
-        if (orderPriceLines.length < orderNumber)
+        if (widget.workingOrders.length < orderNumber)
             return;
-        let order = orderPriceLines[orderNumber - 1].orderData;
+        let order = widget.workingOrders[orderNumber - 1];
         let oldOrderId = order.orderId;
         order.orderId = null;
         let newPrice = widget.crosshairPrice;
@@ -320,6 +319,7 @@ window.TradingApp.TOS = (function () {
         initialAccount,
         getAccount,
         getOrders,
+        getOrdersForSymbol,
         cancelWorkingOrders,
         getAccountBySymbol,
         filterAccountBySymbol,

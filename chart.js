@@ -235,6 +235,7 @@ window.TradingApp.Chart = (function () {
             });
         }
         widget.workingOrdersPriceLines = [];
+        widget.workingOrders = [];
 
         if (account.orders.length === 0)
             return;
@@ -253,9 +254,26 @@ window.TradingApp.Chart = (function () {
                 color = 'red';
                 q = -q;
             }
-            let l = createPriceLine(widget.candleSeries, price, `${i + 1}: ${orderTypeString}(${q})`, color);
-            l.orderData = orders[i];
-            widget.workingOrdersPriceLines.push(l);
+            let hasOrdersAtSamePrice = false;
+            for (let j = 0; j < widget.workingOrdersPriceLines.length; j++) {
+                let oldPriceLine = widget.workingOrdersPriceLines[j];
+                if (oldPriceLine.options().price === price) {
+                    hasOrdersAtSamePrice = true;
+                    // assume it's the same order type
+                    let text = `${i + 1}: (${q})`
+                    oldPriceLine.applyOptions({
+                        ...oldPriceLine.options(),
+                        title: oldPriceLine.options().title + "," + text
+                    })
+                    break;
+                }
+            }
+            if (!hasOrdersAtSamePrice) {
+                let l = createPriceLine(widget.candleSeries, price, `${i + 1}: ${orderTypeString}(${q})`, color);
+                l.orderData = orders[i];
+                widget.workingOrdersPriceLines.push(l);
+            }
+            widget.workingOrders.push(orders[i])
         }
     };
     return {
