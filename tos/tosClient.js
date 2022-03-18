@@ -100,18 +100,23 @@ window.TradingApp.TOS = (function () {
         let symbolAccount = {
             orders: []
         };
-        if (account && account.orderStrategies) {
+        if (!account)
+            return symbol
+
+        if (account.orderStrategies) {
             account.orderStrategies.forEach(order => {
                 if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol) {
                     symbolAccount.orders.push(order);
                 }
             });
         }
-        for (let i = 0; i < account.positions.length; i++) {
-            let p = account.positions[i];
-            if (p.instrument.symbol === symbol) {
-                symbolAccount.position = p;
-                break;
+        if (account.positions) {
+            for (let i = 0; i < account.positions.length; i++) {
+                let p = account.positions[i];
+                if (p.instrument.symbol === symbol) {
+                    symbolAccount.position = p;
+                    break;
+                }
             }
         }
         return symbolAccount;
