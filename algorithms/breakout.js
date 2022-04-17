@@ -105,8 +105,22 @@ window.TradingApp.Algo.Breakout = (function () {
     const test = () => {
         submitBreakoutOrders("MSFT", 340, 320, "a", 1);
     };
+
+    const prepareBreakoutOrders = (symbol, code) => {
+        let stopOutPrice = getStopLossPrice(symbol, code);
+        let entryPrice = getEntryPrice(symbol, code);
+        if (code === "KeyB") {
+            window.TradingApp.Firestore.logInfo("breakout buy for " + symbol);
+        } else if (code === "KeyS") {
+            window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol);
+        }
+        let multiplier = window.TradingApp.Chart.getMultiplier(window.TradingApp.Main.widgets[symbol]);
+        submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", multiplier);
+    };
+
     return {
         submitBreakoutOrders,
+        prepareBreakoutOrders,
         test,
         getStopLossPrice,
         getEntryPrice,

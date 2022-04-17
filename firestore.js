@@ -11,6 +11,7 @@ window.TradingApp.Firestore = (function () {
     let dateobj = new Date();
     let date = dateobj.getDate(), month = dateobj.getMonth() + 1, year = dateobj.getFullYear();
     let collectionNamePrefix = `${year}-${month}-${date}`;
+    let pendingOrdersBySymbol = {};
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -85,6 +86,7 @@ window.TradingApp.Firestore = (function () {
         logOrder,
         getAutoTraderStateWithoutRefresh,
         setAutoTraderState,
-        getAutoTraderStateWithRefresh
+        getAutoTraderStateWithRefresh,
+        pendingOrdersBySymbol
     };
 })();
