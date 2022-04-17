@@ -9,8 +9,13 @@ window.TradingApp.Helper = (function () {
     const getMinutesSinceMarketOpen = (jsDate) => {
         return (jsDate - window.TradingApp.Settings.marketOpenTime) / 60000;
     };
+
+    const getSecondsSinceMarketOpen = (jsDate) => {
+        return (jsDate - window.TradingApp.Settings.marketOpenTime) / 1000;
+    }
     return {
         tvTimestampToLocalJsDate,
-        getMinutesSinceMarketOpen
+        getMinutesSinceMarketOpen,
+        getSecondsSinceMarketOpen
     };
 })();

@@ -90,6 +90,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
     //console.log(keyboardEvent);
     let symbol = window.TradingApp.State.activeSymbol;
     let code = keyboardEvent.code;
+    let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
     console.log(code);
 
     if (code === "KeyB" || code === "KeyS") {
@@ -125,21 +126,25 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                 });
             });
         } else {
-            let stopOutPrice = window.TradingApp.Algo.Breakout.getStopLossPrice(symbol, code);
-            let entryPrice = window.TradingApp.Algo.Breakout.getEntryPrice(symbol, code);
-            if (code === "KeyB") {
-                window.TradingApp.Firestore.logInfo("breakout buy for " + symbol);
-            } else if (code === "KeyS") {
-                window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol);
+            // inside first minute, delay ordering
+            if (0 < secondsSinceMarketOpen && secondsSinceMarketOpen < 60) {
+                let timeoutID = setTimeout(function () {
+                    window.TradingApp.Algo.Breakout.prepareBreakoutOrders(symbol, code);
+                }, (60 - secondsSinceMarketOpen) * 1000);
+                window.TradingApp.Firestore.pendingOrdersBySymbol[symbol] = timeoutID;
+                console.log(timeoutID);
+            } else {
+                window.TradingApp.Algo.Breakout.prepareBreakoutOrders(symbol, code);
             }
-            let multiplier = window.TradingApp.Chart.getMultiplier(window.TradingApp.Main.widgets[symbol]);
-            window.TradingApp.Algo.Breakout.submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", multiplier);
         }
     } else if (code === 'Space') {
         window.TradingApp.Chart.clearPriceLines(symbol);
     } else if (code === "KeyC") {
         // shift + c or just c: cancel all
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
+        if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
+            clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
+        }
         window.TradingApp.Firestore.logInfo("cancel all for " + symbol);
     } else if (code === "KeyF") {
         window.TradingApp.TOS.flattenPosition(symbol);
