@@ -171,10 +171,10 @@ window.TradingApp.DB = (function () {
         window.TradingApp.Chart.updateUI(symbol, "lod", lowOfDay);
         window.TradingApp.Watchlist.forEach(stock => {
             if (stock.symbol === symbol) {
-                if (stock.ajbuy)
-                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajbuy, "aj buy", "#16A085", 2);
-                if (stock.ajsell)
-                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.ajsell, "aj sell", "red", 2);
+                if (stock.boxup)
+                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.boxup, "box up", "#16A085", 2);
+                if (stock.boxdown)
+                    window.TradingApp.Chart.createPriceLine(window.TradingApp.Main.widgets[symbol].candleSeries, stock.boxdown, "box down", "red", 2);
             }
         });
 
