@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date(), //('2022-01-28 6:30'),
+        'currentDay': new Date('2022-04-22 6:30'), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false
     },
@@ -9,22 +9,22 @@ window.TradingApp = {
         'GPS': {
             symbol: 'GPS', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            ajbuy: 12, ajsell: 11.25
+            boxup: 12, boxdown: 11.25
         },
         'ATEN': {
             symbol: 'ATEN', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            ajbuy: 14.8, ajsell: 14.5,
+            boxup: 14.8, boxdown: 14.5,
         },
         'SNAP': {
             symbol: 'SNAP', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //ajsell: 80, ajbuy: 88
+            //boxdown: 80, boxup: 88
         },
         'QQQ': {
             symbol: 'QQQ', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //ajbuy: 22, ajsell: 21.1
+            //boxup: 22, boxdown: 21.1
         }
     },
     'State': {
