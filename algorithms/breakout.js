@@ -6,6 +6,9 @@ window.TradingApp.Algo.Breakout = (function () {
         if (!checkRuleForBias(symbol, entryPrice, stopOutPrice)) {
             return false;
         }
+        if (!checkRuleForOpenCandle(symbol, entryPrice, stopOutPrice)) {
+            return false;
+        }
         return true;
     };
     const checkRuleForVwap = (symbol, entryPrice, stopOutPrice) => {
@@ -41,6 +44,30 @@ window.TradingApp.Algo.Breakout = (function () {
         }
         return true;
     };
+    // avoid chase the first candle during second candle
+    const checkRuleForOpenCandle = (symbol, entryPrice, stopOutPrice) => {
+        let openingCandle = window.TradingApp.DB.dataBySymbol[symbol].openingCandle;
+        if (!openingCandle)
+            return true;
+
+        let seconds = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
+        if (seconds >= 120)
+            return true;
+
+        if (entryPrice > stopOutPrice) {
+            // try to go long
+            if (window.TradingApp.Algo.Pattern.isGreenOpenBar(openingCandle)) {
+                return false;
+            }
+        } else {
+            // try to go short
+            if (window.TradingApp.Algo.Pattern.isRedOpenBar(openingCandle)) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
         let orders = [];
         if (window.TradingApp.Settings.preMarketTrading) {
