@@ -28,5 +28,6 @@ window.TradingApp.Algo.Pattern = (function () {
     return {
         isRedOpenBar: isRedOpenBar,
         isGreenOpenBar: isGreenOpenBar,
+        getBodyRatio: getBodyRatio,
     };
 })();
