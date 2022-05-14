@@ -7,42 +7,42 @@ window.TradingApp = {
     'Algo': {},
     'StockCandidates': {
         'AFRM': {
-            symbol: 'AFRM', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            symbol: 'AFRM', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 25.75, boxdown: 24
         },
         'GME': {
-            symbol: 'GME', initialVolume: 51686, initialTradingAmount: 1029861, premktHigh: 0, premktLow: 99999999,
+            symbol: 'GME', volumeSum: 36482, tradingSum: 3490241, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 98, boxdown: 95.5
         },
         'RBLX': {
-            symbol: 'RBLX', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            symbol: 'RBLX', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 41, boxdown: 39
         },
         'BYND': {
-            symbol: 'BYND', initialVolume: 99525, initialTradingAmount: 1996779, premktHigh: 0, premktLow: 99999999,
+            symbol: 'BYND', volumeSum: 99525, tradingSum: 1996779, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 21, boxdown: 19
         },
         'TSLA': {
-            symbol: 'TSLA', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            symbol: 'TSLA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 785, boxdown: 770
         },
         'NVDA': {
-            symbol: 'NVDA', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            symbol: 'NVDA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             //boxup: 2600, boxdown: 2570,
         },
         'SPY': {
-            symbol: 'SPY', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            symbol: 'SPY', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxdown: 80, boxup: 88
         },
         'QQQ': {
-            symbol: 'QQQ', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            symbol: 'QQQ', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 22, boxdown: 21.1
         }
@@ -55,9 +55,9 @@ window.TradingApp = {
 
 let top4 = [
     window.TradingApp.StockCandidates['AFRM'],
-    window.TradingApp.StockCandidates['GME'],
-    window.TradingApp.StockCandidates['TSLA'],
     window.TradingApp.StockCandidates['SPY'],
+    window.TradingApp.StockCandidates['TSLA'],
+    window.TradingApp.StockCandidates['GME'],
 ];
 window.TradingApp.Watchlist = top4;
 

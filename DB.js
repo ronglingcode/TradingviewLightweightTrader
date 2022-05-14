@@ -57,11 +57,14 @@ window.TradingApp.DB = (function () {
         let premktLow = 99999999;
         let totalVolume = 0;
         let totalTradingAmount = 0;
+        let vwapCorrectionVolumeSum = 0;
+        let vwapCorrectionTradingAmount = 0;
+        let vwapCorrected = false;
         for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
             if (window.TradingApp.Watchlist[i].symbol === symbol) {
                 let item = window.TradingApp.Watchlist[i];
-                totalVolume = item.initialVolume;
-                totalTradingAmount = item.initialTradingAmount;
+                vwapCorrectionVolumeSum = item.volumeSum;
+                vwapCorrectionTradingAmount = item.tradingSum;
                 premktHigh = item.premktHigh;
                 premktLow = item.premktLow;
                 break;
@@ -112,6 +115,14 @@ window.TradingApp.DB = (function () {
                 if (element.high > premktHigh) {
                     premktHigh = Math.ceil(element.high * 100) / 100;
                     window.TradingApp.Indicators.resetPreMarketHighLineSeries(widget);
+                }
+                if (!vwapCorrected && vwapCorrectionTradingAmount > 0 && vwapCorrectionVolumeSum > 0) {
+                    if (newCandle.minutesSinceMarketOpen >= -30) {
+                        totalTradingAmount = vwapCorrectionTradingAmount;
+                        totalVolume = vwapCorrectionVolumeSum;
+                        vwapCorrected = true;
+                        console.log('vwap corrected');
+                    }
                 }
             } else {
                 // update in-market indicators
