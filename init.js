@@ -1,23 +1,43 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date('2022-04-22 6:30'), //('2022-01-28 6:30'),
+        'currentDay': new Date('2022-05-13 6:30'), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false
     },
     'Algo': {},
     'StockCandidates': {
-        'GPS': {
-            symbol: 'GPS', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+        'AFRM': {
+            symbol: 'AFRM', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 12, boxdown: 11.25
+            boxup: 25.75, boxdown: 24
         },
-        'ATEN': {
-            symbol: 'ATEN', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+        'GME': {
+            symbol: 'GME', initialVolume: 51686, initialTradingAmount: 1029861, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            boxup: 98, boxdown: 95.5
+        },
+        'RBLX': {
+            symbol: 'RBLX', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            //boxup: 41, boxdown: 39
+        },
+        'BYND': {
+            symbol: 'BYND', initialVolume: 99525, initialTradingAmount: 1996779, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            boxup: 21, boxdown: 19
+        },
+        'TSLA': {
+            symbol: 'TSLA', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            boxup: 785, boxdown: 770
+        },
+        'NVDA': {
+            symbol: 'NVDA', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            boxup: 14.8, boxdown: 14.5,
+            //boxup: 2600, boxdown: 2570,
         },
-        'SNAP': {
-            symbol: 'SNAP', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
+        'SPY': {
+            symbol: 'SPY', initialVolume: 0, initialTradingAmount: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxdown: 80, boxup: 88
         },
@@ -34,10 +54,10 @@ window.TradingApp = {
 };
 
 let top4 = [
-    window.TradingApp.StockCandidates['SNAP'],
-    window.TradingApp.StockCandidates['ATEN'],
-    window.TradingApp.StockCandidates['GPS'],
-    window.TradingApp.StockCandidates['QQQ'],
+    window.TradingApp.StockCandidates['AFRM'],
+    window.TradingApp.StockCandidates['GME'],
+    window.TradingApp.StockCandidates['TSLA'],
+    window.TradingApp.StockCandidates['SPY'],
 ];
 window.TradingApp.Watchlist = top4;
 
