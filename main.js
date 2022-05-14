@@ -114,12 +114,12 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                     window.TradingApp.Firestore.logInfo("market sell for " + symbol);
                     estimatedEntryPrice = bid - 2 * spread;
                 }
-                if (!window.TradingApp.Algo.Breakout.checkRules(symbol, estimatedEntryPrice, stopOutPrice)) {
-                    console.log("failed rule");
+                let checkResult = window.TradingApp.Algo.Breakout.checkRules(symbol, estimatedEntryPrice, stopOutPrice);
+                if (checkResult == 0) {
                     return;
                 }
                 orders = factory.createEntryOrdersWithFixedRisk(
-                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.35
+                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.35 * checkResult
                 );
                 orders.forEach(order => {
                     window.TradingApp.TOS.placeOrderBase(order);

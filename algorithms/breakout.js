@@ -1,15 +1,21 @@
 window.TradingApp.Algo.Breakout = (function () {
+    // return a number between 0 to 1 for share size multiplier
+    // 0 means cannot make the trade
+    // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
-            return false;
+            window.TradingApp.Firestore.logInfo(`checkRuleForVwap failed for ${symbol}`);
+            return 0.3;
         }
         if (!checkRuleForBias(symbol, entryPrice, stopOutPrice)) {
-            return false;
+            window.TradingApp.Firestore.logInfo(`checkRuleForBias failed for ${symbol}`);
+            return 0;
         }
         if (!checkRuleForOpenCandle(symbol, entryPrice, stopOutPrice)) {
-            return false;
+            window.TradingApp.Firestore.logInfo(`checkRuleForOpenCandle failed for ${symbol}`);
+            return 0;
         }
-        return true;
+        return 1;
     };
     const checkRuleForVwap = (symbol, entryPrice, stopOutPrice) => {
         let minutesSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 60000;
@@ -20,12 +26,12 @@ window.TradingApp.Algo.Breakout = (function () {
             if (entryPrice > stopOutPrice) {
                 // buy orders
                 if (entryPrice < currentVwap) {
-                    return confirm("entry against vwap, still continue?");
+                    return false;
                 }
             } else {
                 // sell orders
                 if (entryPrice > currentVwap) {
-                    return confirm("entry against vwap, still continue?");
+                    return false;
                 }
             }
         }
@@ -35,11 +41,14 @@ window.TradingApp.Algo.Breakout = (function () {
         let bias = window.TradingApp.AutoTrader.getStockBias(symbol);
         if (bias === 'long') {
             if (entryPrice < stopOutPrice) {
-                return confirm("sell orders on long bias, still continue?");
+                // block trade against bias because taking an opposite trade can lead to
+                // missing the entry for original trade bias
+                return false;
             }
         } else if (bias === 'short') {
             if (entryPrice > stopOutPrice) {
-                return confirm("buy orders on short bias, still continue?");
+                //return confirm("buy orders on short bias, still continue?");
+                return false;
             }
         }
         return true;
@@ -73,10 +82,11 @@ window.TradingApp.Algo.Breakout = (function () {
         if (window.TradingApp.Settings.preMarketTrading) {
             orders = window.TradingApp.OrderFactory.createPreMarketOrderWithFixedRisk(symbol, entryPrice, stopOut, setupQuality, multiplier);
         } else {
-            if (!checkRules(symbol, entryPrice, stopOut)) {
-                console.log("failed rule");
+            let checkResult = checkRules(symbol, entryPrice, stopOut);
+            if (checkResult == 0) {
                 return;
             }
+            multiplier = multiplier * checkResult;
             let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
             orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
         }
