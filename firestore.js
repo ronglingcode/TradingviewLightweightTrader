@@ -70,7 +70,10 @@ window.TradingApp.Firestore = (function () {
         let currentDate = new Date();
         let dateString = currentDate.toLocaleDateString();
         if (dateString !== state.date) {
-            let result = await setAutoTraderState({ date: dateString });
+            let result = await setAutoTraderState({
+                date: dateString,
+                dayTrades: 0,
+            });
             state = await getAutoTraderStateWithoutRefresh();
             console.log(state);
             return state;

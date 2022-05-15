@@ -87,12 +87,40 @@ window.TradingApp.AutoTrader = (function () {
     const manualTrigger = (symbol, trigger) => {
         stateBySymbol[symbol].manualTriggered = trigger;
     };
+
+    const countTrades = (accountData) => {
+        let orders = accountData.securitiesAccount.orderStrategies;
+        let filledOrders = [];
+        for (let i = 0; i < orders.length; i++) {
+            let order = orders[i];
+            if (order.status == 'FILLED') {
+                filledOrders.push(order);
+            }
+        }
+
+        let totalTrades = 0;
+        let positions = {};
+        for (let i = 0; i < filledOrders.length; i++) {
+            let symbol = window.TradingApp.OrderFactory.getOrderSymbol(order);
+            let previousQuantity = 0;
+            if (symbol in positions) {
+                previousQuantity = positions[symbol];
+            }
+            if (previousQuantity == 0) {
+                totalTrades++; // opened a new position
+            }
+            positions[symbol] = previousQuantity + order.filledQuantity;
+        }
+        return totalTrades;
+    };
+
     return {
         stateBySymbol,
         manualTrigger,
         getStockBias,
         onFirstMinuteClose,
         onSecondMinuteClose,
-        onThirdMinuteClose
+        onThirdMinuteClose,
+        countTrades,
     }
 })();
