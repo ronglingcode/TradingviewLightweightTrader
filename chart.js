@@ -180,6 +180,9 @@ window.TradingApp.Chart = (function () {
             let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, account);
             updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
+
+        let totalTrades = window.TradingApp.AutoTrader.countTrades(account);
+        console.log(`total trades: ${totalTrades}`);
     };
 
     const updateAccountUIStatusForSymbol = (symbol, account) => {
