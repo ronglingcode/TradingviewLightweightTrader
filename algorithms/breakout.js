@@ -5,7 +5,7 @@ window.TradingApp.Algo.Breakout = (function () {
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
             window.TradingApp.Firestore.logInfo(`checkRuleForVwap failed for ${symbol}`);
-            return 0.3;
+            return 0;
         }
         if (!checkRuleForBias(symbol, entryPrice, stopOutPrice)) {
             window.TradingApp.Firestore.logInfo(`checkRuleForBias failed for ${symbol}`);
