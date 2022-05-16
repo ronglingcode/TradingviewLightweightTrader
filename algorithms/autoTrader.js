@@ -107,6 +107,7 @@ window.TradingApp.AutoTrader = (function () {
             }
         }
 
+        filledOrders.sort((a, b) => (a.closeTime > b.closeTime ? 1 : -1))
         let totalTrades = 0;
         let positions = {};
         for (let i = 0; i < filledOrders.length; i++) {
