@@ -94,13 +94,23 @@ window.TradingApp.AutoTrader = (function () {
         for (let i = 0; i < orders.length; i++) {
             let order = orders[i];
             if (order.status == 'FILLED') {
-                filledOrders.push(order);
+                if (order.orderStrategyType == 'OCO') {
+                    let childOrders = order.childOrderStrategies;
+                    for (let j = 0; j < childOrders.length; j++) {
+                        if (childOrders[j].status == 'FILLED') {
+                            filledOrders.push(childOrders[j])
+                        }
+                    }
+                } else {
+                    filledOrders.push(order);
+                }
             }
         }
 
         let totalTrades = 0;
         let positions = {};
         for (let i = 0; i < filledOrders.length; i++) {
+            let order = filledOrders[i];
             let symbol = window.TradingApp.OrderFactory.getOrderSymbol(order);
             let previousQuantity = 0;
             if (symbol in positions) {
@@ -109,7 +119,11 @@ window.TradingApp.AutoTrader = (function () {
             if (previousQuantity == 0) {
                 totalTrades++; // opened a new position
             }
-            positions[symbol] = previousQuantity + order.filledQuantity;
+            if (window.TradingApp.OrderFactory.isSellOrder(order.orderLegCollection[0].instruction)) {
+                positions[symbol] = previousQuantity - order.filledQuantity;
+            } else {
+                positions[symbol] = previousQuantity + order.filledQuantity;
+            }
         }
         return totalTrades;
     };

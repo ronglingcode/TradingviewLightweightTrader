@@ -37,6 +37,7 @@ window.TradingApp.OrderFactory = (function () {
         }
     };
 
+    /* #region Read Order Fields */
     const getOrderSymbol = (order) => {
         if (order.orderLegCollection && order.orderLegCollection.length > 0) {
             let orderLeg = order.orderLegCollection[0];
@@ -48,7 +49,7 @@ window.TradingApp.OrderFactory = (function () {
         }
         return "";
     }
-
+    /* #endregion */
 
     /* #region Basic Orders */
     const createDayOrder = function (symbol, quantity, orderLegInstruction) {
@@ -291,6 +292,9 @@ window.TradingApp.OrderFactory = (function () {
     const isBuyOrder = (orderInstruction) => {
         return [OrderLegInstruction.BUY, OrderLegInstruction.BUY_TO_COVER].includes(orderInstruction);
     };
+    const isSellOrder = (orderInstruction) => {
+        return orderInstruction.startsWith('SELL');
+    };
     const getOrderTypeShortString = (orderType) => {
         if (orderType === OrderType.STOP)
             return 'Stp';
@@ -332,6 +336,7 @@ window.TradingApp.OrderFactory = (function () {
         extractStopOrders,
         extractOrderPrice,
         isBuyOrder,
+        isSellOrder,
         getOrderTypeShortString,
         replicateOrderWithNewPrice
     }
