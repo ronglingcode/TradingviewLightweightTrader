@@ -4,19 +4,19 @@ window.TradingApp.Algo.Breakout = (function () {
     // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
         if (!checkRuleForTimeWindow()) {
-            window.TradingApp.Firestore.logInfo(`checkRuleForTimeWindow failed for ${symbol}`);
+            window.TradingApp.Firestore.logInfo(`checkRule: TimeWindow rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
-            window.TradingApp.Firestore.logInfo(`checkRuleForVwap failed for ${symbol}`);
+            window.TradingApp.Firestore.logInfo(`checkRule: Vwap rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForBias(symbol, entryPrice, stopOutPrice)) {
-            window.TradingApp.Firestore.logInfo(`checkRuleForBias failed for ${symbol}`);
+            window.TradingApp.Firestore.logInfo(`checkRule: Bias rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForOpenCandle(symbol, entryPrice, stopOutPrice)) {
-            window.TradingApp.Firestore.logInfo(`checkRuleForOpenCandle failed for ${symbol}`);
+            window.TradingApp.Firestore.logInfo(`checkRule: OpenCandle rule failed for ${symbol}`);
             return 0;
         }
         return 1;
