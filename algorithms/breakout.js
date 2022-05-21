@@ -3,6 +3,10 @@ window.TradingApp.Algo.Breakout = (function () {
     // 0 means cannot make the trade
     // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
+        if (!checkRuleForTimeWindow()) {
+            window.TradingApp.Firestore.logInfo(`checkRuleForTimeWindow failed for ${symbol}`);
+            return 0;
+        }
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
             window.TradingApp.Firestore.logInfo(`checkRuleForVwap failed for ${symbol}`);
             return 0;
@@ -17,9 +21,18 @@ window.TradingApp.Algo.Breakout = (function () {
         }
         return 1;
     };
+    const checkRuleForTimeWindow = () => {
+        let minutesSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 60000;
+        if (minutesSinceMarketOpen > 30) {
+            return 0;
+        } else {
+            return 1;
+        }
+    };
+
     const checkRuleForVwap = (symbol, entryPrice, stopOutPrice) => {
         let minutesSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 60000;
-        if (minutesSinceMarketOpen >= 0 && minutesSinceMarketOpen <= 5) {
+        if (minutesSinceMarketOpen >= 0) {
             let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
             let currentVwap = vwap[vwap.length - 1].value;
             window.TradingApp.Firestore.logInfo(`check vwap rule for ${symbol}, entry: ${entryPrice}, stop: ${stopOutPrice}, vwap ${currentVwap}`);
