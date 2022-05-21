@@ -271,7 +271,6 @@ window.TradingApp.OrderFactory = (function () {
         return workingOrders;
     };
     const extractWorkingChildOrdersFromOCO = (oco) => {
-        console.log(oco);
         if (oco.status != "WORKING")
             return [];
         let workingChildOrders = [];
