@@ -99,6 +99,7 @@ window.TradingApp.Chart = (function () {
         setupQuantityBar(widget.htmlContents.quantityBar, widget.htmlContents.quantityInput);
         widget.htmlContents.symbol.innerText = stock.symbol;
         widget.htmlContents.positionCount = widget.htmlContents.container.getElementsByClassName("positionCount")[0];
+        widget.htmlContents.exitOrders = widget.htmlContents.container.getElementsByClassName("exitOrders")[0];
         widget.chart = LightweightCharts.createChart(
             widget.htmlContents.chart,
             window.TradingApp.ChartSettings.chartSettings
@@ -236,6 +237,7 @@ window.TradingApp.Chart = (function () {
             widget.workingOrdersPriceLines.forEach(l => {
                 widget.candleSeries.removePriceLine(l);
             });
+            widget.htmlContents.exitOrders.innerText = "Exits:";
         }
         widget.workingOrdersPriceLines = [];
         widget.workingOrders = [];
@@ -246,6 +248,7 @@ window.TradingApp.Chart = (function () {
         if (orders.length === 0)
             return;
 
+        let exitOrdersString = "Exits: ";
         for (let i = 0; i < orders.length; i++) {
             let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i]);
             let orderInstruction = orders[i].orderLegCollection[0].instruction;
@@ -276,8 +279,12 @@ window.TradingApp.Chart = (function () {
                 l.orderData = orders[i];
                 widget.workingOrdersPriceLines.push(l);
             }
-            widget.workingOrders.push(orders[i])
+            widget.workingOrders.push(orders[i]);
+            if (orderTypeString == "LMT") {
+                exitOrdersString += `${i}(${q})`;
+            }
         }
+        widget.htmlContents.exitOrders = exitOrdersString;
     };
     return {
         createChartWidget,
