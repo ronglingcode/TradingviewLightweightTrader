@@ -51,13 +51,8 @@ window.TradingApp.Indicators = (function () {
 
     const createOpenRangeSeries = (chart) => {
         // add from low to high: low3R, low2R, low1R, low, open, high, high1R, ...
-        let lineSeriesList = []
-        const lineSettings = {
-            lineWidth: 1,
-            crosshairMarkerVisible: false,
-            priceLineVisible: false,
-            autoscaleInfoProvider: () => null
-        }
+        let lineSeriesList = [];
+        const lineSettings = window.TradingApp.ChartSettings.openRangeLineSettings;
         for (let i = 0; i < 3; i++) {
             let s = chart.addLineSeries({
                 color: redColor,

@@ -3,7 +3,7 @@ window.TradingApp.ChartSettings = (function () {
     const defaultGreen = 'rgb(38,166,154)';
     const chartSettings = {
         width: 800,
-        height: 545,
+        height: 440,
         layout: {
             backgroundColor: '#ffffff',
             textColor: 'rgba(33, 56, 77, 1)',
@@ -106,6 +106,14 @@ window.TradingApp.ChartSettings = (function () {
         crosshairMarkerVisible: false,
         lastValueVisible: false,
         priceLineVisible: false
+    };
+
+    const openRangeLineSettings = {
+        lineWidth: 1,
+        crosshairMarkerVisible: false,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        autoscaleInfoProvider: () => null
     }
 
     return {
@@ -117,6 +125,7 @@ window.TradingApp.ChartSettings = (function () {
         cloudLineSettings,
         defaultRed,
         defaultGreen,
-        preMarketLineSettings
+        preMarketLineSettings,
+        openRangeLineSettings
     };
 })();
