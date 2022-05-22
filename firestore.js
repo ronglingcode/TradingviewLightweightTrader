@@ -65,20 +65,25 @@ window.TradingApp.Firestore = (function () {
         let docRef = await doc(db, "state/autoTrader")
         await setDoc(docRef, newState);
     };
-    const getAutoTraderStateWithRefresh = async () => {
+    const initializeAutoTraderState = async (account) => {
         let state = await getAutoTraderStateWithoutRefresh();
         let currentDate = new Date();
+        currentDate = window.TradingApp.Settings.currentDay;
         let dateString = currentDate.toLocaleDateString();
         if (dateString !== state.date) {
+            let dayTrades = window.TradingApp.AutoTrader.countTrades(account);
             let result = await setAutoTraderState({
                 date: dateString,
-                dayTrades: 0,
+                dayTrades: dayTrades,
+                initialBalance: account.securitiesAccount.currentBalances.liquidationValue,
             });
             state = await getAutoTraderStateWithoutRefresh();
             console.log(state);
+            setInitialBalance(state.initialBalance);
             return state;
         } else {
             console.log(state);
+            setInitialBalance(state.initialBalance);
             return state;
         }
     };
@@ -93,6 +98,14 @@ window.TradingApp.Firestore = (function () {
         } else {
             return countInt;
         }
+    };
+    const setInitialBalance = (balance) => {
+        sessionStorage.setItem("TradingApp.InitialBalance", balance);
+    }
+    const getProfitAndLoss = (account) => {
+        let newBalance = account.securitiesAccount.currentBalances.liquidationValue;
+        let oldBalance = sessionStorage.getItem("TradingApp.InitialBalance");
+        return newBalance - oldBalance;
     }
 
     return {
@@ -101,9 +114,10 @@ window.TradingApp.Firestore = (function () {
         logOrder,
         getAutoTraderStateWithoutRefresh,
         setAutoTraderState,
-        getAutoTraderStateWithRefresh,
+        initializeAutoTraderState,
         pendingOrdersBySymbol,
         setTradesCount,
         getTradesCount,
+        getProfitAndLoss,
     };
 })();
