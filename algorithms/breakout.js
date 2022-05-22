@@ -3,6 +3,10 @@ window.TradingApp.Algo.Breakout = (function () {
     // 0 means cannot make the trade
     // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
+        if (!checkRuleForDailyMaxLoss()) {
+            window.TradingApp.Firestore.logInfo(`checkRule: Daily max loss exceeded`);
+            return 0;
+        }
         if (!checkRuleForTimeWindow()) {
             window.TradingApp.Firestore.logInfo(`checkRule: TimeWindow rule failed for ${symbol}`);
             return 0;
@@ -24,6 +28,14 @@ window.TradingApp.Algo.Breakout = (function () {
             return 0;
         }
         return 1;
+    };
+    const checkRuleForDailyMaxLoss = () => {
+        let currentLoss = window.TradingApp.Firestore.getProfitAndLossFromCache() * (-1);
+        if (currentLoss > 3 * window.TradingApp.Algo.RiskManager.MaxDailyLoss) {
+            return 0;
+        } else {
+            return 1;
+        }
     };
     const checkRuleForTradesCount = () => {
         let count = window.TradingApp.Firestore.getTradesCount();
@@ -186,6 +198,7 @@ window.TradingApp.Algo.Breakout = (function () {
         test,
         getStopLossPrice,
         getEntryPrice,
-        checkRules
+        checkRules,
+        checkRuleForDailyMaxLoss,
     };
 })();

@@ -101,12 +101,24 @@ window.TradingApp.Firestore = (function () {
     };
     const setInitialBalance = (balance) => {
         sessionStorage.setItem("TradingApp.InitialBalance", balance);
-    }
+    };
     const getProfitAndLoss = (account) => {
         let newBalance = account.securitiesAccount.currentBalances.liquidationValue;
         let oldBalance = sessionStorage.getItem("TradingApp.InitialBalance");
         return newBalance - oldBalance;
-    }
+    };
+    const getProfitAndLossFromCache = () => {
+        let newBalance = sessionStorage.getItem("TradingApp.CurrentBalance");
+        let oldBalance = sessionStorage.getItem("TradingApp.InitialBalance");
+        return newBalance - oldBalance;
+    };
+    const cacheAccountInfo = (account) => {
+        sessionStorage.setItem("TradingApp.CurrentBalance", account.securitiesAccount.currentBalances.liquidationValue);
+
+        let totalTrades = window.TradingApp.AutoTrader.countTrades(account);
+        console.log(`total trades: ${totalTrades}`);
+        setTradesCount(totalTrades);
+    };
 
     return {
         logInfo,
@@ -116,8 +128,9 @@ window.TradingApp.Firestore = (function () {
         setAutoTraderState,
         initializeAutoTraderState,
         pendingOrdersBySymbol,
-        setTradesCount,
         getTradesCount,
         getProfitAndLoss,
+        cacheAccountInfo,
+        getProfitAndLossFromCache,
     };
 })();
