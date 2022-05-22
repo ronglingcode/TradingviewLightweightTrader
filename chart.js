@@ -184,6 +184,7 @@ window.TradingApp.Chart = (function () {
 
         let totalTrades = window.TradingApp.AutoTrader.countTrades(account);
         console.log(`total trades: ${totalTrades}`);
+        window.TradingApp.Firestore.setTradesCount(totalTrades);
     };
 
     const updateAccountUIStatusForSymbol = (symbol, account) => {

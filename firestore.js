@@ -82,6 +82,18 @@ window.TradingApp.Firestore = (function () {
             return state;
         }
     };
+    const setTradesCount = (count) => {
+        sessionStorage.setItem("TradingApp.TradesCount", count);
+    };
+    const getTradesCount = () => {
+        let count = sessionStorage.getItem("TradingApp.TradesCount");
+        let countInt = parseInt(count, 10);
+        if (isNaN(countInt)) {
+            return 0;
+        } else {
+            return countInt;
+        }
+    }
 
     return {
         logInfo,
@@ -90,6 +102,8 @@ window.TradingApp.Firestore = (function () {
         getAutoTraderStateWithoutRefresh,
         setAutoTraderState,
         getAutoTraderStateWithRefresh,
-        pendingOrdersBySymbol
+        pendingOrdersBySymbol,
+        setTradesCount,
+        getTradesCount,
     };
 })();
