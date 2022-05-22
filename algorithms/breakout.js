@@ -7,6 +7,10 @@ window.TradingApp.Algo.Breakout = (function () {
             window.TradingApp.Firestore.logInfo(`checkRule: TimeWindow rule failed for ${symbol}`);
             return 0;
         }
+        if (!checkRuleForTradesCount()) {
+            window.TradingApp.Firestore.logInfo(`checkRule: TimeWindow rule failed for ${symbol}`);
+            return 0;
+        }
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
             window.TradingApp.Firestore.logInfo(`checkRule: Vwap rule failed for ${symbol}`);
             return 0;
@@ -17,6 +21,14 @@ window.TradingApp.Algo.Breakout = (function () {
         }
         if (!checkRuleForOpenCandle(symbol, entryPrice, stopOutPrice)) {
             window.TradingApp.Firestore.logInfo(`checkRule: OpenCandle rule failed for ${symbol}`);
+            return 0;
+        }
+        return 1;
+    };
+    const checkRuleForTradesCount = () => {
+        let count = window.TradingApp.Firestore.getTradesCount();
+        if (count >= 5) {
+            window.TradingApp.Firestore.logInfo(`no more than 5 trades/day`);
             return 0;
         }
         return 1;
