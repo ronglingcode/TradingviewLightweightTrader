@@ -62,7 +62,7 @@ const createWebSocket = async () => {
                     contents.forEach(content => {
                         let act = window.TradingApp.Streaming.createAccountActivity(content);
                         //console.log(act);
-                        console.log(act.messageType);
+                        //console.log(act.messageType);
                         if (act && window.TradingApp.Streaming.OrderChangeMessageTypes.includes(act.messageType)) {
                             //let d = new Date();
                             //console.log(d.toISOString());

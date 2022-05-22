@@ -177,14 +177,11 @@ window.TradingApp.Chart = (function () {
 
     const updateAccountUIStatus = async (symbolList) => {
         let account = await window.TradingApp.TOS.getAccount();
+        window.TradingApp.Firestore.cacheAccountInfo(account);
         symbolList.forEach(symbol => {
             let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, account);
             updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
-
-        let totalTrades = window.TradingApp.AutoTrader.countTrades(account);
-        console.log(`total trades: ${totalTrades}`);
-        window.TradingApp.Firestore.setTradesCount(totalTrades);
     };
 
     const updateAccountUIStatusForSymbol = (symbol, account) => {
