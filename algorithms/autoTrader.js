@@ -90,6 +90,9 @@ window.TradingApp.AutoTrader = (function () {
 
     const countTrades = (accountData) => {
         let orders = accountData.securitiesAccount.orderStrategies;
+        if (!orders) {
+            return 0;
+        }
         let filledOrders = [];
         for (let i = 0; i < orders.length; i++) {
             let order = orders[i];

@@ -128,6 +128,7 @@ window.TradingApp.TOS = (function () {
     const setInitialAccount = async () => {
         let account = await getAccount();
         window.TradingApp.TOS.initialAccount = account;
+        window.TradingApp.Firestore.initializeAutoTraderState(account);
     };
     const flattenPosition = async (symbol) => {
         let account = await getAccountBySymbol(symbol);
