@@ -278,11 +278,12 @@ window.TradingApp.Chart = (function () {
                 widget.workingOrdersPriceLines.push(l);
             }
             widget.workingOrders.push(orders[i]);
-            if (orderTypeString == "LMT") {
-                exitOrdersString += `${i}(${q})`;
+            console.log(orderTypeString);
+            if (orderTypeString == "Lmt") {
+                exitOrdersString += `${i + 1}(${q}),`;
             }
         }
-        widget.htmlContents.exitOrders = exitOrdersString;
+        widget.htmlContents.exitOrders.innerText = exitOrdersString;
     };
     return {
         createChartWidget,

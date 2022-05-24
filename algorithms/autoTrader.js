@@ -93,22 +93,7 @@ window.TradingApp.AutoTrader = (function () {
         if (!orders) {
             return 0;
         }
-        let filledOrders = [];
-        for (let i = 0; i < orders.length; i++) {
-            let order = orders[i];
-            if (order.status == 'FILLED') {
-                if (order.orderStrategyType == 'OCO') {
-                    let childOrders = order.childOrderStrategies;
-                    for (let j = 0; j < childOrders.length; j++) {
-                        if (childOrders[j].status == 'FILLED') {
-                            filledOrders.push(childOrders[j])
-                        }
-                    }
-                } else {
-                    filledOrders.push(order);
-                }
-            }
-        }
+        let filledOrders = window.TradingApp.OrderFactory.extractFilledOrders(orders);
 
         filledOrders.sort((a, b) => (a.closeTime > b.closeTime ? 1 : -1))
         let totalTrades = 0;

@@ -95,6 +95,17 @@ window.TradingApp.TOS = (function () {
             .catch(err => console.log('Request Failed', err));
     };
 
+    const getTransactions = async () => {
+        let accountId = window.TradingApp.Secrets.accountId;
+        let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/transactions`;
+        return asyncGet(url).then(response => response.json())  // convert to json
+            .then(json => {
+                console.log(json);
+                return json;
+            })
+            .catch(err => console.log('Request Failed', err));
+    };
+
     const filterAccountBySymbol = (symbol, account) => {
         account = account.securitiesAccount;
         let symbolAccount = {
@@ -330,6 +341,7 @@ window.TradingApp.TOS = (function () {
         cancelWorkingOrders,
         getAccountBySymbol,
         filterAccountBySymbol,
-        flattenPosition
+        flattenPosition,
+        getTransactions
     }
 })();

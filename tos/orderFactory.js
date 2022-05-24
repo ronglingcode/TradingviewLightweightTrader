@@ -240,6 +240,30 @@ window.TradingApp.OrderFactory = (function () {
         });
         return stopOrders;
     };
+
+    const extractFilledOrders = (orders) => {
+        let filledOrders = [];
+        orders.forEach(order => {
+            if (order.status == "FILLED") {
+                if (order.orderStrategyType == "OCO") {
+                    if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
+                        let childFilledOrders = extractFilledOrders(order.childOrderStrategies);
+                        filledOrders.push(...childFilledOrders);
+                    }
+                } else if (order.orderStrategyType == "TRIGGER") {
+                    filledOrders.push(order);
+                    if (order.childOrderStrategies && order.childOrderStrategies.length > 0) {
+                        let childFilledOrders = extractFilledOrders(order.childOrderStrategies);
+                        filledOrders.push(...childFilledOrders);
+                    }
+                } else {
+                    filledOrders.push(order);
+                }
+            }
+        });
+        return filledOrders;
+    };
+
     // if OTO is not triggered, return the parent order of OTO
     // if OTO is triggered, return the child orders.
     // For OCO orders, always return the 2 child orders
@@ -334,6 +358,7 @@ window.TradingApp.OrderFactory = (function () {
         extractTopLevelCancelableOrdersIds,
         extractStopOrders,
         extractOrderPrice,
+        extractFilledOrders,
         isBuyOrder,
         isSellOrder,
         getOrderTypeShortString,
