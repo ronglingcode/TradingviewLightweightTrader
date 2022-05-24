@@ -245,6 +245,15 @@ window.TradingApp.Chart = (function () {
         let orders = window.TradingApp.OrderFactory.filterWorkingOrders(account.orders);
         if (orders.length === 0)
             return;
+        orders.sort(function (a, b) {
+            if (a.orderType > b.orderType) {
+                return 1;
+            } else if (a.orderType < b.orderType) {
+                return -1;
+            } else {
+                return a.quantity - b.quantity;
+            }
+        });
 
         let exitOrdersString = "Exits: ";
         for (let i = 0; i < orders.length; i++) {
@@ -278,7 +287,6 @@ window.TradingApp.Chart = (function () {
                 widget.workingOrdersPriceLines.push(l);
             }
             widget.workingOrders.push(orders[i]);
-            console.log(orderTypeString);
             if (orderTypeString == "Lmt") {
                 exitOrdersString += `${i + 1}(${q}),`;
             }
