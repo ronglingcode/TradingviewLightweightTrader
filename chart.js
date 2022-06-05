@@ -121,8 +121,8 @@ window.TradingApp.Chart = (function () {
         //let openRangeSeriesList = window.TradingApp.Indicators.createOpenRangeSeries(chart);
 
         function myClickHandler(param) {
-            console.log(param)
             /*
+            console.log(param)
             if (!param.point) {
                 return;
             }
@@ -139,11 +139,13 @@ window.TradingApp.Chart = (function () {
             window.TradingApp.Chart.drawEntry(symbol, crosshairPrice);
         });
 
+        /*
         widget.htmlContents.chart.addEventListener('dblclick', event => {
             console.log(event);
             let crosshairPrice = window.TradingApp.Main.widgets[symbol].crosshairPrice;
             window.TradingApp.Chart.drawStopLoss(symbol, crosshairPrice);
         });
+        */
 
         widget.htmlContents.container.addEventListener('mouseover', function (mouseEvent) {
             for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
