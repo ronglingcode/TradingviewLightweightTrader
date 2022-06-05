@@ -205,12 +205,21 @@ window.TradingApp.Chart = (function () {
             return;
         }
         let position = account.position;
+        let filledPrice = position.averagePrice;
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+        let riskManager = window.TradingApp.Algo.RiskManager;
+
+        // show relative position size regarding to risk size
         if (position.longQuantity) {
-            html.innerText = `Pos: +${position.longQuantity}`;
+            let riskPerShare = filledPrice - symbolData.lowOfDay;
+            let riskMultiples = riskManager.quantityToRiskMultiples(riskPerShare, position.longQuantity);
+            html.innerText = `Pos: +${riskMultiples}%`;
             html.style.color = 'green';
             return;
         } else if (position.shortQuantity) {
-            html.innerText = `Pos: -${position.shortQuantity}`;
+            let riskPerShare = symbolData.highOfDay - filledPrice;
+            let riskMultiples = riskManager.quantityToRiskMultiples(riskPerShare, position.shortQuantity);
+            html.innerText = `Pos: -${riskMultiples}%`;
             html.style.color = 'red';
             return;
         }
@@ -257,6 +266,10 @@ window.TradingApp.Chart = (function () {
             }
         });
 
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+        let riskManager = window.TradingApp.Algo.RiskManager;
+        let filledPrice = account.position.averagePrice;
+
         let exitOrdersString = "Exits: ";
         for (let i = 0; i < orders.length; i++) {
             let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i]);
@@ -265,9 +278,12 @@ window.TradingApp.Chart = (function () {
             let color = 'green';
             let orderTypeString = window.TradingApp.OrderFactory.getOrderTypeShortString(orders[i].orderType);
             let q = orders[i].quantity;
+            let riskMultiples = riskManager.quantityToRiskMultiples(filledPrice - symbolData.lowOfDay, q);
             if (!isBuyOrder) {
+                riskMultiples = riskManager.quantityToRiskMultiples(symbolData.highOfDay - filledPrice, q);
                 color = 'red';
                 q = -q;
+                riskMultiples = -riskMultiples;
             }
             let hasOrdersAtSamePrice = false;
             for (let j = 0; j < widget.workingOrdersPriceLines.length; j++) {
@@ -275,7 +291,8 @@ window.TradingApp.Chart = (function () {
                 if (oldPriceLine.options().price === price) {
                     hasOrdersAtSamePrice = true;
                     // assume it's the same order type
-                    let text = `${i + 1}: (${q})`
+                    let text = `${i + 1}: (${q})`;
+                    text = `${i + 1}: (${riskMultiples}%)`;
                     oldPriceLine.applyOptions({
                         ...oldPriceLine.options(),
                         title: oldPriceLine.options().title + "," + text
@@ -284,13 +301,13 @@ window.TradingApp.Chart = (function () {
                 }
             }
             if (!hasOrdersAtSamePrice) {
-                let l = createPriceLine(widget.candleSeries, price, `${i + 1}: ${orderTypeString}(${q})`, color);
+                let l = createPriceLine(widget.candleSeries, price, `${i + 1}: ${orderTypeString}(${riskMultiples}%)`, color);
                 l.orderData = orders[i];
                 widget.workingOrdersPriceLines.push(l);
             }
             widget.workingOrders.push(orders[i]);
             if (orderTypeString == "Lmt") {
-                exitOrdersString += `${i + 1}(${q}),`;
+                exitOrdersString += `${i + 1}(${riskMultiples}%),`;
             }
         }
         widget.htmlContents.exitOrders.innerText = exitOrdersString;
