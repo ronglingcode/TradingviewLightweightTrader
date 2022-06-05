@@ -390,7 +390,8 @@ window.TradingApp.DB = (function () {
             };
             globalData.vwap.push(lastVwap);
             addOrbAreaCandle(newTime, globalData.orbArea, globalData.openingCandle);
-            window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[globalData.orbArea.length - 1]);
+            if (globalData.orbArea[globalData.orbArea.length - 1])
+                window.TradingApp.Main.widgets[symbol].orbSeries.update(globalData.orbArea[globalData.orbArea.length - 1]);
             window.TradingApp.Indicators.populatePreMarketLineSeries(newTime, globalData.premktHigh, globalData.premktLow, widget);
 
         }
