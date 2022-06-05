@@ -46,11 +46,15 @@ window.TradingApp.Algo.Breakout = (function () {
         return 1;
     };
     const checkRuleForTimeWindow = () => {
-        let minutesSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 60000;
-        if (minutesSinceMarketOpen > 30) {
-            return 0;
-        } else {
+        let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
+        let minutesSinceMarketOpen = secondsSinceMarketOpen / 60;
+        // only allow new trades after first 1 minute candle close
+        // cannot take trades after 30 minutes of market open
+        // add a few seconds as buffer
+        if (58 <= secondsSinceMarketOpen && secondsSinceMarketOpen <= (30 * 60 + 10)) {
             return 1;
+        } else {
+            return 0;
         }
     };
 
