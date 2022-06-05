@@ -48,12 +48,13 @@ window.TradingApp.Algo.TakeProfit = (function () {
 
     const getProfitTargets = (totalShares, basePrice, stopOut, setupQuality) => {
         /* set as:
-         * 2.1 35%
-         * 3.0 45%
-         * 4.0 20%
+         * 1.0 15%
+         * 2.0 45%
+         * 3.0 24%
+         * 4.0 16%
         */
-        let rrr = [2.1, 3, 4];
-        let percentage = [0.35, 0.45, 0.2];
+        let rrr = [1.0, 2.0, 3, 4];
+        let percentage = [0.15, 0.45, 0.24, 0.16];
         return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, rrr, percentage);
 
     };
