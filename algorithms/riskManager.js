@@ -23,11 +23,17 @@ window.TradingApp.Algo.RiskManager = (function () {
         price = Math.floor(price * 100);
         return (price - cents) / 100;
     };
+    const quantityToRiskMultiples = (riskPerShare, quantity) => {
+        let riskSize = riskPerShare * quantity;
+        let riskMultiples = riskSize / DefaultMaxRiskPerTrade * 100;
+        return Math.round(riskMultiples);
+    };
     return {
         getMaxRiskPerTrade,
         MaxCapitalPerTrade,
         MaxDailyLoss,
         addCents,
-        minusCents
+        minusCents,
+        quantityToRiskMultiples
     }
 })();
