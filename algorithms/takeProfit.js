@@ -50,11 +50,11 @@ window.TradingApp.Algo.TakeProfit = (function () {
         /* set as:
          * 1.0 15%
          * 2.0 45%
-         * 3.0 24%
-         * 4.0 16%
+         * 3.0 22%
+         * 4.0 18%
         */
         let rrr = [1.0, 2.0, 3, 4];
-        let percentage = [0.15, 0.45, 0.24, 0.16];
+        let percentage = [0.15, 0.45, 0.22, 0.18];
         return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, rrr, percentage);
 
     };
