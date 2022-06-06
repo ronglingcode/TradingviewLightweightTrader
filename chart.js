@@ -266,7 +266,6 @@ window.TradingApp.Chart = (function () {
 
         let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
         let riskManager = window.TradingApp.Algo.RiskManager;
-        let filledPrice = account.position.averagePrice;
 
         let exitOrdersString = "Exits: ";
         for (let i = 0; i < orders.length; i++) {
@@ -276,9 +275,15 @@ window.TradingApp.Chart = (function () {
             let color = 'green';
             let orderTypeString = window.TradingApp.OrderFactory.getOrderTypeShortString(orders[i].orderType);
             let q = orders[i].quantity;
-            let riskMultiples = riskManager.quantityToRiskMultiples(filledPrice - symbolData.lowOfDay, q);
+            let entryPrice = orders[i].stopPrice;
+            let riskMultiples = 100;
+            // has positions, working orders are exit orders
+            if (account.position && account.position.averagePrice) {
+                entryPrice = account.position.averagePrice;
+            }
+            riskMultiples = riskManager.quantityToRiskMultiples(entryPrice - symbolData.lowOfDay, q);
             if (!isBuyOrder) {
-                riskMultiples = riskManager.quantityToRiskMultiples(symbolData.highOfDay - filledPrice, q);
+                riskMultiples = riskManager.quantityToRiskMultiples(symbolData.highOfDay - entryPrice, q);
                 color = 'red';
                 q = -q;
                 riskMultiples = -riskMultiples;
