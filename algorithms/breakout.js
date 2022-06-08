@@ -8,11 +8,11 @@ window.TradingApp.Algo.Breakout = (function () {
             return 0;
         }
         if (!checkRuleForTimeWindow()) {
-            window.TradingApp.Firestore.logInfo(`checkRule: TimeWindow rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logInfo(`checkRule: Time Window rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForTradesCount()) {
-            window.TradingApp.Firestore.logInfo(`checkRule: TimeWindow rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logInfo(`checkRule: Trades Count rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
@@ -51,6 +51,7 @@ window.TradingApp.Algo.Breakout = (function () {
         // only allow new trades after first 1 minute candle close
         // cannot take trades after 30 minutes of market open
         // add a few seconds as buffer
+        console.log("seconds: " + secondsSinceMarketOpen);
         if (58 <= secondsSinceMarketOpen && secondsSinceMarketOpen <= (30 * 60 + 10)) {
             return 1;
         } else {
