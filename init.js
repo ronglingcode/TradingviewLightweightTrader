@@ -68,15 +68,13 @@ window.TradingApp = {
 
 // only pick the best stocks, stocks with biggest news to trade
 // be selective
-let bestStocksToTradeToday = [
-    window.TradingApp.StockCandidates['DOCU'],
-    window.TradingApp.StockCandidates['NFLX'],
-    //window.TradingApp.StockCandidates['TSLA'],
-    //window.TradingApp.StockCandidates['SPY'],
-];
-window.TradingApp.Watchlist = bestStocksToTradeToday;
-
 let currentDay = window.TradingApp.Settings.currentDay;
+let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
+window.TradingApp.Watchlist = []
+bestStocksToTradeToday.forEach(symbol => {
+    window.TradingApp.Watchlist.push(window.TradingApp.StockCandidates[symbol]);
+});
+
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
 
 let dtStartTime = new Date(`${currentDayStr} 01:00`);
