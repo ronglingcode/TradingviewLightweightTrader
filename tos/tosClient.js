@@ -168,6 +168,9 @@ window.TradingApp.TOS = (function () {
     const adjustOrder = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         let orderNumber = parseInt(keyCode[5]);
+        if (keyCode == "Digit0") {
+            orderNumber = 10;
+        }
 
         let widget = window.TradingApp.Main.widgets[symbol];
         if (widget.workingOrders.length < orderNumber)
