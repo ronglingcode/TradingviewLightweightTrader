@@ -47,6 +47,29 @@ window.TradingApp.ChartSettings = (function () {
         }*/
     };
 
+    const getChartSettings = (tabIndex) => {
+        let wideWidth = 1628;
+        let stocksCount = window.TradingApp.Watchlist.length
+        if (stocksCount == 4) {
+            return chartSettings;
+        } else if (stocksCount == 3) {
+            if (tabIndex == 0 || tabIndex == 2) {
+                return chartSettings;
+            } else {
+                return {
+                    ...chartSettings,
+                    width: wideWidth
+                };
+            }
+
+        } else if (stocksCount == 2) {
+            return {
+                ...chartSettings,
+                width: wideWidth
+            };
+        }
+    }
+
     const candlestickSeriesSettings = {
         //upColor: '#08b265',
         //downColor: '#fb3434',// 'rgb(255,82,82)',
@@ -118,6 +141,7 @@ window.TradingApp.ChartSettings = (function () {
 
     return {
         chartSettings,
+        getChartSettings,
         candlestickSeriesSettings,
         volumeSeriesSettings,
         vwapSettings,
