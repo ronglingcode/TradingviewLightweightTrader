@@ -100,7 +100,7 @@ window.TradingApp.Chart = (function () {
         widget.htmlContents.exitOrders = widget.htmlContents.container.getElementsByClassName("exitOrders")[0];
         widget.chart = LightweightCharts.createChart(
             widget.htmlContents.chart,
-            window.TradingApp.ChartSettings.chartSettings
+            window.TradingApp.ChartSettings.getChartSettings(tabIndex)
         );
         widget.orbSeries = widget.chart.addCandlestickSeries(window.TradingApp.ChartSettings.cloudAreaCandleSettings);
         var volumeSeries = widget.chart.addHistogramSeries(window.TradingApp.ChartSettings.volumeSeriesSettings);

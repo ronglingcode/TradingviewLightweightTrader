@@ -1,40 +1,50 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date('2022-05-13 6:30'), //('2022-01-28 6:30'),
+        'currentDay': new Date('2022-06-10 6:30'), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false
     },
     'Algo': {},
     'StockCandidates': {
-        'AFRM': {
-            symbol: 'AFRM', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'DOCU': {
+            symbol: 'DOCU', volumeSum: 1168365, tradingSum: 76478482, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 25.75, boxdown: 24
+            boxup: 67, boxdown: 64
         },
-        'GME': {
-            symbol: 'GME', volumeSum: 36482, tradingSum: 3490241, premktHigh: 0, premktLow: 99999999,
+        'NFLX': {
+            symbol: 'NFLX', volumeSum: 160061, tradingSum: 29403716, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 98, boxdown: 95.5
+            boxup: 184, boxdown: 180
         },
-        'RBLX': {
-            symbol: 'RBLX', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'NVAX': {
+            symbol: 'NVAX', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //boxup: 41, boxdown: 39
+            boxup: 47.75, boxdown: 46
         },
-        'BYND': {
-            symbol: 'BYND', volumeSum: 99525, tradingSum: 1996779, premktHigh: 0, premktLow: 99999999,
+        'COIN': {
+            symbol: 'COIN', volumeSum: 94928, tradingSum: 6395870, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 21, boxdown: 19
+            boxup: 67.5, boxdown: 66.25
+        },
+        'PDD': {
+            symbol: 'PDD', volumeSum: 573579, tradingSum: 35820728, premktHigh: 0, premktLow: 99999999,
+            bias: 'short',
+            boxup: 62.75, boxdown: 61
         },
         'TSLA': {
             symbol: 'TSLA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 785, boxdown: 770
+            boxup: 707, boxdown: 695
         },
-        'NVDA': {
-            symbol: 'NVDA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'BABA': {
+            symbol: 'BABA', volumeSum: 5262371, tradingSum: 626251173, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            //boxup: 2600, boxdown: 2570,
+            boxup: 118, boxdown: 112,
+        },
+        'AMZN': {
+            symbol: 'AMZN', volumeSum: 45648, tradingSum: 4173173, premktHigh: 0, premktLow: 99999999,
+            //bias: 'long',
+            //boxup: 91.25, boxdown: 90,
         },
         'SPY': {
             symbol: 'SPY', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
@@ -45,6 +55,9 @@ window.TradingApp = {
             symbol: 'QQQ', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 22, boxdown: 21.1
+        },
+        'IWM': {
+            symbol: 'IWM', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
         }
     },
     'State': {
@@ -53,13 +66,15 @@ window.TradingApp = {
     }
 };
 
-let top4 = [
-    window.TradingApp.StockCandidates['AFRM'],
-    window.TradingApp.StockCandidates['SPY'],
-    window.TradingApp.StockCandidates['TSLA'],
-    window.TradingApp.StockCandidates['GME'],
+// only pick the best stocks, stocks with biggest news to trade
+// be selective
+let bestStocksToTradeToday = [
+    window.TradingApp.StockCandidates['DOCU'],
+    window.TradingApp.StockCandidates['NFLX'],
+    //window.TradingApp.StockCandidates['TSLA'],
+    //window.TradingApp.StockCandidates['SPY'],
 ];
-window.TradingApp.Watchlist = top4;
+window.TradingApp.Watchlist = bestStocksToTradeToday;
 
 let currentDay = window.TradingApp.Settings.currentDay;
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
