@@ -107,6 +107,24 @@ window.TradingApp.Streaming = (function () {
         window.TradingApp.Streaming.socket.send(JSON.stringify(request));
     }
 
+    const createStockLevelOneQuoteRequest = () => {
+        let request = createRequestBase(window.TradingApp.Streaming.requestCounter++, window.TradingApp.TOS.userPrincipal, "QUOTE", "SUBS");
+        let symbols = "";
+        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+            let s = window.TradingApp.Watchlist[i].symbol;
+            if (i == 0) {
+                symbols += s;
+            } else {
+                symbols += ("," + s);
+            }
+        }
+        request.parameters = {
+            "keys": symbols,
+            "fields": "0,1,2"
+        };
+        return request;
+    };
+
     const createTimeSale = (c) => {
         let record = {
             symbol: c["key"]
@@ -124,6 +142,18 @@ window.TradingApp.Streaming = (function () {
             record.seq = c["seq"];
         }
         record.receivedTime = new Date;
+        return record;
+    };
+
+    const createLevelOneQuote = (c) => {
+        let record = {
+            symbol: c["key"]
+        };
+        if (c["1"] != null) {
+            record.bid = c["1"];
+        }
+        if (c["2"] != null)
+            record.ask = c["2"];
         return record;
     };
 
@@ -160,7 +190,9 @@ window.TradingApp.Streaming = (function () {
         createMainRequest,
         createStockTimeSaleRequest,
         sendStockTimeSaleRequest,
+        createStockLevelOneQuoteRequest,
         createTimeSale,
+        createLevelOneQuote,
         createAccountActivity,
         OrderChangeMessageTypes
     };

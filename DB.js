@@ -422,10 +422,14 @@ window.TradingApp.DB = (function () {
         series.update(dataArray.slice(-1)[0]);
     };
 
+    const updateFromLevelOneQuote = (quote) => {
+        console.log(quote);
+    };
 
     return {
         initialize,
         updateFromTimeSale,
+        updateFromLevelOneQuote,
         dataBySymbol,
         jsDateToUTC
     };
