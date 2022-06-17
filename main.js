@@ -49,6 +49,8 @@ const createWebSocket = async () => {
                     // the earliest time we can start streaming is right after
                     let stockRequest = window.TradingApp.Streaming.createStockTimeSaleRequest();
                     websocket.send(JSON.stringify(stockRequest));
+                    let quoteRequest = window.TradingApp.Streaming.createStockLevelOneQuoteRequest();
+                    websocket.send(JSON.stringify(quoteRequest));
                 } else {
                     console.log(messageEvent);
                 }
@@ -62,6 +64,11 @@ const createWebSocket = async () => {
                     contents.forEach(content => {
                         let timeSale = window.TradingApp.Streaming.createTimeSale(content);
                         window.TradingApp.DB.updateFromTimeSale(timeSale);
+                    });
+                } else if (service === "QUOTE") {
+                    contents.forEach(content => {
+                        let quote = window.TradingApp.Streaming.createLevelOneQuote(content);
+                        window.TradingApp.DB.updateFromLevelOneQuote(quote);
                     });
                 } else if (service === "ACCT_ACTIVITY") {
                     contents.forEach(content => {
