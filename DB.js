@@ -224,7 +224,9 @@ window.TradingApp.DB = (function () {
             highOfDay: highOfDay,
             lowOfDay: lowOfDay,
             premktHigh: premktHigh,
-            premktLow: premktLow
+            premktLow: premktLow,
+            bid: 0,
+            ask: 0
         };
 
         for (let i = 0; i < dataBySymbol[symbol].candles.length; i++) {
@@ -423,7 +425,20 @@ window.TradingApp.DB = (function () {
     };
 
     const updateFromLevelOneQuote = (quote) => {
-        console.log(quote);
+        let symbol = quote.symbol;
+        if (quote.bid) {
+            window.TradingApp.Chart.updateUI(symbol, "bid", quote.bid);
+            window.TradingApp.DB.dataBySymbol[symbol].bid = quote.bid;
+        }
+        if (quote.ask) {
+            window.TradingApp.Chart.updateUI(symbol, "ask", quote.ask);
+            window.TradingApp.DB.dataBySymbol[symbol].ask = quote.ask;
+        }
+        let spread = window.TradingApp.DB.dataBySymbol[symbol].ask - window.TradingApp.DB.dataBySymbol[symbol].bid;
+        spread = Math.round(spread * 100) / 100;
+        let spreadPercentage = spread * 100 / window.TradingApp.DB.dataBySymbol[symbol].bid;
+        spreadPercentage = Math.round(spreadPercentage * 100) / 100;
+        window.TradingApp.Chart.updateUI(symbol, "spread", `${spread} (${spreadPercentage}%)`);
     };
 
     return {
