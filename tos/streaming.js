@@ -69,16 +69,7 @@ window.TradingApp.Streaming = (function () {
             "fields": "0,1,2,3"
         };
         return request;
-    }
-
-    const createESTimeSaleRequest = (requestId, userPrincipal) => {
-        let request = createRequestBase(requestId, userPrincipal, "TIMESALE_FUTURES", "SUBS");
-        request.parameters = {
-            "keys": "/ES",
-            "fields": "0,1,2,3,4"
-        };
-        return request;
-    }
+    };
 
     const createStockTimeSaleRequest = () => {
         let request = createRequestBase(window.TradingApp.Streaming.requestCounter++, window.TradingApp.TOS.userPrincipal, "TIMESALE_EQUITY", "SUBS");
