@@ -211,7 +211,6 @@ window.TradingApp.TOS = (function () {
         let start = window.TradingApp.DB.jsDateToUTC(date) * 1000;
         let clientId = window.TradingApp.Secrets.clientId
         let url = `https://api.tdameritrade.com/v1/marketdata/${symbol}/pricehistory?apikey=${clientId}&frequencyType=minute&frequency=1&startDate=${start}&endDate=${end}`;
-        //url = "https://api.tdameritrade.com/v1/marketdata/TSLA/pricehistory?apikey=GPH5HXCYICGCYMQWFGNZAGK8EQJIUX5N&frequencyType=minute&frequency=1&startDate=1640615400000&endDate=1640626681446";
 
         return asyncGet(url);
     };

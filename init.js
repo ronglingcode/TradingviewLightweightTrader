@@ -65,7 +65,7 @@ window.TradingApp = {
 // be selective
 let currentDay = window.TradingApp.Settings.currentDay;
 let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
-window.TradingApp.Watchlist = []
+window.TradingApp.Watchlist = [];
 bestStocksToTradeToday.forEach(symbol => {
     window.TradingApp.Watchlist.push(window.TradingApp.StockCandidates[symbol]);
 });
