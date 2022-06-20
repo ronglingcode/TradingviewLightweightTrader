@@ -312,6 +312,16 @@ window.TradingApp.TOS = (function () {
         });
     };
 
+    const cancelEntryOrders = async (symbol) => {
+        let orders = await getOrdersForSymbol(symbol);
+        let ids = window.TradingApp.OrderFactory.extractEntryOrdersIds(orders);
+        let accountId = window.TradingApp.Secrets.accountId;
+        ids.forEach(orderId => {
+            let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${orderId}`;
+            asyncDelete(url);
+        });
+    };
+
     const testOrder = () => {
         let order = window.TradingApp.OrderFactory.createTestOrder();
         placeOrderBase(order).then(response => {
@@ -341,6 +351,7 @@ window.TradingApp.TOS = (function () {
         getOrders,
         getOrdersForSymbol,
         cancelWorkingOrders,
+        cancelEntryOrders,
         getAccountBySymbol,
         filterAccountBySymbol,
         flattenPosition,

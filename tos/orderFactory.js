@@ -228,6 +228,18 @@ window.TradingApp.OrderFactory = (function () {
         });
         return ids;
     };
+
+    const extractEntryOrdersIds = (orders) => {
+        // assume entry orders are all OTO orders
+        let ids = [];
+        orders.forEach(order => {
+            if (order.cancelable && order.orderStrategyType == OrderStrategyType.TRIGGER) {
+                ids.push(order.orderId);
+            }
+        });
+        return ids;
+    };
+
     const extractStopOrders = (orders) => {
         let stopOrders = [];
         orders.forEach(order => {
@@ -356,6 +368,7 @@ window.TradingApp.OrderFactory = (function () {
         OrderLegInstruction,
         filterWorkingOrders,
         extractTopLevelCancelableOrdersIds,
+        extractEntryOrdersIds,
         extractStopOrders,
         extractOrderPrice,
         extractFilledOrders,
