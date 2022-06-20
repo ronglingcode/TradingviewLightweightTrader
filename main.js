@@ -158,6 +158,13 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
         }
         window.TradingApp.Firestore.logInfo("cancel all for " + symbol);
+    } else if (code === "KeyQ") {
+        // shift + q or just q: cancel entry orders
+        window.TradingApp.TOS.cancelEntryOrders(symbol);
+        if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
+            clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
+        }
+        window.TradingApp.Firestore.logInfo("cancel new entries for " + symbol);
     } else if (code === "KeyF") {
         window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);

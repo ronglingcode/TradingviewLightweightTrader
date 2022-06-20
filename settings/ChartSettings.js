@@ -50,7 +50,7 @@ window.TradingApp.ChartSettings = (function () {
     const getChartSettings = (tabIndex) => {
         let wideWidth = 1628;
         let stocksCount = window.TradingApp.Watchlist.length
-        if (stocksCount == 4) {
+        if (stocksCount == 4 || 1) {
             return chartSettings;
         } else if (stocksCount == 3) {
             if (tabIndex == 0 || tabIndex == 2) {
