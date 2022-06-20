@@ -175,6 +175,20 @@ window.TradingApp.TOS = (function () {
         let widget = window.TradingApp.Main.widgets[symbol];
         if (widget.workingOrders.length < orderNumber)
             return;
+
+        // assume first half working orders are profit taking
+        // second half are stop outs
+        let numberOfProfitTakingOrders = widget.workingOrders.length / 2;
+        if (numberOfProfitTakingOrders == orderNumber) {
+            // cannot adjust the last profit taking order
+            // assume exit orders are sorted by quantity
+            // the last one is for 2R target, it's not a big target
+            // we should at least not change it. 
+            // unless the trade went wrong, we can bail out by flattening
+            window.TradingApp.Firestore.logInfo("cannot adjust last profit taking order for " + symbol);
+            return;
+        }
+
         let order = widget.workingOrders[orderNumber - 1];
         let oldOrderId = order.orderId;
         order.orderId = null;
