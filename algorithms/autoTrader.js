@@ -136,8 +136,8 @@ window.TradingApp.AutoTrader = (function () {
             if (tradeSymbol != symbol) {
                 continue;
             }
-            if (!foundFirst || earliestTime > order.time) {
-                earliestTime = order.time;
+            if (!foundFirst || earliestTime > order.closeTime) {
+                earliestTime = order.closeTime;
                 foundFirst = true;
             }
         }
