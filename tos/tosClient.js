@@ -90,6 +90,7 @@ window.TradingApp.TOS = (function () {
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}?fields=positions,orders`;
         return asyncGet(url).then(response => response.json())  // convert to json
             .then(json => {
+                window.TradingApp.Firestore.accountFromCache = json;
                 return json;
             })
             .catch(err => console.log('Request Failed', err));
@@ -190,6 +191,12 @@ window.TradingApp.TOS = (function () {
         }
 
         let order = widget.workingOrders[orderNumber - 1];
+        let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
+        if (order.orderType == "LIMIT" && secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust profit taking order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
+            return;
+        }
+
         let oldOrderId = order.orderId;
         order.orderId = null;
         let newPrice = widget.crosshairPrice;

@@ -117,6 +117,40 @@ window.TradingApp.AutoTrader = (function () {
         return totalTrades;
     };
 
+    const getEntryTimeFromNowInSeconds = (symbol) => {
+        let accountData = window.TradingApp.Firestore.accountFromCache;
+        if (!accountData || !accountData.securitiesAccount) {
+            return -1;
+        }
+        let orders = accountData.securitiesAccount.orderStrategies;
+        if (!orders) {
+            return -1;
+        }
+        let filledOrders = window.TradingApp.OrderFactory.extractFilledOrders(orders);
+
+        let foundFirst = false;
+        let earliestTime = null;
+        for (let i = 0; i < filledOrders.length; i++) {
+            let order = filledOrders[i];
+            let tradeSymbol = window.TradingApp.OrderFactory.getOrderSymbol(order);
+            if (tradeSymbol != symbol) {
+                continue;
+            }
+            if (!foundFirst || earliestTime > order.time) {
+                earliestTime = order.time;
+                foundFirst = true;
+            }
+        }
+        if (!foundFirst) {
+            return -1;
+        }
+        let now = new Date();
+        let tradeTime = new Date(earliestTime);
+        let seconds = (now - tradeTime) / 1000;
+        console.log(`${seconds} seconds ago`);
+        return seconds;
+    };
+
     return {
         stateBySymbol,
         manualTrigger,
@@ -125,5 +159,6 @@ window.TradingApp.AutoTrader = (function () {
         onSecondMinuteClose,
         onThirdMinuteClose,
         countTrades,
+        getEntryTimeFromNowInSeconds
     }
 })();
