@@ -6,40 +6,45 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'BABA': {
-            symbol: 'BABA', volumeSum: 1935862, tradingSum: 214544639, premktHigh: 0, premktLow: 99999999,
+        'SNOW': {
+            symbol: 'SNOW', volumeSum: 71823, tradingSum: 9647050, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 119.5, boxdown: 118
-        },
-        'ROKU': {
-            symbol: 'ROKU', volumeSum: 82307, tradingSum: 6734784, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            boxup: 81.5
-        },
-        'AAPL': {
-            symbol: 'NVAX', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            //boxup: 47.75, boxdown: 46
+            //boxup: 119.5, boxdown: 118
         },
         'AMD': {
             symbol: 'AMD', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 67.5, boxdown: 66.25
+            //boxup: 81.5
+        },
+        'AAPL': {
+            symbol: 'AAPL', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            //boxup: 47.75, boxdown: 46
+        },
+        'PEV': {
+            symbol: 'PEV', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            boxup: 8, boxdown: 7.25
         },
         'TSLA': {
-            symbol: 'TSLA', volumeSum: 314025, tradingSum: 211453676, premktHigh: 0, premktLow: 99999999,
+            symbol: 'TSLA', volumeSum: 285591, tradingSum: 204348024, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            // boxup: 63.5, boxdown: 62
+            boxup: 722, boxdown: 710
         },
-        'PDD': {
-            symbol: 'PDD', volumeSum: 344203, tradingSum: 21510668, premktHigh: 0, premktLow: 99999999,
+        'NVDA': {
+            symbol: 'NVDA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             boxup: 63.5, boxdown: 62
         },
-        'BA': {
-            symbol: 'BA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'PDD': {
+            symbol: 'PDD', volumeSum: 199792, tradingSum: 12146050, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            //boxup: 91.25, boxdown: 90,
+            boxup: 61.2, boxdown: 60.2,
+        },
+        'NIO': {
+            symbol: 'NIO', volumeSum: 1830018, tradingSum: 40203230, premktHigh: 0, premktLow: 99999999,
+            //bias: 'long',
+            //boxup: 61.2, boxdown: 60.2,
         },
         'SPY': {
             symbol: 'SPY', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
