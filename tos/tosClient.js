@@ -90,6 +90,7 @@ window.TradingApp.TOS = (function () {
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}?fields=positions,orders`;
         return asyncGet(url).then(response => response.json())  // convert to json
             .then(json => {
+                window.TradingApp.Firestore.accountFromCache = json;
                 return json;
             })
             .catch(err => console.log('Request Failed', err));
