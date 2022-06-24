@@ -9,5 +9,6 @@ window.TradingData = {
         '6/21/2022': ['TSLA', 'NIO', 'QQQ', 'SPY'],
         '6/22/2022': ['AAPL', 'AMD', 'QQQ', 'TSLA'],
         '6/23/2022': ['TSLA', 'SNOW', 'PEV', 'SPY'],
+        '6/24/2022': ['TSLA', 'ZEN', 'QQQ', 'SPY'],
     }
 };
