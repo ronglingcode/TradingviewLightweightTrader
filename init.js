@@ -6,8 +6,8 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'SNOW': {
-            symbol: 'SNOW', volumeSum: 71823, tradingSum: 9647050, premktHigh: 0, premktLow: 99999999,
+        'ZEN': {
+            symbol: 'ZEN', volumeSum: 3661907, tradingSum: 300187321, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 119.5, boxdown: 118
         },
@@ -21,15 +21,15 @@ window.TradingApp = {
             //bias: 'short',
             //boxup: 47.75, boxdown: 46
         },
-        'PEV': {
-            symbol: 'PEV', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'MSFT': {
+            symbol: 'MSFT', volumeSum: 53561, tradingSum: 14011489, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 8, boxdown: 7.25
         },
         'TSLA': {
-            symbol: 'TSLA', volumeSum: 285591, tradingSum: 204348024, premktHigh: 0, premktLow: 99999999,
+            symbol: 'TSLA', volumeSum: 121044, tradingSum: 85998186, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 722, boxdown: 710
+            boxup: 714, boxdown: 708
         },
         'NVDA': {
             symbol: 'NVDA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
@@ -37,9 +37,9 @@ window.TradingApp = {
             boxup: 63.5, boxdown: 62
         },
         'PDD': {
-            symbol: 'PDD', volumeSum: 199792, tradingSum: 12146050, premktHigh: 0, premktLow: 99999999,
+            symbol: 'PDD', volumeSum: 106038, tradingSum: 7024086, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            boxup: 61.2, boxdown: 60.2,
+            boxup: 66.75, boxdown: 65.8,
         },
         'NIO': {
             symbol: 'NIO', volumeSum: 1830018, tradingSum: 40203230, premktHigh: 0, premktLow: 99999999,
