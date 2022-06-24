@@ -190,6 +190,12 @@ window.TradingApp.TOS = (function () {
             return;
         }
 
+        let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
+        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust profit taking order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
+            return;
+        }
+
         let order = widget.workingOrders[orderNumber - 1];
         let oldOrderId = order.orderId;
         order.orderId = null;
