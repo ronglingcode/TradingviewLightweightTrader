@@ -71,8 +71,8 @@ window.TradingApp = {
 let currentDay = window.TradingApp.Settings.currentDay;
 let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
 window.TradingApp.Watchlist = [];
-bestStocksToTradeToday.forEach(symbol => {
-    window.TradingApp.Watchlist.push(window.TradingApp.StockCandidates[symbol]);
+bestStocksToTradeToday.forEach(stock => {
+    window.TradingApp.Watchlist.push(window.TradingApp.StockCandidates[stock.symbol]);
 });
 
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
