@@ -131,7 +131,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                     return;
                 }
                 orders = factory.createEntryOrdersWithFixedRisk(
-                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.35 * checkResult
+                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.45 * checkResult
                 );
                 orders.forEach(order => {
                     window.TradingApp.TOS.placeOrderBase(order);
