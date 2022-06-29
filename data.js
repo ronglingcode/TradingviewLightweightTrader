@@ -11,10 +11,13 @@ window.TradingData = {
         '6/23/2022': ['TSLA', 'SNOW', 'PEV', 'SPY'],
         '6/24/2022': ['TSLA', 'ZEN', 'QQQ', 'SPY'],
         '6/27/2022': [
-            { symbol: 'TSLA', news: '' }, { symbol: 'TSLA', news: '' },
-            { symbol: 'SPY', news: '' }, { symbol: 'QQQ', news: '' }],
+            { symbol: 'CHWY', news: 'upgrade' }, { symbol: 'COIN', news: 'downgrade' },
+            { symbol: 'QQQ', news: '' }, { symbol: 'SPY', news: '' }],
         '6/28/2022': [
-            { symbol: 'TSLA', news: '' }, { symbol: 'TSLA', news: '' },
-            { symbol: 'SPY', news: '' }, { symbol: 'QQQ', news: '' }],
+            { symbol: 'LI', news: 'offering' }, { symbol: 'TCOM', news: 'earnings gap up' },
+            { symbol: 'DIS', news: 'earnings gap up' }, { symbol: 'NKE', news: 'earnings gap down' }],
+        '6/29/2022': [
+            { symbol: 'UPST', news: 'downgrade' }, { symbol: 'NIO', news: 'short seller report' },
+            { symbol: 'QQQ', news: '' }, { symbol: 'SPY', news: '' }],
     }
 };
