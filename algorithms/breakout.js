@@ -188,12 +188,13 @@ window.TradingApp.Algo.Breakout = (function () {
     const prepareBreakoutOrders = (symbol, code) => {
         let stopOutPrice = getStopLossPrice(symbol, code);
         let entryPrice = getEntryPrice(symbol, code);
-        if (code === "KeyB") {
-            window.TradingApp.Firestore.logInfo("breakout buy for " + symbol);
-        } else if (code === "KeyS") {
-            window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol);
-        }
         let multiplier = window.TradingApp.Chart.getMultiplier(window.TradingApp.Main.widgets[symbol]);
+
+        if (code === "KeyB") {
+            window.TradingApp.Firestore.logInfo("breakout buy for " + symbol + " " + multiplier);
+        } else if (code === "KeyS") {
+            window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol + " " + multiplier);
+        }
         submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", multiplier);
     };
 
