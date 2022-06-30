@@ -6,10 +6,10 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'DIS': {
-            symbol: 'DIS', volumeSum: 64976, tradingSum: 6406138, premktHigh: 0, premktLow: 99999999,
+        'RH': {
+            symbol: 'RH', volumeSum: 29308, tradingSum: 6363364, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 100, boxdown: 98.5
+            boxup: 220, boxdown: 212
         },
         'UPST': {
             symbol: 'UPST', volumeSum: 402158, tradingSum: 12996624, premktHigh: 0, premktLow: 99999999,
@@ -27,9 +27,9 @@ window.TradingApp = {
             //boxup: 38.34, boxdown: 37.3
         },
         'TSLA': {
-            symbol: 'TSLA', volumeSum: 77357, tradingSum: 57134633, premktHigh: 0, premktLow: 99999999,
+            symbol: 'TSLA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 714, boxdown: 708
+            boxup: 678, boxdown: 668
         },
         'NVDA': {
             symbol: 'NVDA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
