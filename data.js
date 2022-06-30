@@ -19,5 +19,8 @@ window.TradingData = {
         '6/29/2022': [
             { symbol: 'UPST', news: 'downgrade' }, { symbol: 'NIO', news: 'short seller report' },
             { symbol: 'QQQ', news: '' }, { symbol: 'SPY', news: '' }],
+        '6/30/2022': [
+            { symbol: 'TSLA', news: 'relative strong' }, { symbol: 'RH', news: 'earnings miss, price cut' },
+            { symbol: 'QQQ', news: 'PCE data' }, { symbol: 'SPY', news: 'PCE data' }],
     }
 };
