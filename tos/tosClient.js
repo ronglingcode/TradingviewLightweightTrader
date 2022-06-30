@@ -192,8 +192,8 @@ window.TradingApp.TOS = (function () {
 
         let order = widget.workingOrders[orderNumber - 1];
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
-        if (order.orderType == "LIMIT" && secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
-            window.TradingApp.Firestore.logInfo(`cannot adjust profit taking order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
+        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
             return;
         }
 
@@ -207,6 +207,12 @@ window.TradingApp.TOS = (function () {
     };
 
     const adjustStopOrders = async (symbol) => {
+        let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
+        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
+            return;
+        }
+
         let orders = await getOrdersForSymbol(symbol);
         let stopOrders = window.TradingApp.OrderFactory.extractStopOrders(orders);
 
