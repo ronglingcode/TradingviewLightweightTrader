@@ -22,5 +22,8 @@ window.TradingData = {
         '6/30/2022': [
             { symbol: 'TSLA', news: 'relative strong' }, { symbol: 'RH', news: 'earnings miss, price cut' },
             { symbol: 'QQQ', news: 'PCE data' }, { symbol: 'SPY', news: 'PCE data' }],
+        '7/1/2022': [
+            { symbol: 'KSS', news: 'aquisition talk failed' }, { symbol: 'AMD', news: 'earnings miss' },
+            { symbol: 'TSLA', news: 'expecting good deliveries' }, { symbol: 'SPY', news: '' }],
     }
 };
