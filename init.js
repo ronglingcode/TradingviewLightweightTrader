@@ -2,7 +2,8 @@ window.TradingApp = {
     'Settings': {
         'currentDay': new Date(), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
-        'preMarketTrading': false
+        'preMarketTrading': false,
+        'maxStocksCount': 8
     },
     'Algo': {},
     'StockCandidates': {
@@ -51,7 +52,7 @@ window.TradingApp = {
         'AMD': {
             symbol: 'AMD', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            boxup: 75.75, boxdown: 75,,
+            boxup: 75.75, boxdown: 75,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },

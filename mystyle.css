@@ -33,6 +33,7 @@ body {
 
 .topBarRight {
     float: right;
+    display: none;
 }
 
 .quantityBar {
