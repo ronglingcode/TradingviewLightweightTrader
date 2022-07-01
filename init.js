@@ -8,77 +8,77 @@ window.TradingApp = {
     'Algo': {},
     'StockCandidates': {
         'KSS': {
-            symbol: 'KSS', volumeSum: 1478880, tradingSum: 43472966, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 1478880, tradingSum: 43472966, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 30, boxdown: 28.5,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'MU': {
-            symbol: 'MU', volumeSum: 704423, tradingSum: 37105943, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 704423, tradingSum: 37105943, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 53.75, boxdown: 52,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'NKE': {
-            symbol: 'NKE', volumeSum: 349036, tradingSum: 37551572, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 349036, tradingSum: 37551572, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 108.5, boxdown: 107,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'NIO': {
-            symbol: 'NIO', volumeSum: 2929120, tradingSum: 61069566, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 2929120, tradingSum: 61069566, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 38.34, boxdown: 37.3,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'TSLA': {
-            symbol: 'TSLA', volumeSum: 122630, tradingSum: 82895761, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 122630, tradingSum: 82895761, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 685, boxdown: 672,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'NVDA': {
-            symbol: 'NVDA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             boxup: 150, boxdown: 148,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'AMD': {
-            symbol: 'AMD', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             boxup: 75.75, boxdown: 75,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'BABA': {
-            symbol: 'BABA', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             //boxup: 61.2, boxdown: 60.2,,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'SPY': {
-            symbol: 'SPY', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxdown: 80, boxup: 88,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'QQQ': {
-            symbol: 'QQQ', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 22, boxdown: 21.1,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         },
         'IWM': {
-            symbol: 'IWM', volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             longTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }],
             shortTargets: [{ price: 123, percentage: 30 }, { price: 123, percentage: 30 }]
         }
@@ -95,7 +95,9 @@ let currentDay = window.TradingApp.Settings.currentDay;
 let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
 window.TradingApp.Watchlist = [];
 bestStocksToTradeToday.forEach(stock => {
-    window.TradingApp.Watchlist.push(window.TradingApp.StockCandidates[stock.symbol]);
+    let candidate = window.TradingApp.StockCandidates[stock.symbol];
+    candidate.symbol = stock.symbol;
+    window.TradingApp.Watchlist.push(candidate);
 });
 
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
