@@ -49,9 +49,16 @@ window.TradingApp.ChartSettings = (function () {
 
     const getChartSettings = (tabIndex) => {
         let wideWidth = 1628;
+        let threeStocksWidth = 525;
+        let fourStocksWidth = 387;
         let stocksCount = window.TradingApp.Watchlist.length;
         if (stocksCount == 4 || stocksCount == 1) {
             return chartSettings;
+        } else if (stocksCount == 2) {
+            return {
+                ...chartSettings,
+                width: wideWidth
+            };
         } else if (stocksCount == 3) {
             if (tabIndex == 0 || tabIndex == 2) {
                 return chartSettings;
@@ -61,10 +68,36 @@ window.TradingApp.ChartSettings = (function () {
                     width: wideWidth
                 };
             }
-        } else if (stocksCount == 2) {
+        } else if (stocksCount == 5) {
+            if (tabIndex % 2 == 0) {
+                return {
+                    ...chartSettings,
+                    width: threeStocksWidth
+                };
+            } else {
+                return chartSettings;
+            }
+        } else if (stocksCount == 6) {
             return {
                 ...chartSettings,
-                width: wideWidth
+                width: threeStocksWidth
+            };
+        } else if (stocksCount == 7) {
+            if (tabIndex % 2 == 0) {
+                return {
+                    ...chartSettings,
+                    width: fourStocksWidth
+                };
+            } else {
+                return {
+                    ...chartSettings,
+                    width: threeStocksWidth
+                };
+            }
+        } else if (stocksCount == 8) {
+            return {
+                ...chartSettings,
+                width: fourStocksWidth
             };
         }
     }

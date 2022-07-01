@@ -5,9 +5,11 @@ for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
     window.TradingApp.Main.widgets[symbol] = chart;
 }
 
-for (let i = window.TradingApp.Watchlist.length; i < 4; i++) {
+for (let i = window.TradingApp.Watchlist.length; i < window.TradingApp.Settings.maxStocksCount; i++) {
     let container = document.getElementById("chartContainer" + i);
-    container.style.display = 'none';
+    if (container) {
+        container.style.display = 'none';
+    }
 }
 
 window.TradingApp.TOS.initialize().then(() => {
