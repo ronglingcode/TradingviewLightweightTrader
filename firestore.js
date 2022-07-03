@@ -67,6 +67,9 @@ window.TradingApp.Firestore = (function () {
     };
     const setAutoTraderState = async (newState) => {
         cache.autoTraderState = newState;
+        setAutoTraderStateInFirestore(newState);
+    };
+    const setAutoTraderStateInFirestore = async (newState) => {
         let docRef = await doc(db, "state/autoTrader")
         await setDoc(docRef, newState);
     };
@@ -106,10 +109,18 @@ window.TradingApp.Firestore = (function () {
         console.log(`total trades: ${totalTrades}`);
     };
     const setStockState = async (symbol, key, data) => {
-        let state = await getAutoTraderStateFromFirestore();
-
+        if (!(symbol in cache.autoTraderState.statesBySymbol)) {
+            cache.autoTraderState.statesBySymbol[symbol] = {};
+        }
+        cache.autoTraderState.statesBySymbol[symbol][key] = data;
+        setAutoTraderStateInFirestore(cache.autoTraderState);
     };
-    const getStockState = (symbol, key) => { };
+    const getStockState = (symbol, key) => {
+        if (!(symbol in cache.autoTraderState.statesBySymbol)) {
+            return null;
+        }
+        return cache.autoTraderState.statesBySymbol[symbol][key];
+    };
 
     return {
         logInfo,
