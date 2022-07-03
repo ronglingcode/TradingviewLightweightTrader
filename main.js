@@ -173,9 +173,12 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
     } else if (["Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9", "Digit0"].includes(code)) {
-        window.TradingApp.TOS.adjustOrder(symbol, code);
+        window.TradingApp.TOS.adjustOrderWithNewPrice(symbol, code);
     } else if (code === 'KeyT') {
         // move stop orders
         window.TradingApp.TOS.adjustStopOrders(symbol);
+    } else if (code === 'KeyG') {
+        let marketOut = keyboardEvent.shiftKey;
+        window.TradingApp.TOS.reduceOrderQuantityByHalf(symbol, marketOut);
     }
 });

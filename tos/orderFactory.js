@@ -352,12 +352,25 @@ window.TradingApp.OrderFactory = (function () {
             return createLimitOrder(symbol, q, newPrice, instruction);
         else if (order.orderType === OrderType.STOP)
             return createStopOrder(symbol, q, newPrice, instruction);
+    };
+    const replicateOrderWithNewQuantity = (order, newQuantity) => {
+        if (order.orderStrategyType === OrderStrategyType.SINGLE)
+            return replicateSingleOrderWithNewQuantity(order, newQuantity);
+    };
+    const replicateSingleOrderWithNewQuantity = (order, newQuantity) => {
+        let symbol = order.orderLegCollection[0].instrument.symbol;
+        let instruction = order.orderLegCollection[0].instruction;
+        if (order.orderType === OrderType.LIMIT)
+            return createLimitOrder(symbol, newQuantity, order.price, instruction);
+        else if (order.orderType === OrderType.STOP)
+            return createStopOrder(symbol, newQuantity, order.stopPrice, instruction);
     }
     /* #endregion */
 
     return {
         createMarketOrder,
         createPreMarketOrder,
+        createOcoOrder,
         createTestOrder,
         createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
@@ -375,6 +388,7 @@ window.TradingApp.OrderFactory = (function () {
         isBuyOrder,
         isSellOrder,
         getOrderTypeShortString,
-        replicateOrderWithNewPrice
+        replicateOrderWithNewPrice,
+        replicateOrderWithNewQuantity
     }
 })();
