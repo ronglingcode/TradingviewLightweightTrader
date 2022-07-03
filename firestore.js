@@ -12,6 +12,10 @@ window.TradingApp.Firestore = (function () {
     let date = dateobj.getDate(), month = dateobj.getMonth() + 1, year = dateobj.getFullYear();
     let collectionNamePrefix = `${year}-${month}-${date}`;
     let pendingOrdersBySymbol = {};
+    let cache = {
+        'autoTraderState': {},
+        'tosAccount': {}
+    };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -50,7 +54,7 @@ window.TradingApp.Firestore = (function () {
             ...order
         });
     };
-    const getAutoTraderStateWithoutRefresh = async () => {
+    const getAutoTraderStateFromFirestore = async () => {
         const docRef = doc(db, "state", "autoTrader");
         const docSnap = await getDoc(docRef);
 
@@ -62,75 +66,63 @@ window.TradingApp.Firestore = (function () {
         }
     };
     const setAutoTraderState = async (newState) => {
+        cache.autoTraderState = newState;
         let docRef = await doc(db, "state/autoTrader")
         await setDoc(docRef, newState);
     };
     const initializeAutoTraderState = async (account) => {
-        let state = await getAutoTraderStateWithoutRefresh();
+        let state = await getAutoTraderStateFromFirestore();
         let currentDate = new Date();
         currentDate = window.TradingApp.Settings.currentDay;
         let dateString = currentDate.toLocaleDateString();
         if (dateString !== state.date) {
+            // start a new day
             let dayTrades = window.TradingApp.AutoTrader.countTrades(account);
-            let result = await setAutoTraderState({
+            let initialState = {
                 date: dateString,
                 dayTrades: dayTrades,
                 initialBalance: account.securitiesAccount.currentBalances.liquidationValue,
-            });
-            state = await getAutoTraderStateWithoutRefresh();
-            console.log(state);
-            setInitialBalance(state.initialBalance);
-            return state;
+                statesBySymbol: {}
+            };
+            let result = await setAutoTraderState(initialState);
+            console.log(initialState);
         } else {
+            cache.autoTraderState = state;
             console.log(state);
-            setInitialBalance(state.initialBalance);
-            return state;
         }
-    };
-    const setTradesCount = (count) => {
-        sessionStorage.setItem("TradingApp.TradesCount", count);
     };
     const getTradesCount = () => {
-        let count = sessionStorage.getItem("TradingApp.TradesCount");
-        let countInt = parseInt(count, 10);
-        if (isNaN(countInt)) {
-            return 0;
-        } else {
-            return countInt;
-        }
-    };
-    const setInitialBalance = (balance) => {
-        sessionStorage.setItem("TradingApp.InitialBalance", balance);
-    };
-    const getProfitAndLoss = (account) => {
-        let newBalance = account.securitiesAccount.currentBalances.liquidationValue;
-        let oldBalance = sessionStorage.getItem("TradingApp.InitialBalance");
-        return newBalance - oldBalance;
+        return window.TradingApp.AutoTrader.countTrades(cache.tosAccount);
     };
     const getProfitAndLossFromCache = () => {
-        let newBalance = sessionStorage.getItem("TradingApp.CurrentBalance");
-        let oldBalance = sessionStorage.getItem("TradingApp.InitialBalance");
-        return newBalance - oldBalance;
+        let initialBalance = cache.autoTraderState.initialBalance;
+        let currentBalance = cache.tosAccount.securitiesAccount.currentBalances.liquidationValue;
+        return currentBalance - initialBalance;
     };
     const cacheAccountInfo = (account) => {
-        sessionStorage.setItem("TradingApp.CurrentBalance", account.securitiesAccount.currentBalances.liquidationValue);
+        cache.tosAccount = account;
 
         let totalTrades = window.TradingApp.AutoTrader.countTrades(account);
         console.log(`total trades: ${totalTrades}`);
-        setTradesCount(totalTrades);
     };
+    const setStockState = async (symbol, key, data) => {
+        let state = await getAutoTraderStateFromFirestore();
+
+    };
+    const getStockState = (symbol, key) => { };
 
     return {
         logInfo,
         logError,
         logOrder,
-        getAutoTraderStateWithoutRefresh,
+        getAutoTraderStateFromFirestore,
         setAutoTraderState,
         initializeAutoTraderState,
         pendingOrdersBySymbol,
         getTradesCount,
-        getProfitAndLoss,
         cacheAccountInfo,
         getProfitAndLossFromCache,
+        setStockState,
+        getStockState
     };
 })();
