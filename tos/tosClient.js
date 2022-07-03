@@ -166,7 +166,7 @@ window.TradingApp.TOS = (function () {
         let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
         placeOrderBase(order);
     };
-    const adjustOrder = async (symbol, keyCode) => {
+    const adjustOrderWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         let orderNumber = parseInt(keyCode[5]);
         if (keyCode == "Digit0") {
@@ -204,6 +204,47 @@ window.TradingApp.TOS = (function () {
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
         console.log(newOrder);
         replaceOrderBase(newOrder, oldOrderId);
+    };
+
+    const reduceOrderQuantityByHalf = async (symbol, marketOut) => {
+        let widget = window.TradingApp.Main.widgets[symbol];
+        if (!widget || !widget.workingOrders || widget.workingOrders.length == 0) {
+            console.log('no working orders');
+            return;
+        }
+
+        let remainingQuantity = 0;
+        let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
+        let stopPrice = 0;
+        for (let i = 0; i < widget.workingOrders.length; i++) {
+            let order = widget.workingOrders[i];
+            if (order.orderType == "STOP") {
+                stopPrice = order.stopPrice;
+            }
+            let oldOrderId = order.orderId;
+            let q = order.orderLegCollection[0].quantity;
+            let newQuantity = Math.ceil(q / 2);
+            remainingQuantity += (q - newQuantity);
+            let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
+            replaceOrderBase(newOrder, oldOrderId);
+        }
+
+        if (remainingQuantity == 0) {
+            console.log('no remaining quantity');
+            return;
+        }
+        if (stopPrice == 0) {
+            console.log('no stop price, change to market out');
+        }
+
+        if (marketOut || stopPrice == 0) {
+            let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
+            placeOrderBase(order);
+        } else {
+            let newPrice = widget.crosshairPrice;
+            let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
+            placeOrderBase(order);
+        }
     };
 
     const adjustStopOrders = async (symbol) => {
@@ -370,7 +411,8 @@ window.TradingApp.TOS = (function () {
         initialized,
         userPrincipal,
         placeOrderBase,
-        adjustOrder,
+        adjustOrderWithNewPrice: adjustOrderWithNewPrice,
+        reduceOrderQuantityByHalf: reduceOrderQuantityByHalf,
         adjustStopOrders,
         testPriceHistory,
         initialAccount,
