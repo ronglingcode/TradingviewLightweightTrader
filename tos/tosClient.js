@@ -213,6 +213,14 @@ window.TradingApp.TOS = (function () {
             return;
         }
 
+        let fieldToCheck = marketOut ? "marketOutHalf" : "limitOutHalf";
+        let hasDoneIt = window.TradingApp.Firestore.getStockState(symbol, fieldToCheck);
+        if (hasDoneIt === true) {
+            window.TradingApp.Firestore.logInfo(`has already done ${fieldToCheck} for ${symbol}, skipping this time.`);
+            return;
+        }
+        window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
+
         let remainingQuantity = 0;
         let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
         let stopPrice = 0;
