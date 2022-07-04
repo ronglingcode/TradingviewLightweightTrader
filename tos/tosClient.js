@@ -180,10 +180,21 @@ window.TradingApp.TOS = (function () {
         }
 
         let order = widget.workingOrders[orderNumber - 1];
+        let orderInstruction = order.orderLegCollection[0].instruction;
+        let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+        // order is profit taking order
         if (order.orderType == "LIMIT") {
-            // order is profit taking order, check for pinned prices
-            let pinnedPriceTargets = window.TradingApp.Firestore.getStockState(symbol, "pinnedPrices");
-            if (pinnedPriceTargets && pinnedPriceTargets.includes(order.price)) {
+            // check for 1R open range
+            if ((isBuyOrder && order.price > symbolData.openLow1R) ||
+                (!isBuyOrder && order.price < symbolData.openHigh1R)) {
+                window.TradingApp.Firestore.logInfo("cannot adjust exit order less than 1R for " + symbol);
+                return;
+            }
+
+            // check for pinned prices
+            let pinnedPriceTargets = window.TradingApp.Firestore.getPinnedTargets(symbol);
+            if (pinnedPriceTargets.includes(order.price)) {
                 window.TradingApp.Firestore.logInfo("cannot adjust pinned price target for " + symbol);
                 return;
             }

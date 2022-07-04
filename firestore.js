@@ -140,6 +140,14 @@ window.TradingApp.Firestore = (function () {
             setStockState(symbol, "pinnedTargets", targets);
         }
     };
+    const getPinnedTargets = (symbol) => {
+        let targets = getStockState(symbol, "pinnedTargets");
+        if (!targets || !targets.length || targets.length < 1) {
+            return [];
+        } else {
+            return targets;
+        }
+    };
 
     return {
         logInfo,
@@ -156,6 +164,7 @@ window.TradingApp.Firestore = (function () {
         getStockState,
         addPinnedTarget,
         clearPinnedTargets,
-        removeLastPinnedTarget
+        removeLastPinnedTarget,
+        getPinnedTargets
     };
 })();
