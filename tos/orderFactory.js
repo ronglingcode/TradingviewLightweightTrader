@@ -168,7 +168,7 @@ window.TradingApp.OrderFactory = (function () {
         let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
 
         let TakeProfit = window.TradingApp.Algo.TakeProfit;
-        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
+        let profitTargets = TakeProfit.getProfitTargets(symbol, totalShares, entryPrice, stopOutPrice, setupQuality);
         let entryInstruction = OrderLegInstruction.BUY;
         if (entryPrice < stopOutPrice) {
             entryInstruction = OrderLegInstruction.SELL_SHORT;
@@ -197,7 +197,7 @@ window.TradingApp.OrderFactory = (function () {
         let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
 
         let TakeProfit = window.TradingApp.Algo.TakeProfit;
-        let profitTargets = TakeProfit.getProfitTargets(totalShares, entryPrice, stopOutPrice, setupQuality);
+        let profitTargets = TakeProfit.getProfitTargets(symbol, totalShares, entryPrice, stopOutPrice, setupQuality);
         let entryInstruction = OrderLegInstruction.BUY;
         if (entryPrice < stopOutPrice) {
             entryInstruction = OrderLegInstruction.SELL_SHORT;
