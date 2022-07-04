@@ -174,23 +174,21 @@ window.TradingApp.TOS = (function () {
         }
 
         let widget = window.TradingApp.Main.widgets[symbol];
-        if (widget.workingOrders.length < orderNumber)
-            return;
-
-        // assume first half working orders are profit taking
-        // second half are stop outs
-        let numberOfProfitTakingOrders = widget.workingOrders.length / 2;
-        if (numberOfProfitTakingOrders == orderNumber) {
-            // cannot adjust the last profit taking order
-            // assume exit orders are sorted by quantity
-            // the last one is for 2R target, it's not a big target
-            // we should at least not change it. 
-            // unless the trade went wrong, we can bail out by flattening
-            window.TradingApp.Firestore.logInfo("cannot adjust last profit taking order for " + symbol);
+        if (widget.workingOrders.length < orderNumber) {
+            window.TradingApp.Firestore.logInfo("out of range");
             return;
         }
 
         let order = widget.workingOrders[orderNumber - 1];
+        if (order.orderType == "LIMIT") {
+            // order is profit taking order, check for pinned prices
+            let pinnedPriceTargets = window.TradingApp.Firestore.getStockState(symbol, "pinnedPrices");
+            if (pinnedPriceTargets && pinnedPriceTargets.includes(order.price)) {
+                window.TradingApp.Firestore.logInfo("cannot adjust pinned price target for " + symbol);
+                return;
+            }
+        }
+
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
         if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
             window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);

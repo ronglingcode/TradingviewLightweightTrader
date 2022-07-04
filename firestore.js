@@ -121,6 +121,25 @@ window.TradingApp.Firestore = (function () {
         }
         return cache.autoTraderState.statesBySymbol[symbol][key];
     };
+    const addPinnedTarget = (symbol, price) => {
+        let targets = getStockState(symbol, "pinnedTargets");
+        if (targets) {
+            targets.push(price)
+        } else {
+            targets = [price];
+        }
+        setStockState(symbol, "pinnedTargets", targets);
+    };
+    const clearPinnedTargets = (symbol) => {
+        setStockState(symbol, "pinnedTargets", []);
+    };
+    const removeLastPinnedTarget = (symbol) => {
+        let targets = getStockState(symbol, "pinnedTargets");
+        if (targets) {
+            targets.pop();
+            setStockState(symbol, "pinnedTargets", targets);
+        }
+    };
 
     return {
         logInfo,
@@ -134,6 +153,9 @@ window.TradingApp.Firestore = (function () {
         cacheAccountInfo,
         getProfitAndLossFromCache,
         setStockState,
-        getStockState
+        getStockState,
+        addPinnedTarget,
+        clearPinnedTargets,
+        removeLastPinnedTarget
     };
 })();

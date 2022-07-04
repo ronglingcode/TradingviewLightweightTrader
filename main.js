@@ -158,6 +158,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
     } else if (code === "KeyC") {
         // shift + c or just c: cancel all
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
+        window.TradingApp.Firestore.clearPinnedTargets(symbol);
         if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
         }
@@ -165,6 +166,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
     } else if (code === "KeyQ") {
         // shift + q or just q: cancel entry orders
         window.TradingApp.TOS.cancelEntryOrders(symbol);
+        window.TradingApp.Firestore.removeLastPinnedTarget(symbol);
         if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
         }
