@@ -74,6 +74,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         targetPrices.push(target3R);
         percentage.push(remainingPercentage / 2);
 
+        window.TradingApp.Firestore.addPinnedTarget(symbol, target2R);
         return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, targetPrices, percentage);
     };
     const getDefaultProfitTargets = (totalShares, basePrice, stopOut) => {
@@ -93,6 +94,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
             targetPrices.push(target);
         }
 
+        window.TradingApp.Firestore.addPinnedTarget(symbol, targetPrices[1]);
         return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, targetPrices, percentage);
     };
     return {
