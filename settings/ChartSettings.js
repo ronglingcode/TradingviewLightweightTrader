@@ -150,7 +150,7 @@ window.TradingApp.ChartSettings = (function () {
         crosshairMarkerVisible: false,
         autoscaleInfoProvider: () => null,
         lastValueVisible: false,
-        lineStyle: LightweightCharts.LineStyle.SparseDotted,
+        lineStyle: LightweightCharts.LineStyle.LargeDashed,
         priceLineVisible: false
     };
 
