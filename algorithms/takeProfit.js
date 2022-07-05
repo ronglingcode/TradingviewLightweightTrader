@@ -50,11 +50,11 @@ window.TradingApp.Algo.TakeProfit = (function () {
         let risk = basePrice - stopOut;
         let stockSettings = window.TradingApp.StockCandidates[symbol];
         if (!stockSettings) {
-            return getDefaultProfitTargets(totalShares, basePrice, stopOut);
+            return getDefaultProfitTargets(symbol, totalShares, basePrice, stopOut);
         }
         if ((isLong && !stockSettings.longTargets) || (!isLong && !stockSettings.shortTargets)) {
             window.TradingApp.Firestore.logInfo("no pre-defined targets, using default targets");
-            return getDefaultProfitTargets(totalShares, basePrice, stopOut);
+            return getDefaultProfitTargets(symbol, totalShares, basePrice, stopOut);
         }
         let presetTargets = isLong ? stockSettings.longTargets : stockSettings.shortTargets;
         let targetPrices = [];
@@ -77,7 +77,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         window.TradingApp.Firestore.addPinnedTarget(symbol, target2R);
         return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, targetPrices, percentage);
     };
-    const getDefaultProfitTargets = (totalShares, basePrice, stopOut) => {
+    const getDefaultProfitTargets = (symbol, totalShares, basePrice, stopOut) => {
         /* set as:
          * 1.0 15%
          * 2.0 45%
