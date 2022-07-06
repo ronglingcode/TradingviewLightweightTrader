@@ -231,7 +231,6 @@ window.TradingApp.TOS = (function () {
         }
         window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
 
-        let remainingQuantity = 0;
         let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
         let stopPrice = 0;
 
