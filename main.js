@@ -172,14 +172,13 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         }
         window.TradingApp.Firestore.logInfo("cancel new entries for " + symbol);
     } else if (code === "KeyF") {
+        /*
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
-        window.TradingApp.Firestore.clearPinnedTargets(symbol);
         if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
-        }
-        setTimeout(function () {
-            window.TradingApp.TOS.flattenPosition(symbol);
-        }, 300);
+        }*/
+        window.TradingApp.Firestore.clearPinnedTargets(symbol);
+        window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
     } else if (["Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9", "Digit0"].includes(code)) {
         window.TradingApp.TOS.adjustOrderWithNewPrice(symbol, code);
