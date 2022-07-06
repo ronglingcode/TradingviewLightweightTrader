@@ -33,6 +33,7 @@ window.TradingApp.Chart = (function () {
         }
     };
     const createPriceLine = (series, price, title, color, lineWidth, noPriceLabel) => {
+        // check undefined for price
         if (!color) {
             color = 'blue';
         }
