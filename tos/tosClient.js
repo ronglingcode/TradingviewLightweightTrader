@@ -224,17 +224,24 @@ window.TradingApp.TOS = (function () {
 
         let fieldToCheck = marketOut ? "marketOutHalf" : "limitOutHalf";
         let hasDoneIt = window.TradingApp.Firestore.getStockState(symbol, fieldToCheck);
+        /*
         if (hasDoneIt === true) {
             window.TradingApp.Firestore.logInfo(`has already done ${fieldToCheck} for ${symbol}, skipping this time.`);
             return;
-        }
+        }*/
         window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
 
         let remainingQuantity = 0;
         let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
         let stopPrice = 0;
+        //make a copy because orders are updated
+        let workingOrders = [];
         for (let i = 0; i < widget.workingOrders.length; i++) {
-            let order = widget.workingOrders[i];
+            workingOrders.push(widget.workingOrders[i]);
+        }
+
+        for (let i = 0; i < workingOrders.length; i++) {
+            let order = workingOrders[i];
             if (order.orderType == "STOP") {
                 stopPrice = order.stopPrice;
             }
@@ -242,10 +249,13 @@ window.TradingApp.TOS = (function () {
             let q = order.orderLegCollection[0].quantity;
             let newQuantity = Math.ceil(q / 2);
             remainingQuantity += (q - newQuantity);
-            let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
-            replaceOrderBase(newOrder, oldOrderId);
-        }
+            console.log(`q: ${q}, new: ${newQuantity}`);
+            if (newQuantity != q) {
 
+                let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
+                replaceOrderBase(newOrder, oldOrderId);
+            }
+        }
         if (remainingQuantity == 0) {
             console.log('no remaining quantity');
             return;
@@ -253,15 +263,18 @@ window.TradingApp.TOS = (function () {
         if (stopPrice == 0) {
             console.log('no stop price, change to market out');
         }
-
-        if (marketOut || stopPrice == 0) {
-            let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
-            placeOrderBase(order);
-        } else {
-            let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
-            let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
-            placeOrderBase(order);
-        }
+        // fix double counting here due to having both limit orders and stop orders
+        remainingQuantity = remainingQuantity / 2;
+        setTimeout(() => {
+            if (marketOut || stopPrice == 0) {
+                let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
+                placeOrderBase(order);
+            } else {
+                let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+                let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
+                placeOrderBase(order);
+            }
+        }, 2000);
     };
 
     const adjustStopOrders = async (symbol) => {
@@ -350,7 +363,7 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.Firestore.logOrder(order);
         let accountId = window.TradingApp.Secrets.accountId;
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders`;
-        return sendJsonPostRequestWithAccessToken(url, order)//.then(response => console.log(response))
+        return sendJsonPostRequestWithAccessToken(url, order).then(response => console.log(response))
             .catch(err => {
                 window.TradingApp.Firestore.logError('Order request Failed ' + err);
                 console.log(err);

@@ -26,8 +26,6 @@ window.TradingData = {
             { symbol: 'KSS', news: 'aquisition talk failed' }, { symbol: 'AMD', news: 'earnings miss' },
             { symbol: 'TSLA', news: 'expecting good deliveries' }, { symbol: 'SPY', news: '' }],
         '7/5/2022': [
-            { symbol: 'TSLA', news: 'delivery not good' }, { symbol: 'BNTX', news: 'patent lawsuit' },
-            { symbol: 'AMD', news: 'very weak' },
-            { symbol: 'QQQ', news: 'russia cut pipeline drags down market' }, { symbol: 'SPY', news: 'russia cut pipeline drags down market' }],
+            { symbol: 'SPY', news: 'russia cut pipeline drags down market' }],
     }
 };

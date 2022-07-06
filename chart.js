@@ -211,13 +211,13 @@ window.TradingApp.Chart = (function () {
         if (position.longQuantity) {
             let riskPerShare = filledPrice - symbolData.lowOfDay;
             let riskMultiples = riskManager.quantityToRiskMultiples(riskPerShare, position.longQuantity);
-            html.innerText = `Pos: +${riskMultiples}%`;
+            html.innerText = `Pos: +${riskMultiples}% ${position.longQuantity}`;
             html.style.color = 'green';
             return;
         } else if (position.shortQuantity) {
             let riskPerShare = symbolData.highOfDay - filledPrice;
             let riskMultiples = riskManager.quantityToRiskMultiples(riskPerShare, position.shortQuantity);
-            html.innerText = `Pos: -${riskMultiples}%`;
+            html.innerText = `Pos: -${riskMultiples}% ${position.shortQuantity}`;
             html.style.color = 'red';
             return;
         }
