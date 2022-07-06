@@ -89,7 +89,8 @@ window.TradingApp.Indicators = (function () {
         drawHigherLows(end, candles, widget);
         drawLowerHighs(end, candles, widget);
         drawFirstTriangleConsolidation(end, candles, widget);
-    }
+        drawConsecutiveBarNumber(end, candles, widget);
+    };
 
     const drawPreMarketHigh = (price, widget) => {
         if (widget.premktHigh) {
@@ -128,6 +129,42 @@ window.TradingApp.Indicators = (function () {
             widget.candleSeries.removePriceLine(widget.premktLow);
         }
         widget.premktLow = window.TradingApp.Chart.createPriceLine(widget.candleSeries, price, "pm-lo", "black", 2, true);
+    };
+
+    const drawConsecutiveBarNumber = (end, candles, widget) => {
+        let count = 0;
+        let start = end;
+        let fibonacci = [3, 5, 8, 13, 21];
+        // count consecutive green bars
+        while (start >= 0) {
+            if (candles[start].minutesSinceMarketOpen >= 0 &&
+                candles[start].close > candles[start].open) {
+                count++;
+            } else {
+                break;
+            }
+            start--;
+        }
+        if (fibonacci.includes(count)) {
+            //console.log(count);
+            return;
+        }
+        // count consecutive red bars
+        start = end;
+        count = 0;
+        while (start >= 0) {
+            if (candles[start].minutesSinceMarketOpen >= 0 &&
+                candles[start].close < candles[start].open) {
+                count++;
+            } else {
+                break;
+            }
+            start--;
+        }
+        if (fibonacci.includes(count)) {
+            //console.log(count);
+            return;
+        }
     };
 
     const drawHigherLows = (end, candles, widget) => {
