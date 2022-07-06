@@ -211,6 +211,7 @@ window.TradingApp.TOS = (function () {
         order.orderId = null;
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
+        console.log("new order");
         console.log(newOrder);
         replaceOrderBase(newOrder, oldOrderId);
     };
@@ -239,9 +240,45 @@ window.TradingApp.TOS = (function () {
         for (let i = 0; i < widget.workingOrders.length; i++) {
             workingOrders.push(widget.workingOrders[i]);
         }
+        reduceOrderGroupQuantityByHalf("LIMIT", workingOrders);
 
+        setTimeout(() => {
+            let workingOrders2 = [];
+            for (let i = 0; i < widget.workingOrders.length; i++) {
+                workingOrders2.push(widget.workingOrders[i]);
+            }
+            reduceOrderGroupQuantityByHalf("LIMIT", workingOrders2);
+        }, 200);
+
+
+        // fix double counting here due to having both limit orders and stop orders
+        remainingQuantity = remainingQuantity / 2;
+        setTimeout(() => {
+            let remainingQuantity = 0;
+            if (remainingQuantity == 0) {
+                console.log('no remaining quantity');
+                return;
+            }
+            if (stopPrice == 0) {
+                console.log('no stop price, change to market out');
+            }
+            if (marketOut || stopPrice == 0) {
+                let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
+                placeOrderBase(order);
+            } else {
+                let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+                let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
+                placeOrderBase(order);
+            }
+        }, 400);
+    };
+
+    const reduceOrderGroupQuantityByHalf = async (orderType, workingOrders) => {
         for (let i = 0; i < workingOrders.length; i++) {
             let order = workingOrders[i];
+            if (order.orderType != orderType) {
+                continue;
+            }
             if (order.orderType == "STOP") {
                 stopPrice = order.stopPrice;
             }
@@ -251,30 +288,10 @@ window.TradingApp.TOS = (function () {
             remainingQuantity += (q - newQuantity);
             console.log(`q: ${q}, new: ${newQuantity}`);
             if (newQuantity != q) {
-
                 let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
                 replaceOrderBase(newOrder, oldOrderId);
             }
         }
-        if (remainingQuantity == 0) {
-            console.log('no remaining quantity');
-            return;
-        }
-        if (stopPrice == 0) {
-            console.log('no stop price, change to market out');
-        }
-        // fix double counting here due to having both limit orders and stop orders
-        remainingQuantity = remainingQuantity / 2;
-        setTimeout(() => {
-            if (marketOut || stopPrice == 0) {
-                let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
-                placeOrderBase(order);
-            } else {
-                let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
-                let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
-                placeOrderBase(order);
-            }
-        }, 2000);
     };
 
     const adjustStopOrders = async (symbol) => {

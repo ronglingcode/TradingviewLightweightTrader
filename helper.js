@@ -14,7 +14,7 @@ window.TradingApp.Helper = (function () {
         return (jsDate - window.TradingApp.Settings.marketOpenTime) / 1000;
     };
     const roundToCents = (price) => {
-        Math.round(price * 100) / 100;
+        return Math.round(price * 100) / 100;
     };
     return {
         tvTimestampToLocalJsDate,
