@@ -12,10 +12,14 @@ window.TradingApp.Helper = (function () {
 
     const getSecondsSinceMarketOpen = (jsDate) => {
         return (jsDate - window.TradingApp.Settings.marketOpenTime) / 1000;
-    }
+    };
+    const roundToCents = (price) => {
+        Math.round(price * 100) / 100;
+    };
     return {
         tvTimestampToLocalJsDate,
         getMinutesSinceMarketOpen,
-        getSecondsSinceMarketOpen
+        getSecondsSinceMarketOpen,
+        roundToCents
     };
 })();
