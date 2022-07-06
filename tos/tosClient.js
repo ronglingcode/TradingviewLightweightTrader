@@ -208,8 +208,7 @@ window.TradingApp.TOS = (function () {
 
         let oldOrderId = order.orderId;
         order.orderId = null;
-        let newPrice = widget.crosshairPrice;
-        newPrice = Math.round(newPrice * 100) / 100;
+        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
         console.log(newOrder);
         replaceOrderBase(newOrder, oldOrderId);
@@ -258,7 +257,7 @@ window.TradingApp.TOS = (function () {
             let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
             placeOrderBase(order);
         } else {
-            let newPrice = widget.crosshairPrice;
+            let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
             let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
             placeOrderBase(order);
         }
@@ -275,8 +274,7 @@ window.TradingApp.TOS = (function () {
         let stopOrders = window.TradingApp.OrderFactory.extractStopOrders(orders);
 
         let widget = window.TradingApp.Main.widgets[symbol];
-        let newPrice = widget.crosshairPrice;
-        newPrice = Math.round(newPrice * 100) / 100;
+        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
 
         stopOrders.forEach(order => {
             let oldOrderId = order.orderId;
