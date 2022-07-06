@@ -7,31 +7,31 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'BNTX': {
-            volumeSum: 29061, tradingSum: 4440364, premktHigh: 0, premktLow: 99999999,
+        'COIN': {
+            volumeSum: 70792, tradingSum: 3795812, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 152, boxdown: 147,
-            longTargets: [{ price: 153.94, percentage: 0.25 }],
-            shortTargets: [{ price: 142.02, percentage: 0.25 }]
+            //longTargets: [{ price: 153.94, percentage: 0.25 }],
+            shortTargets: [{ price: 51.7, percentage: 0.4 }]
         },
-        'MU': {
-            volumeSum: 704423, tradingSum: 37105943, premktHigh: 0, premktLow: 99999999,
+        'UBER': {
+            volumeSum: 302896, tradingSum: 6615092, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 53.75, boxdown: 52,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
+            //shortTargets: [{ price: 21.4, percentage: 0.1 }, { price: 21.3, percentage: 0.15 }]
         },
-        'NKE': {
-            volumeSum: 349036, tradingSum: 37551572, premktHigh: 0, premktLow: 99999999,
+        'DASH': {
+            volumeSum: 183689, tradingSum: 12795661, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 108.5, boxdown: 107,
+            boxup: 70, boxdown: 67.5,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
+            shortTargets: [{ price: 67.55, percentage: 0.15 }, { price: 67.05, percentage: 0.30 }]
         },
-        'NIO': {
-            volumeSum: 2929120, tradingSum: 61069566, premktHigh: 0, premktLow: 99999999,
+        'TDOC': {
+            volumeSum: 74198, tradingSum: 2942605, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //boxup: 38.34, boxdown: 37.3,
+            boxup: 40.25, boxdown: 38.5,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },

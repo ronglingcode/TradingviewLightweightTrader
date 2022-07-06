@@ -29,5 +29,9 @@ window.TradingData = {
             { symbol: 'TSLA', news: 'delivery not good' }, { symbol: 'BNTX', news: 'patent lawsuit' },
             { symbol: 'AMD', news: 'very weak' },
             { symbol: 'QQQ', news: 'russia cut pipeline drags down market' }, { symbol: 'SPY', news: 'russia cut pipeline drags down market' }],
+        '7/6/2022': [
+            { symbol: 'DASH', news: 'amazon with grubhub' }, { symbol: 'UBER', news: 'amazon with grubhub' },
+            { symbol: 'TDOC', news: 'tier 1 upgrade' }, { symbol: 'AMD', news: 'continue strength' },
+            { symbol: 'QQQ', news: '' }, { symbol: 'SPY', news: '' }],
     }
 };
