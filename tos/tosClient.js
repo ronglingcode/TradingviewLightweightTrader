@@ -235,26 +235,36 @@ window.TradingApp.TOS = (function () {
         let remainingQuantity = 0;
         let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
         let stopPrice = 0;
-        //make a copy because orders are updated
-        let workingOrders = [];
-        for (let i = 0; i < widget.workingOrders.length; i++) {
-            workingOrders.push(widget.workingOrders[i]);
-        }
-        reduceOrderGroupQuantityByHalf("LIMIT", workingOrders);
+
+        reduceOrderGroupQuantityByHalf(symbol, "LIMIT");
 
         setTimeout(() => {
-            let workingOrders2 = [];
-            for (let i = 0; i < widget.workingOrders.length; i++) {
-                workingOrders2.push(widget.workingOrders[i]);
-            }
-            reduceOrderGroupQuantityByHalf("LIMIT", workingOrders2);
+            reduceOrderGroupQuantityByHalf(symbol, "STOP");
         }, 200);
 
 
-        // fix double counting here due to having both limit orders and stop orders
-        remainingQuantity = remainingQuantity / 2;
         setTimeout(() => {
-            let remainingQuantity = 0;
+            let existingQuantity = 0;
+            let widget = window.TradingApp.Main.widgets[symbol];
+            for (let i = 0; i < widget.workingOrders.length; i++) {
+                let order = workingOrders[i];
+                let q = order.orderLegCollection[0].quantity;
+                existingQuantity += q;
+            }
+            let cache = window.TradingApp.Firestore.getCache(); //await getAccountBySymbol(symbol);
+            let account = window.TradingApp.TOS.filterAccountBySymbol(symbol, cache.tosAccount);
+            let position = account.position;
+            if (!position) {
+                return;
+            }
+            let totalQuantity = 0;
+            if (position.longQuantity > 0) {
+                totalQuantity = position.longQuantity;
+            }
+            else if (position.shortQuantity > 0) {
+                totalQuantity = position.shortQuantity;
+            }
+            let remainingQuantity = totalQuantity - existingQuantity;
             if (remainingQuantity == 0) {
                 console.log('no remaining quantity');
                 return;
@@ -273,7 +283,12 @@ window.TradingApp.TOS = (function () {
         }, 400);
     };
 
-    const reduceOrderGroupQuantityByHalf = async (orderType, workingOrders) => {
+    const reduceOrderGroupQuantityByHalf = async (symbol, orderType) => {
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let workingOrders = [];
+        for (let i = 0; i < widget.workingOrders.length; i++) {
+            workingOrders.push(widget.workingOrders[i]);
+        }
         for (let i = 0; i < workingOrders.length; i++) {
             let order = workingOrders[i];
             if (order.orderType != orderType) {
