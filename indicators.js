@@ -89,7 +89,7 @@ window.TradingApp.Indicators = (function () {
         drawHigherLows(end, candles, widget);
         drawLowerHighs(end, candles, widget);
         drawFirstTriangleConsolidation(end, candles, widget);
-        drawConsecutiveBarNumber(end, candles, widget);
+        //drawConsecutiveBarNumber(end, candles, widget);
     };
 
     const drawPreMarketHigh = (price, widget) => {
