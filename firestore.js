@@ -148,6 +148,9 @@ window.TradingApp.Firestore = (function () {
             return targets;
         }
     };
+    const getCache = () => {
+        return cache;
+    }
 
     return {
         logInfo,
@@ -165,6 +168,7 @@ window.TradingApp.Firestore = (function () {
         addPinnedTarget,
         clearPinnedTargets,
         removeLastPinnedTarget,
-        getPinnedTargets
+        getPinnedTargets,
+        getCache
     };
 })();
