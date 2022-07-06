@@ -211,6 +211,7 @@ window.TradingApp.TOS = (function () {
         order.orderId = null;
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
+        console.log("new order");
         console.log(newOrder);
         replaceOrderBase(newOrder, oldOrderId);
     };
@@ -230,11 +231,67 @@ window.TradingApp.TOS = (function () {
         }
         window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
 
-        let remainingQuantity = 0;
         let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
         let stopPrice = 0;
+
+        reduceOrderGroupQuantityByHalf(symbol, "LIMIT");
+
+        setTimeout(() => {
+            reduceOrderGroupQuantityByHalf(symbol, "STOP");
+        }, 200);
+
+
+        setTimeout(() => {
+            let existingQuantity = 0;
+            let widget = window.TradingApp.Main.widgets[symbol];
+            for (let i = 0; i < widget.workingOrders.length; i++) {
+                let order = workingOrders[i];
+                let q = order.orderLegCollection[0].quantity;
+                existingQuantity += q;
+            }
+            let cache = window.TradingApp.Firestore.getCache(); //await getAccountBySymbol(symbol);
+            let account = window.TradingApp.TOS.filterAccountBySymbol(symbol, cache.tosAccount);
+            let position = account.position;
+            if (!position) {
+                return;
+            }
+            let totalQuantity = 0;
+            if (position.longQuantity > 0) {
+                totalQuantity = position.longQuantity;
+            }
+            else if (position.shortQuantity > 0) {
+                totalQuantity = position.shortQuantity;
+            }
+            let remainingQuantity = totalQuantity - existingQuantity;
+            if (remainingQuantity == 0) {
+                console.log('no remaining quantity');
+                return;
+            }
+            if (stopPrice == 0) {
+                console.log('no stop price, change to market out');
+            }
+            if (marketOut || stopPrice == 0) {
+                let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
+                placeOrderBase(order);
+            } else {
+                let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+                let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
+                placeOrderBase(order);
+            }
+        }, 400);
+    };
+
+    const reduceOrderGroupQuantityByHalf = async (symbol, orderType) => {
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let workingOrders = [];
         for (let i = 0; i < widget.workingOrders.length; i++) {
-            let order = widget.workingOrders[i];
+            workingOrders.push(widget.workingOrders[i]);
+        }
+        for (let i = 0; i < workingOrders.length; i++) {
+            let order = workingOrders[i];
+            if (order.orderType != orderType) {
+                continue;
+            }
             if (order.orderType == "STOP") {
                 stopPrice = order.stopPrice;
             }
@@ -242,25 +299,11 @@ window.TradingApp.TOS = (function () {
             let q = order.orderLegCollection[0].quantity;
             let newQuantity = Math.ceil(q / 2);
             remainingQuantity += (q - newQuantity);
-            let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
-            replaceOrderBase(newOrder, oldOrderId);
-        }
-
-        if (remainingQuantity == 0) {
-            console.log('no remaining quantity');
-            return;
-        }
-        if (stopPrice == 0) {
-            console.log('no stop price, change to market out');
-        }
-
-        if (marketOut || stopPrice == 0) {
-            let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
-            placeOrderBase(order);
-        } else {
-            let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
-            let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
-            placeOrderBase(order);
+            console.log(`q: ${q}, new: ${newQuantity}`);
+            if (newQuantity != q) {
+                let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
+                replaceOrderBase(newOrder, oldOrderId);
+            }
         }
     };
 
