@@ -7,53 +7,53 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'COIN': {
-            volumeSum: 70792, tradingSum: 3795812, premktHigh: 0, premktLow: 99999999,
+        'GME': {
+            volumeSum: 30996, tradingSum: 3939119, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 152, boxdown: 147,
-            //longTargets: [{ price: 153.94, percentage: 0.25 }],
-            shortTargets: [{ price: 51.7, percentage: 0.4 }]
+            boxup: 130, boxdown: 127,
+            //longTargets: [{ price: 129.7, percentage: 0.5 }],
+            shortTargets: [{ price: 123.8, percentage: 0.2 }, { price: 122.7, percentage: 0.4 }]
         },
-        'UBER': {
-            volumeSum: 302896, tradingSum: 6615092, premktHigh: 0, premktLow: 99999999,
+        'TWTR': {
+            volumeSum: 204164, tradingSum: 7614893, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 53.75, boxdown: 52,
+            boxup: 37.5, boxdown: 37,
+            //longTargets: [{ price: 9.98, percentage: 0.3 }, { price: 10.05, percentage: 0.3 }],
+            shortTargets: [{ price: 36.51, percentage: 0.2 }, { price: 36.05, percentage: 0.5 }]
+        },
+        'UPST': {
+            volumeSum: 965889, tradingSum: 26660591, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            boxup: 28.5, boxdown: 27,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            //shortTargets: [{ price: 21.4, percentage: 0.1 }, { price: 21.3, percentage: 0.15 }]
+            shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'DASH': {
-            volumeSum: 183689, tradingSum: 12795661, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            boxup: 70, boxdown: 67.5,
-            //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            shortTargets: [{ price: 67.55, percentage: 0.15 }, { price: 67.05, percentage: 0.30 }]
-        },
-        'TDOC': {
-            volumeSum: 74198, tradingSum: 2942605, premktHigh: 0, premktLow: 99999999,
+        'AFRM': {
+            volumeSum: 255403, tradingSum: 5691557, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             boxup: 40.25, boxdown: 38.5,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
+            shortTargets: [{ price: 21.37, percentage: 0.3 }]
         },
         'TSLA': {
-            volumeSum: 152128, tradingSum: 102335271, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 672.5, boxdown: 665,
-            longTargets: [{ price: 679.5, percentage: 0.35 }],
-            shortTargets: [{ price: 666.37, percentage: 0.25 }]
+            boxup: 703.5, boxdown: 699,
+            //longTargets: [{ price: 679.5, percentage: 0.35 }],
+            //shortTargets: [{ price: 666.37, percentage: 0.25 }]
         },
         'NVDA': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 184018, tradingSum: 28289007, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
-            boxup: 150, boxdown: 148,
-            //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
+            //boxup: 150, boxdown: 148,
+            longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
         'AMD': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 289054, tradingSum: 22134159, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             //boxup: 75.75, boxdown: 75,
-            //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
+            longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
         'BABA': {
@@ -64,14 +64,14 @@ window.TradingApp = {
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
         'SPY': {
-            volumeSum: 1331258, tradingSum: 502848192, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxdown: 80, boxup: 88,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
         'QQQ': {
-            volumeSum: 1381186, tradingSum: 385612970, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             //boxup: 22, boxdown: 21.1,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
