@@ -64,7 +64,6 @@ window.TradingApp.Algo.Breakout = (function () {
         if (minutesSinceMarketOpen >= 0) {
             let vwap = window.TradingApp.DB.dataBySymbol[symbol].vwap;
             let currentVwap = vwap[vwap.length - 1].value;
-            window.TradingApp.Firestore.logInfo(`check vwap rule for ${symbol}, entry: ${entryPrice}, stop: ${stopOutPrice}, vwap ${currentVwap}`);
             if (entryPrice > stopOutPrice) {
                 // buy orders
                 if (entryPrice < currentVwap) {
