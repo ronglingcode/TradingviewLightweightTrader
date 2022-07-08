@@ -33,5 +33,13 @@ window.TradingData = {
             { symbol: 'DASH', news: 'amazon with grubhub' }, { symbol: 'UBER', news: 'amazon with grubhub' },
             { symbol: 'TDOC', news: 'tier 1 upgrade' }, { symbol: 'AMD', news: 'continue strength' },
             { symbol: 'QQQ', news: '' }, { symbol: 'SPY', news: '' }],
+        '7/7/2022': [
+            { symbol: 'GME', news: 'stock split approval' }, { symbol: 'USEA', news: 'new stock' },
+            { symbol: 'NVDA', news: 'samsung good news' }, { symbol: 'AMD', news: 'samsung good news' },
+            { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
+        '7/8/2022': [
+            { symbol: 'UPST', news: 'bad preliminary Q2' }, { symbol: 'TWTR', news: 'elon not buying' },
+            { symbol: 'GME', news: 'CFO and layoff' },
+            { symbol: 'QQQ', news: 'econ data release' }, { symbol: 'SPY', news: 'econ data release' }],
     }
 };
