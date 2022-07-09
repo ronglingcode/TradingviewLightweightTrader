@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date(), //('2022-01-28 6:30'),
+        'currentDay': new Date('2022-07-08 6:30'), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false,
         'maxStocksCount': 8
@@ -94,10 +94,19 @@ window.TradingApp = {
 let currentDay = window.TradingApp.Settings.currentDay;
 let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
 window.TradingApp.Watchlist = [];
+let nonShortableStocks = ['GME'];
+let stocksNotGoodForDayTrading = [];
 bestStocksToTradeToday.forEach(stock => {
-    let candidate = window.TradingApp.StockCandidates[stock.symbol];
-    candidate.symbol = stock.symbol;
-    window.TradingApp.Watchlist.push(candidate);
+    let symbol = stock.symbol;
+    if (nonShortableStocks.includes(symbol)) {
+        console.log(`skip ${symbol} because it's not shortable, it trades differently than regular stocks.`);
+    } else if (stocksNotGoodForDayTrading.includes(symbol)) {
+        console.log(`skip ${symbol} because it's not good for day trading, even with news, it trades poorly in the past.`);
+    } else {
+        let candidate = window.TradingApp.StockCandidates[symbol];
+        candidate.symbol = symbol;
+        window.TradingApp.Watchlist.push(candidate);
+    }
 });
 
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
