@@ -425,19 +425,24 @@ window.TradingApp.TOS = (function () {
             .then(json => { return json; })
             .catch(err => console.log('Request Failed', err)); //;
     };
-    const getOrdersForSymbol = async (symbol) => {
+    const filterOrdersForSymbol = (symbol, orders) => {
         let ordersForSymbol = [];
-        let orders = await getOrders();
         orders.forEach(order => {
             if (window.TradingApp.OrderFactory.getOrderSymbol(order) === symbol) {
                 ordersForSymbol.push(order);
             }
         });
         return ordersForSymbol;
+    }
+    const getOrdersForSymbol = async (symbol) => {
+        let orders = await getOrders();
+        return filterOrdersForSymbol(symbol, orders);
     };
 
     const cancelWorkingOrders = async (symbol) => {
-        let orders = await getOrdersForSymbol(symbol);
+        let cache = window.TradingApp.Firestore.getCache();
+        let account = cache.tosAccount;
+        let orders = filterOrdersForSymbol(symbol, account.securitiesAccount.orderStrategies);
         let ids = window.TradingApp.OrderFactory.extractTopLevelCancelableOrdersIds(orders);
         let accountId = window.TradingApp.Secrets.accountId;
         ids.forEach(orderId => {
