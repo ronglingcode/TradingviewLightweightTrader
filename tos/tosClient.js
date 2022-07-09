@@ -90,7 +90,7 @@ window.TradingApp.TOS = (function () {
         let url = `https://api.tdameritrade.com/v1/accounts/${accountId}?fields=positions,orders`;
         return asyncGet(url).then(response => response.json())  // convert to json
             .then(json => {
-                window.TradingApp.Firestore.accountFromCache = json;
+                window.TradingApp.Firestore.cacheAccountInfo(json);
                 return json;
             })
             .catch(err => console.log('Request Failed', err));
@@ -141,7 +141,6 @@ window.TradingApp.TOS = (function () {
         let account = await getAccount();
         window.TradingApp.TOS.initialAccount = account;
         window.TradingApp.Firestore.initializeAutoTraderState(account);
-        window.TradingApp.Firestore.cacheAccountInfo(account);
     };
     const flattenPosition = async (symbol) => {
         let cache = window.TradingApp.Firestore.getCache(); //await getAccountBySymbol(symbol);
