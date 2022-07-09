@@ -28,6 +28,13 @@ window.TradingApp.TOS.initialize().then(() => {
             window.TradingApp.DB.initialize(symbol, json);
             let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, window.TradingApp.TOS.initialAccount);
             window.TradingApp.Chart.updateAccountUIStatusForSymbol(symbol, symbolAccount);
+            let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+            let lastPrice = symbolData.candles[symbolData.candles.length - 1].close;
+            let minPrice = window.TradingApp.Algo.RiskManager.MinimumStockPrice;
+            if (lastPrice < minPrice) {
+                window.TradingApp.Chart.hideChart(symbol);
+                window.TradingApp.Firestore.logInfo(`${symbol} is under $${minPrice}, trading is disabled.`);
+            }
         });
     }
 });
