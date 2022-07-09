@@ -73,6 +73,7 @@ const createWebSocket = async () => {
                         window.TradingApp.DB.updateFromLevelOneQuote(quote);
                     });
                 } else if (service === "ACCT_ACTIVITY") {
+                    let symbolsToUpdateUI = [];
                     contents.forEach(content => {
                         let act = window.TradingApp.Streaming.createAccountActivity(content);
                         //console.log(act);
@@ -84,9 +85,14 @@ const createWebSocket = async () => {
                         if (act && window.TradingApp.Streaming.OrderChangeMessageTypes.includes(act.messageType)) {
                             //let d = new Date();
                             //console.log(d.toISOString());
-                            window.TradingApp.Chart.updateAccountUIStatus([act.symbol]);
+                            if (!symbolsToUpdateUI.includes(act.symbol)) {
+                                symbolsToUpdateUI.push(act.symbol);
+                            }
                         }
                     });
+                    if (symbolsToUpdateUI.length > 0) {
+                        window.TradingApp.Chart.updateAccountUIStatus(symbolsToUpdateUI);
+                    }
                 }
             });
         }
@@ -174,11 +180,10 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         }
         window.TradingApp.Firestore.logInfo("cancel new entries for " + symbol);
     } else if (code === "KeyF") {
-        /*
         window.TradingApp.TOS.cancelWorkingOrders(symbol);
         if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
-        }*/
+        }
         window.TradingApp.Firestore.clearPinnedTargets(symbol);
         window.TradingApp.TOS.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
