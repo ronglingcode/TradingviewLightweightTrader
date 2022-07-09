@@ -269,7 +269,7 @@ window.TradingApp.Chart = (function () {
 
         let exitOrdersString = "Exits: ";
         for (let i = 0; i < orders.length; i++) {
-            let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i]);
+            let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i], symbol);
             let orderInstruction = orders[i].orderLegCollection[0].instruction;
             let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
             let color = 'green';
