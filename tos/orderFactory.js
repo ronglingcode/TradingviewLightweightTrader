@@ -317,11 +317,17 @@ window.TradingApp.OrderFactory = (function () {
         });
         return workingChildOrders;
     };
-    const extractOrderPrice = (order) => {
+    const extractOrderPrice = (order, symbol) => {
         if (order.orderType === OrderType.STOP) {
             return order.stopPrice;
         } else if (order.orderType === OrderType.LIMIT) {
             return order.price;
+        } else if (order.orderType === OrderType.MARKET) {
+            let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+            let lastCandle = symbolData.candles[symbolData.candles.length - 1];
+            return lastCandle.close;
+        } else {
+            window.TradingApp.Firestore.logError(`unknown order type: ${order.orderType}`);
         }
     };
     const isBuyOrder = (orderInstruction) => {
