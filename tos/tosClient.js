@@ -162,9 +162,17 @@ window.TradingApp.TOS = (function () {
         else {
             return;
         }
-
-        let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
-        placeOrderBase(order);
+        let workingOrderIds = getCancelableOrdersIds(symbol);
+        if (workingOrderIds.length > 0) {
+            // still has orders not canceled, keep waiting
+            console.log('still has orders not canceled, keep waiting');
+            setTimeout(() => {
+                flattenPosition(symbol);
+            }, 100);
+        } else {
+            let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
+            placeOrderBase(order);
+        }
     };
     const adjustOrderWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
@@ -438,12 +446,15 @@ window.TradingApp.TOS = (function () {
         let orders = await getOrders();
         return filterOrdersForSymbol(symbol, orders);
     };
-
-    const cancelWorkingOrders = async (symbol) => {
+    const getCancelableOrdersIds = (symbol) => {
         let cache = window.TradingApp.Firestore.getCache();
         let account = cache.tosAccount;
         let orders = filterOrdersForSymbol(symbol, account.securitiesAccount.orderStrategies);
-        let ids = window.TradingApp.OrderFactory.extractTopLevelCancelableOrdersIds(orders);
+        return window.TradingApp.OrderFactory.extractTopLevelCancelableOrdersIds(orders);
+    };
+
+    const cancelWorkingOrders = async (symbol) => {
+        let ids = getCancelableOrdersIds(symbol);
         let accountId = window.TradingApp.Secrets.accountId;
         ids.forEach(orderId => {
             let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${orderId}`;
