@@ -16,7 +16,6 @@ window.TradingApp.AutoTrader = (function () {
     const onFirstMinuteClose = (symbol, candle, vwap) => {
         window.TradingApp.Firestore.logInfo("onFirstMinuteClose " + symbol + ", vwap: " + vwap);
         let bias = getStockBias(symbol);
-        window.TradingApp.Firestore.logInfo("bias for " + symbol + bias);
         if (stateBySymbol[symbol].manualTriggered === true) {
             return;
         }
