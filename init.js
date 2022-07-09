@@ -98,15 +98,23 @@ let nonShortableStocks = ['GME'];
 let stocksNotGoodForDayTrading = [];
 bestStocksToTradeToday.forEach(stock => {
     let symbol = stock.symbol;
+    let skipMessage = `skip ${symbol} because `;
     if (nonShortableStocks.includes(symbol)) {
-        console.log(`skip ${symbol} because it's not shortable, it trades differently than regular stocks.`);
-    } else if (stocksNotGoodForDayTrading.includes(symbol)) {
-        console.log(`skip ${symbol} because it's not good for day trading, even with news, it trades poorly in the past.`);
-    } else {
-        let candidate = window.TradingApp.StockCandidates[symbol];
-        candidate.symbol = symbol;
-        window.TradingApp.Watchlist.push(candidate);
+        console.log(`${skipMessage}it's not shortable, it trades differently than regular stocks.`);
+        return;
     }
+    if (stocksNotGoodForDayTrading.includes(symbol)) {
+        console.log(`${skipMessage}it's not good for day trading, even with news, it trades poorly in the past.`);
+        return;
+    }
+    if (!stock.news) {
+        console.log(`${skipMessage}has no news.`);
+        return;
+    }
+
+    let candidate = window.TradingApp.StockCandidates[symbol];
+    candidate.symbol = symbol;
+    window.TradingApp.Watchlist.push(candidate);
 });
 
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
