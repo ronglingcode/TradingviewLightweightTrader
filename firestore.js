@@ -104,9 +104,8 @@ window.TradingApp.Firestore = (function () {
     };
     const cacheAccountInfo = (account) => {
         cache.tosAccount = account;
-
         let totalTrades = window.TradingApp.AutoTrader.countTrades(account);
-        console.log(`total trades: ${totalTrades}`);
+        document.getElementById("totalTrades").innerText = totalTrades;
     };
     const setStockState = async (symbol, key, data) => {
         if (!(symbol in cache.autoTraderState.statesBySymbol)) {
