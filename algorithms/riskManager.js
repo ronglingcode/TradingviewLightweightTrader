@@ -1,5 +1,6 @@
 window.TradingApp.Algo.RiskManager = (function () {
     const DefaultMaxRiskPerTrade = 100;//215;
+    const MinimumStockPrice = 20;
     const MaxDailyLoss = 2.5 * DefaultMaxRiskPerTrade;
     const MaxCapitalPerTrade = 100000;
     const getMaxRiskPerTrade = (setupQuality, multiplier) => {
@@ -32,6 +33,7 @@ window.TradingApp.Algo.RiskManager = (function () {
         getMaxRiskPerTrade,
         MaxCapitalPerTrade,
         MaxDailyLoss,
+        MinimumStockPrice,
         addCents,
         minusCents,
         quantityToRiskMultiples

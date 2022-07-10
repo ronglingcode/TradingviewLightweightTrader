@@ -279,6 +279,8 @@ window.TradingApp.OrderFactory = (function () {
     // if OTO is not triggered, return the parent order of OTO
     // if OTO is triggered, return the child orders.
     // For OCO orders, always return the 2 child orders
+    // For OCO orders, mark the child orders with the flag "cancelInPair"
+    // because need to cancel both legs for canceling any leg.
     const filterWorkingOrders = (orders) => {
         let workingOrders = [];
         orders.forEach(order => {
@@ -295,6 +297,15 @@ window.TradingApp.OrderFactory = (function () {
                 }
             } else if (order.orderStrategyType === OrderStrategyType.OCO) {
                 let children = extractWorkingChildOrdersFromOCO(order);
+                if (children.length != 2) {
+                    if (children.length != 0)
+                        window.TradingApp.Firestore.logError(`OCO order should have 2 legs, but got ${children.length} instead`);
+                    return;
+                }
+                children[0].parentOrderId = order.orderId;
+                children[0].siblingOrder = children[1];
+                children[1].parentOrderId = order.orderId;
+                children[1].sibling = children[0];
                 workingOrders.push(...children);
             } else if (order.orderStrategyType === OrderStrategyType.SINGLE) {
                 if (order.orderType != OrderType.MARKET) {
