@@ -162,17 +162,9 @@ window.TradingApp.TOS = (function () {
         else {
             return;
         }
-        let workingOrderIds = getCancelableOrdersIds(symbol);
-        if (workingOrderIds.length > 0) {
-            // still has orders not canceled, keep waiting
-            console.log('still has orders not canceled, keep waiting');
-            setTimeout(() => {
-                flattenPosition(symbol);
-            }, 100);
-        } else {
-            let order = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
-            placeOrderBase(order);
-        }
+        let orderToSubmit = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
+        let orderIdsToCancel = [];// means all working orders need to be canceled
+        submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit);
     };
     const adjustOrderWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
@@ -251,6 +243,7 @@ window.TradingApp.TOS = (function () {
         if (ordersAreCanceled) {
             placeOrderBase(orderToSubmit);
         } else {
+            console.log('still has orders not canceled, keep waiting');
             setTimeout(() => {
                 submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit);
             }, 100);
