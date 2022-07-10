@@ -111,10 +111,13 @@ window.TradingApp.OrderFactory = (function () {
 
     /* #region Advanced Orders */
     const createOcoOrder = (symbol, stopOutQuantity, stopPrice, limitPrice, takeProfitQuantity, orderLegInstruction) => {
-        let mainOrder = { orderStrategyType: OrderStrategyType.OCO };
         let stopOrder = createStopOrder(symbol, stopOutQuantity, stopPrice, orderLegInstruction);
         let limitOrder = createLimitOrder(symbol, takeProfitQuantity, limitPrice, orderLegInstruction);
-        mainOrder.childOrderStrategies = [stopOrder, limitOrder];
+        return createOcoOrderFromTwoLegs(stopOrder, limitOrder);
+    };
+    const createOcoOrderFromTwoLegs = (leg1, leg2) => {
+        let mainOrder = { orderStrategyType: OrderStrategyType.OCO };
+        mainOrder.childOrderStrategies = [leg1, leg2];
         return mainOrder;
     };
 
@@ -388,6 +391,7 @@ window.TradingApp.OrderFactory = (function () {
         createMarketOrder,
         createPreMarketOrder,
         createOcoOrder,
+        createOcoOrderFromTwoLegs,
         createTestOrder,
         createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
