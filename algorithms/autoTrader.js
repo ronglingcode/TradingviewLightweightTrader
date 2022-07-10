@@ -88,6 +88,8 @@ window.TradingApp.AutoTrader = (function () {
     };
 
     const countTrades = (accountData) => {
+        // assume accountData is not null
+        // otherwise the API might returned errors anyway
         let orders = accountData.securitiesAccount.orderStrategies;
         if (!orders) {
             return 0;
