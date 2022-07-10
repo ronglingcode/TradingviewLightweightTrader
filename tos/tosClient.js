@@ -220,7 +220,41 @@ window.TradingApp.TOS = (function () {
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
         console.log("new order");
         console.log(newOrder);
-        replaceOrderBase(newOrder, oldOrderId);
+        if (order.parentOrderId && order.siblingOrderId) {
+            // adjust OCO order, need to candel the parent order and 
+            // submit a new OCO order with 2 legs
+            let newLeg = newOrder;
+            let otherLeg = order.siblingOrder;
+            cancelOrderById(oldLeg.parentOrderId);
+            let orderToSubmit = window.TradingApp.OrderFactory.createOcoOrderFromTwoLegs(newLeg, otherLeg);
+            submitOrderAfterCancel(symbol, [order.parentOrderId], orderToSubmit);
+        } else {
+            replaceOrderBase(newOrder, oldOrderId);
+        }
+    };
+    // submit the order after orders in orderIdsToCancel are all canceled
+    // if orderIdsToCancel is [], that means all orders needs to be canceled,
+    const submitOrderAfterCancel = async (symbol, orderIdsToCancel, orderToSubmit) => {
+        let workingOrderIds = getCancelableOrdersIds(symbol);
+        let ordersAreCanceled = true;
+        if (orderIdsToCancel.length == 0) {
+            ordersAreCanceled = workingOrderIds.length == 0;
+        } else {
+            for (let i = 0; i < orderIdsToCancel.length; i++) {
+                let orderIdToCancel = orderIdsToCancel[i];
+                if (workingOrderIds.includes(orderIdToCancel)) {
+                    ordersAreCanceled = false;
+                    break;
+                }
+            }
+        }
+        if (ordersAreCanceled) {
+            placeOrderBase(orderToSubmit);
+        } else {
+            setTimeout(() => {
+                submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit);
+            }, 100);
+        }
     };
 
     const reduceOrderQuantityByHalf = async (symbol, marketOut) => {
