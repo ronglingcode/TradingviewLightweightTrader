@@ -4,6 +4,10 @@ window.TradingApp.Algo.RiskManager = (function () {
     const MaxDailyLoss = 2.5 * DefaultMaxRiskPerTrade;
     const MaxCapitalPerTrade = 100000;
     const getMaxRiskPerTrade = (setupQuality, multiplier) => {
+        if (window.TradingApp.Secrets.isTestAccount) {
+            // risk $10 per trade if this account is for testing
+            return 10;
+        }
         let pnl = window.TradingApp.Firestore.getProfitAndLossFromCache();
         let defaultRisk = multiplier * DefaultMaxRiskPerTrade;
         // currently negative profit loss on the day

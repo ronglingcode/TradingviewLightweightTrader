@@ -14,9 +14,11 @@ window.TradingApp.Secrets = (function () {
         appId: "123",
         measurementId: "a123"
     };
+    const isTestAccount = false;// or true if this account is for testing
 
     return {
         accountId,
+        isTestAccount,
         accessToken,
         refreshToken,
         code,

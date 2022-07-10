@@ -3,6 +3,10 @@ window.TradingApp.Algo.Breakout = (function () {
     // 0 means cannot make the trade
     // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
+        if (window.TradingApp.Secrets.isTestAccount) {
+            // bypass check rules if this account is for testing
+            return 1;
+        }
         if (!checkRuleForDailyMaxLoss()) {
             window.TradingApp.Firestore.logInfo(`checkRule: Daily max loss exceeded`);
             return 0;
