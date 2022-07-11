@@ -1,18 +1,18 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date('2022-07-08 6:30'), //('2022-01-28 6:30'),
+        'currentDay': new Date(), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false,
         'maxStocksCount': 8
     },
     'Algo': {},
     'StockCandidates': {
-        'GME': {
-            volumeSum: 30996, tradingSum: 3939119, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            boxup: 130, boxdown: 127,
+        'DWAC': {
+            volumeSum: 543845, tradingSum: 15676922, premktHigh: 0, premktLow: 99999999,
+            bias: 'short',
+            boxup: 29.5, boxdown: 27,
             //longTargets: [{ price: 129.7, percentage: 0.5 }],
-            shortTargets: [{ price: 123.8, percentage: 0.2 }, { price: 122.7, percentage: 0.4 }]
+            //shortTargets: [{ price: 123.8, percentage: 0.2 }, { price: 122.7, percentage: 0.4 }]
         },
         'TWTR': {
             volumeSum: 204164, tradingSum: 7614893, premktHigh: 0, premktLow: 99999999,
@@ -21,25 +21,25 @@ window.TradingApp = {
             //longTargets: [{ price: 9.98, percentage: 0.3 }, { price: 10.05, percentage: 0.3 }],
             shortTargets: [{ price: 36.51, percentage: 0.2 }, { price: 36.05, percentage: 0.5 }]
         },
-        'UPST': {
-            volumeSum: 965889, tradingSum: 26660591, premktHigh: 0, premktLow: 99999999,
+        'BABA': {
+            volumeSum: 238624, tradingSum: 27716514, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 28.5, boxdown: 27,
-            //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
+            boxup: 116.5, boxdown: 115.5,
+            longTargets: [{ price: 116.9, percentage: 0.25 }],
+            //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'AFRM': {
-            volumeSum: 255403, tradingSum: 5691557, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            boxup: 40.25, boxdown: 38.5,
+        'META': {
+            volumeSum: 141336, tradingSum: 23605713, premktHigh: 0, premktLow: 99999999,
+            bias: 'short',
+            boxup: 168, boxdown: 166,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
-            shortTargets: [{ price: 21.37, percentage: 0.3 }]
+            shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
         'TSLA': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 281201, tradingSum: 213127173, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 703.5, boxdown: 699,
-            //longTargets: [{ price: 679.5, percentage: 0.35 }],
+            boxup: 765, boxdown: 754,
+            longTargets: [{ price: 769, percentage: 0.1 }, { price: 769.5, percentage: 0.1 }, { price: 771, percentage: 0.3 }],
             //shortTargets: [{ price: 666.37, percentage: 0.25 }]
         },
         'NVDA': {

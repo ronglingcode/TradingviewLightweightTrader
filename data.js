@@ -41,5 +41,9 @@ window.TradingData = {
             { symbol: 'UPST', news: 'bad preliminary Q2' }, { symbol: 'TWTR', news: 'elon not buying' },
             { symbol: 'GME', news: 'CFO and layoff' },
             { symbol: 'QQQ', news: 'econ data release' }, { symbol: 'SPY', news: 'econ data release' }],
+        '7/11/2022': [
+            { symbol: 'META', news: 'small firm downgrade' }, { symbol: 'TSLA', news: 'elon not buy twitter, not need to sell TSLA to raise cash' },
+            { symbol: 'BABA', news: 'china news' }, { symbol: 'DWAC', news: 'elon not buying twitter' },
+            { symbol: 'QQQ', news: 'big gap' }, { symbol: 'SPY', news: 'big gap' }],
     }
 };
