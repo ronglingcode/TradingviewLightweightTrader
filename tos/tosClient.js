@@ -232,13 +232,7 @@ window.TradingApp.TOS = (function () {
         if (orderIdsToCancel.length == 0) {
             ordersAreCanceled = workingOrderIds.length == 0;
         } else {
-            for (let i = 0; i < orderIdsToCancel.length; i++) {
-                let orderIdToCancel = orderIdsToCancel[i];
-                if (workingOrderIds.includes(orderIdToCancel)) {
-                    ordersAreCanceled = false;
-                    break;
-                }
-            }
+            ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, orderIdsToCancel);
         }
         if (ordersAreCanceled) {
             placeOrderBase(orderToSubmit);
@@ -248,6 +242,15 @@ window.TradingApp.TOS = (function () {
                 submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit);
             }, 100);
         }
+    };
+    const checkOrdersAreCanceled = (workingOrderIds, orderIdsToCancel) => {
+        for (let i = 0; i < orderIdsToCancel.length; i++) {
+            let orderIdToCancel = orderIdsToCancel[i];
+            if (workingOrderIds.includes(orderIdToCancel)) {
+                return false;
+            }
+        }
+        return true;
     };
 
     const reduceOrderQuantityByHalf = async (symbol, marketOut) => {
@@ -265,16 +268,29 @@ window.TradingApp.TOS = (function () {
         }
         window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
 
-        let remainingQuantity = await reduceOrderGroupQuantityByHalf(symbol, "LIMIT");
-        console.log(`remainingQuantity: ${remainingQuantity}`);
+        let step1Result = await reduceOrderGroupQuantityByHalf(symbol, "LIMIT");
+        console.log(`remainingQuantity: ${step1Result.remainingQuantity}`);
+        reduceOrderQuantityByHalfStep2(symbol, marketOut, step1Result);
+    };
 
-        setTimeout(() => {
-            reduceOrderGroupQuantityByHalf(symbol, "STOP");
-        }, 200);
-
-
-        setTimeout(() => {
-            console.log('set price target');
+    const reduceOrderQuantityByHalfStep2 = async (symbol, marketOut, step1Result) => {
+        let workingOrderIds = getCancelableOrdersIds(symbol);
+        let ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, step1Result.oldOrderIds);
+        if (ordersAreCanceled) {
+            let step2Result = reduceOrderGroupQuantityByHalf(symbol, "STOP");
+            reduceOrderQuantityByHalfStep3(symbol, marketOut, step2Result);
+        } else {
+            console.log('wait 0.1 sec for step 2');
+            setTimeout(() => {
+                reduceOrderQuantityByHalfStep2(symbol, marketOut, step1Result);
+            }, 100);
+        }
+    };
+    const reduceOrderQuantityByHalfStep3 = async (symbol, marketOut, step2Result) => {
+        let workingOrderIds = getCancelableOrdersIds(symbol);
+        let ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, step2Result.oldOrderIds);
+        if (ordersAreCanceled) {
+            console.log('step 3: set price target');
             let widget = window.TradingApp.Main.widgets[symbol];
             let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
             let stopPrice = 0;
@@ -317,12 +333,20 @@ window.TradingApp.TOS = (function () {
                 let order = window.TradingApp.OrderFactory.createOcoOrder(symbol, remainingQuantity, stopPrice, newPrice, remainingQuantity, orderLegInstruction);
                 placeOrderBase(order);
             }
-        }, 400);
+        } else {
+            console.log('wait 0.1 sec for step 3');
+            setTimeout(() => {
+                reduceOrderQuantityByHalfStep3(symbol, marketOut, step2Result);
+            }, 100);
+        }
     };
 
     const reduceOrderGroupQuantityByHalf = async (symbol, orderType) => {
         console.log(`reduce quantity for ${orderType} orders`);
-        let remainingQuantity = 0;
+        let result = {
+            'oldOrderIds': [],
+            'remainingQuantity': 0
+        };
         let widget = window.TradingApp.Main.widgets[symbol];
         let workingOrders = [];
         for (let i = 0; i < widget.workingOrders.length; i++) {
@@ -339,14 +363,15 @@ window.TradingApp.TOS = (function () {
             let oldOrderId = order.orderId;
             let q = order.orderLegCollection[0].quantity;
             let newQuantity = Math.ceil(q / 2);
-            remainingQuantity += (q - newQuantity);
+            result.remainingQuantity += (q - newQuantity);
             console.log(`q: ${q}, new: ${newQuantity}`);
             if (newQuantity != q) {
+                result.oldOrderIds.push(oldOrderId);
                 let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
                 replaceOrderBase(newOrder, oldOrderId);
             }
         }
-        return remainingQuantity;
+        return result;
     };
 
     const adjustStopOrders = async (symbol) => {
@@ -526,8 +551,8 @@ window.TradingApp.TOS = (function () {
         initialized,
         userPrincipal,
         placeOrderBase,
-        adjustOrderWithNewPrice: adjustOrderWithNewPrice,
-        reduceOrderQuantityByHalf: reduceOrderQuantityByHalf,
+        adjustOrderWithNewPrice,
+        reduceOrderQuantityByHalf,
         adjustStopOrders,
         testPriceHistory,
         initialAccount,
