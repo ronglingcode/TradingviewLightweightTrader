@@ -45,5 +45,8 @@ window.TradingData = {
             { symbol: 'META', news: 'small firm downgrade' }, { symbol: 'TSLA', news: 'elon not buy twitter, not need to sell TSLA to raise cash' },
             { symbol: 'BABA', news: 'china news' }, { symbol: 'DWAC', news: 'elon not buying twitter' },
             { symbol: 'QQQ', news: 'big gap' }, { symbol: 'SPY', news: 'big gap' }],
+        '7/12/2022': [
+            { symbol: 'XLE', news: 'oil crash premarket' }, { symbol: 'TSLA', news: 'twitter news/lawsuit continues' },
+            { symbol: 'QQQ', news: 'stronger than SPY' }, { symbol: 'SPY', news: 'gap below y-low' }],
     }
 };
