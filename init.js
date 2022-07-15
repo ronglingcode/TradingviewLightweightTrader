@@ -84,6 +84,9 @@ window.TradingApp = {
         },
         'DIA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        },
+        'UPRO': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
         }
     },
     'State': {

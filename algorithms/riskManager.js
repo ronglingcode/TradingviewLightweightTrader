@@ -5,8 +5,8 @@ window.TradingApp.Algo.RiskManager = (function () {
     const MaxCapitalPerTrade = 100000;
     const getMaxRiskPerTrade = (setupQuality, multiplier) => {
         if (window.TradingApp.Secrets.isTestAccount) {
-            // risk $10 per trade if this account is for testing
-            return 10;
+            // risk $2 per trade if this account is for testing
+            return 2;
         }
         let pnl = window.TradingApp.Firestore.getProfitAndLossFromCache();
         let defaultRisk = multiplier * DefaultMaxRiskPerTrade;
