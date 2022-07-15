@@ -262,7 +262,7 @@ window.TradingApp.TOS = (function () {
 
         let fieldToCheck = marketOut ? "marketOutHalf" : "limitOutHalf";
         let hasDoneIt = window.TradingApp.Firestore.getStockState(symbol, fieldToCheck);
-        if (hasDoneIt === true) {
+        if (!window.TradingApp.Secrets.isTestAccount && hasDoneIt === true) {
             window.TradingApp.Firestore.logInfo(`has already done ${fieldToCheck} for ${symbol}, skipping this time.`);
             return;
         }
@@ -270,57 +270,46 @@ window.TradingApp.TOS = (function () {
 
         let step1Result = await reduceOrderGroupQuantityByHalf(symbol, "LIMIT");
         console.log(`remainingQuantity: ${step1Result.remainingQuantity}`);
-        reduceOrderQuantityByHalfStep2(symbol, marketOut, step1Result);
+        reduceOrderQuantityByHalfStep2(symbol, marketOut, step1Result.oldOrderIds, step1Result.remainingQuantity);
     };
 
-    const reduceOrderQuantityByHalfStep2 = async (symbol, marketOut, step1Result) => {
-        let workingOrderIds = getCancelableOrdersIds(symbol);
-        let ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, step1Result.oldOrderIds);
+    const reduceOrderQuantityByHalfStep2 = async (symbol, marketOut, oldOlderIds, remainingQuantity) => {
+        let workingOrders = window.TradingApp.Main.widgets[symbol].workingOrders;
+        let workingOrderIds = [];
+        workingOrders.forEach(order => {
+            workingOrderIds.push(order.orderId);
+        });
+        let ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, oldOlderIds);
         if (ordersAreCanceled) {
-            let step2Result = reduceOrderGroupQuantityByHalf(symbol, "STOP");
-            reduceOrderQuantityByHalfStep3(symbol, marketOut, step2Result);
+            let step2Result = await reduceOrderGroupQuantityByHalf(symbol, "STOP");
+            reduceOrderQuantityByHalfStep3(symbol, marketOut, step2Result.oldOrderIds, remainingQuantity);
         } else {
-            console.log('wait 0.1 sec for step 2');
             setTimeout(() => {
-                reduceOrderQuantityByHalfStep2(symbol, marketOut, step1Result);
+                reduceOrderQuantityByHalfStep2(symbol, marketOut, oldOlderIds, remainingQuantity);
             }, 100);
         }
     };
-    const reduceOrderQuantityByHalfStep3 = async (symbol, marketOut, step2Result) => {
-        let workingOrderIds = getCancelableOrdersIds(symbol);
-        let ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, step2Result.oldOrderIds);
+    const reduceOrderQuantityByHalfStep3 = async (symbol, marketOut, oldOrderIds, remainingQuantity) => {
+        if (remainingQuantity == 0) {
+            return;
+        }
+        let workingOrders = window.TradingApp.Main.widgets[symbol].workingOrders;
+        let workingOrderIds = [];
+        workingOrders.forEach(order => {
+            workingOrderIds.push(order.orderId);
+        });
+        let ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, oldOrderIds);
         if (ordersAreCanceled) {
             console.log('step 3: set price target');
             let widget = window.TradingApp.Main.widgets[symbol];
             let orderLegInstruction = widget.workingOrders[0].orderLegCollection[0].instruction;
             let stopPrice = 0;
-            let existingQuantity = 0;
 
             for (let i = 0; i < widget.workingOrders.length; i++) {
                 let order = widget.workingOrders[i];
-                if (order.orderType == "LIMIT") {
-                    let q = order.orderLegCollection[0].quantity;
-                    existingQuantity += q;
-                } else if (order.orderType == "STOP") {
+                if (order.orderType == "STOP") {
                     stopPrice = order.stopPrice;
                 }
-            }
-            let cache = window.TradingApp.Firestore.getCache(); //await getAccountBySymbol(symbol);
-            let account = window.TradingApp.TOS.filterAccountBySymbol(symbol, cache.tosAccount);
-            let position = account.position;
-            if (!position) {
-                return;
-            }
-            let totalQuantity = 0;
-            if (position.longQuantity > 0) {
-                totalQuantity = position.longQuantity;
-            }
-            else if (position.shortQuantity > 0) {
-                totalQuantity = position.shortQuantity;
-            }
-            if (remainingQuantity == 0) {
-                console.log('no remaining quantity');
-                return;
             }
             if (stopPrice == 0) {
                 console.log('no stop price, change to market out');
@@ -336,7 +325,7 @@ window.TradingApp.TOS = (function () {
         } else {
             console.log('wait 0.1 sec for step 3');
             setTimeout(() => {
-                reduceOrderQuantityByHalfStep3(symbol, marketOut, step2Result);
+                reduceOrderQuantityByHalfStep3(symbol, marketOut, oldOrderIds, remainingQuantity);
             }, 100);
         }
     };
