@@ -48,5 +48,15 @@ window.TradingData = {
         '7/12/2022': [
             { symbol: 'XLE', news: 'oil crash premarket' }, { symbol: 'TSLA', news: 'twitter news/lawsuit continues' },
             { symbol: 'QQQ', news: 'stronger than SPY' }, { symbol: 'SPY', news: 'gap below y-low' }],
+        '7/13/2022': [
+            { symbol: 'U', news: 'buy IS for too much money' }, { symbol: 'SPY', news: 'CPI daa high' },
+            { symbol: 'QQQ', news: 'CPI data high' }],
+        '7/14/2022': [
+            { symbol: 'JPM', news: 'earnings miss' }, { symbol: 'TSM', news: 'earnings beat' },
+            { symbol: 'AMD', news: 'upgrade & TSM up' }, { symbol: 'NVDA', news: 'TSM up' },
+            { symbol: 'QQQ', news: 'PPI data' }, { symbol: 'SPY', news: 'PPI data' }],
+        '7/15/2022': [
+            { symbol: 'AMD', news: 'chips strong' }, { symbol: 'NVDA', news: 'chips strong' },
+            { symbol: 'QQQ', news: 'retail data' }, { symbol: 'SPY', news: 'retail data' }],
     }
 };
