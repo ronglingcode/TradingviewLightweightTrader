@@ -45,6 +45,16 @@ window.TradingApp.Algo.TakeProfit = (function () {
         return results;
     };
 
+    const isTargetAtLeastHalfOpenRange = (symbol, isLong, targetPrice) => {
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+        let openRange = symbolData.openHigh - symbolData.openLow;
+        if (isLong) {
+            return targetPrice >= (symbolData.openHigh + 0.5 * openRange);
+        } else {
+            return targetPrice <= (symbolData.openLow - 0.5 * openRange);
+        }
+    };
+
     const getProfitTargets = (symbol, totalShares, basePrice, stopOut, setupQuality) => {
         let isLong = basePrice > stopOut;
         let risk = basePrice - stopOut;
@@ -53,7 +63,6 @@ window.TradingApp.Algo.TakeProfit = (function () {
             return getDefaultProfitTargets(symbol, totalShares, basePrice, stopOut);
         }
         if ((isLong && !stockSettings.longTargets) || (!isLong && !stockSettings.shortTargets)) {
-            window.TradingApp.Firestore.logInfo("no pre-defined targets, using default targets");
             return getDefaultProfitTargets(symbol, totalShares, basePrice, stopOut);
         }
         let presetTargets = isLong ? stockSettings.longTargets : stockSettings.shortTargets;
@@ -62,9 +71,13 @@ window.TradingApp.Algo.TakeProfit = (function () {
         let remainingPercentage = 1;
         for (let i = 0; i < presetTargets.length; i++) {
             let t = presetTargets[i];
-            targetPrices.push(t.price);
-            percentage.push(t.percentage);
-            remainingPercentage -= t.percentage;
+            if (isTargetAtLeastHalfOpenRange(symbol, isLong, t.price)) {
+                targetPrices.push(t.price);
+                percentage.push(t.percentage);
+                remainingPercentage -= t.percentage;
+            } else {
+                window.TradingApp.Firestore.logInfo(`Target price $${t.price} is too close, skipped it.`)
+            }
         }
         // fill the rest with 2R and 3R
         let target2R = basePrice + risk * 2;
