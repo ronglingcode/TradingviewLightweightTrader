@@ -227,12 +227,12 @@ window.TradingApp.TOS = (function () {
     // submit the order after orders in orderIdsToCancel are all canceled
     // if orderIdsToCancel is [], that means all orders needs to be canceled,
     const submitOrderAfterCancel = async (symbol, orderIdsToCancel, orderToSubmit) => {
-        let workingOrderIds = getCancelableOrdersIds(symbol);
+        let allCancelableOrderIds = getAllCancelableOrdersIds(symbol);
         let ordersAreCanceled = true;
         if (orderIdsToCancel.length == 0) {
-            ordersAreCanceled = workingOrderIds.length == 0;
+            ordersAreCanceled = allCancelableOrderIds.length == 0;
         } else {
-            ordersAreCanceled = checkOrdersAreCanceled(workingOrderIds, orderIdsToCancel);
+            ordersAreCanceled = checkOrdersAreCanceled(allCancelableOrderIds, orderIdsToCancel);
         }
         if (ordersAreCanceled) {
             placeOrderBase(orderToSubmit);
@@ -487,15 +487,20 @@ window.TradingApp.TOS = (function () {
         let orders = await getOrders();
         return filterOrdersForSymbol(symbol, orders);
     };
-    const getCancelableOrdersIds = (symbol) => {
+    const getTopLevelCancelableOrdersIds = (symbol) => {
         let cache = window.TradingApp.Firestore.getCache();
         let account = cache.tosAccount;
         let orders = filterOrdersForSymbol(symbol, account.securitiesAccount.orderStrategies);
         return window.TradingApp.OrderFactory.extractTopLevelCancelableOrdersIds(orders);
     };
-
+    const getAllCancelableOrdersIds = (symbol) => {
+        let cache = window.TradingApp.Firestore.getCache();
+        let account = cache.tosAccount;
+        let orders = filterOrdersForSymbol(symbol, account.securitiesAccount.orderStrategies);
+        return window.TradingApp.OrderFactory.extractAllCancelableOrdersIds(orders);
+    };
     const cancelWorkingOrders = async (symbol) => {
-        let ids = getCancelableOrdersIds(symbol);
+        let ids = getTopLevelCancelableOrdersIds(symbol);
         let accountId = window.TradingApp.Secrets.accountId;
         ids.forEach(orderId => {
             let url = `https://api.tdameritrade.com/v1/accounts/${accountId}/orders/${orderId}`;
