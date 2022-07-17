@@ -48,3 +48,15 @@ body {
 .quantityBar input {
     width: 60px;
 }
+
+#logs {
+    padding: 10px;
+}
+
+#logs .Info {
+    color: #424242;
+}
+
+#logs .Error {
+    color: #c62828;
+}

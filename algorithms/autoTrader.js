@@ -14,7 +14,7 @@ window.TradingApp.AutoTrader = (function () {
         return '';
     };
     const onFirstMinuteClose = (symbol, candle, vwap) => {
-        window.TradingApp.Firestore.logInfo("onFirstMinuteClose " + symbol + ", vwap: " + vwap);
+        window.TradingApp.Firestore.logDebug("onFirstMinuteClose " + symbol + ", vwap: " + vwap);
         let bias = getStockBias(symbol);
         if (stateBySymbol[symbol].manualTriggered === true) {
             return;
@@ -34,7 +34,7 @@ window.TradingApp.AutoTrader = (function () {
     const onSecondMinuteClose = (symbol, candle0, candle1) => {
         // second minute close, check for triangle consolidation
         if (candle0.high >= candle1.high && candle0.low <= candle1.low) {
-            window.TradingApp.Firestore.logInfo("onSecondMinuteClose: triangle consolidation for " + symbol);
+            window.TradingApp.Firestore.logDebug("onSecondMinuteClose: triangle consolidation for " + symbol);
         }
         let bias = getStockBias(symbol);
         if (bias === 'long') {
@@ -47,7 +47,7 @@ window.TradingApp.AutoTrader = (function () {
     const onThirdMinuteClose = (symbol, candle0, candle1, candle2) => {
         // second minute close, check for triangle consolidation
         if (candle0.high >= candle1.high && candle0.low <= candle1.low) {
-            window.TradingApp.Firestore.logInfo("onSecondMinuteClose: triangle consolidation for " + symbol);
+            window.TradingApp.Firestore.logDebug("onSecondMinuteClose: triangle consolidation for " + symbol);
         }
         let bias = getStockBias(symbol);
         // if long bias, check for false breakdown open range low
