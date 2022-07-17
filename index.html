@@ -2,6 +2,9 @@
 
 <head>
     <title>Tradingview Lightweight Trader</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="mystyle.css">
     <script src="./dist/lightweight-charts.standalone.development.js"></script>
     <!--<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>-->
@@ -211,6 +214,20 @@
     </div>
     <div id="logs">
         <div>>>> test log</div>
+    </div>
+    <div id="dialog" title="Calm Down Message" style="display:none">
+        <div>Be patient</div>
+        <ul>
+            <li>Don't over analyze it after entering the trade.</li>
+            <li>As long as it didn't hit the stop, let the trade play out.</li>
+            <li>Be patient.</li>
+        </ul>
+        <div>Double top/bottom</div>
+        <ul>
+            <li>For strong trend, it will usually make a double bottom or double top before reversal.</li>
+            <li>So no need to rush to take profit.</li>
+        </ul>
+        <div id="secondstogo">0 seconds to go.</div>
     </div>
     <script src="main.js"></script>
 </body>

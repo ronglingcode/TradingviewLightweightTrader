@@ -70,16 +70,20 @@ window.TradingApp.Chart = (function () {
         if (!button)
             return;
         button.addEventListener("click", (pointerEvent) => {
-            let calmDownMessage = `Don't  over analyze it after entering the trade. as long as it didn't hit the stop, let the trade play out, be patience. 
-
-For strong trend, it will usually make a double bottom or double top before reversal, so no need to rush taking profit`;
             let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
             let remainingTime = window.TradingApp.Helper.toUserTimeString(remainingSeconds);
-            let message = `${calmDownMessage}\n\n${remainingTime} to go.`;
-
-            setTimeout(() => {
-                alert(message);
-            }, 1);
+            document.getElementById("secondstogo").innerText = `${remainingTime} to go.`;
+            $("#dialog").dialog({
+                modal: true,
+                resizable: false,
+                height: "auto",
+                width: 500,
+                buttons: {
+                    Ok: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
         });
     };
 
