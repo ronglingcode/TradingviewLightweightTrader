@@ -8,27 +8,27 @@ window.TradingApp.Algo.Breakout = (function () {
             return 1;
         }
         if (!checkRuleForDailyMaxLoss()) {
-            window.TradingApp.Firestore.logInfo(`checkRule: Daily max loss exceeded`);
+            window.TradingApp.Firestore.logError(`checkRule: Daily max loss exceeded`);
             return 0;
         }
         if (!checkRuleForTimeWindow()) {
-            window.TradingApp.Firestore.logInfo(`checkRule: Time Window rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logError(`checkRule: Time Window rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForTradesCount()) {
-            window.TradingApp.Firestore.logInfo(`checkRule: Trades Count rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logError(`checkRule: Trades Count rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForVwap(symbol, entryPrice, stopOutPrice)) {
-            window.TradingApp.Firestore.logInfo(`checkRule: Vwap rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logError(`checkRule: Vwap rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForBias(symbol, entryPrice, stopOutPrice)) {
-            window.TradingApp.Firestore.logInfo(`checkRule: Bias rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logError(`checkRule: Bias rule failed for ${symbol}`);
             return 0;
         }
         if (!checkRuleForOpenCandle(symbol, entryPrice, stopOutPrice)) {
-            window.TradingApp.Firestore.logInfo(`checkRule: OpenCandle rule failed for ${symbol}`);
+            window.TradingApp.Firestore.logError(`checkRule: OpenCandle rule failed for ${symbol}`);
             return 0;
         }
         return 1;

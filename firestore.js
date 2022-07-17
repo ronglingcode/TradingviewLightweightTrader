@@ -20,13 +20,19 @@ window.TradingApp.Firestore = (function () {
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     var db = getFirestore(app);
+    const logDebug = async (msg) => {
+        log('Debug', msg);
+        console.log(msg);
+    };
     const logInfo = async (msg) => {
         console.log(msg);
         log('Info', msg);
+        addToLogView(msg, 'Info');
     };
     const logError = async (msg) => {
         console.error(msg);
         log('Error', msg);
+        addToLogView(msg, 'Error');
     };
     /*
     const log = async (msgType, msg) => {
@@ -149,9 +155,23 @@ window.TradingApp.Firestore = (function () {
     };
     const getCache = () => {
         return cache;
+    };
+    const addToLogView = (msg, msgType) => {
+        let ul = document.getElementById('logs');
+        let li = document.createElement("div");
+        li.className = msgType;
+        let now = new Date();
+        li.innerText = `>>> ${now.toLocaleTimeString()} ${msg}`;
+        ul.appendChild(li);
+        while (ul.children.length > 8) {
+            let firstChild = ul.children[0];
+            firstChild.remove();
+        }
     }
 
     return {
+        addToLogView,
+        logDebug,
         logInfo,
         logError,
         logOrder,

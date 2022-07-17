@@ -131,7 +131,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
             window.TradingApp.TOS.getQuote(symbol).then((quote) => {
                 let bid = quote.bidPrice;
                 let ask = quote.askPrice;
-                window.TradingApp.Firestore.logInfo(`${symbol} quote => bid: ${bid}, ask: ${ask}`);
+                window.TradingApp.Firestore.logDebug(`${symbol} quote => bid: ${bid}, ask: ${ask}`);
 
                 let spread = ask - bid;
                 let factory = window.TradingApp.OrderFactory;
