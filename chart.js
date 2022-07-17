@@ -66,6 +66,22 @@ window.TradingApp.Chart = (function () {
             });
         }
     };
+    const setupShowLockupButton = (button, symbol) => {
+        if (!button)
+            return;
+        button.addEventListener("click", (pointerEvent) => {
+            let calmDownMessage = `Don't  over analyze it after entering the trade. as long as it didn't hit the stop, let the trade play out, be patience. 
+
+For strong trend, it will usually make a double bottom or double top before reversal, so no need to rush taking profit`;
+            let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
+            let remainingTime = window.TradingApp.Helper.toUserTimeString(remainingSeconds);
+            let message = `${calmDownMessage}\n\n${remainingTime} to go.`;
+
+            setTimeout(() => {
+                alert(message);
+            }, 1);
+        });
+    };
 
     const getMultiplier = (widget) => {
         let qty = widget.htmlContents.quantityInput.value;
@@ -96,6 +112,9 @@ window.TradingApp.Chart = (function () {
         widget.htmlContents.quantityBar = widget.htmlContents.container.getElementsByClassName("quantityBar")[0];
         widget.htmlContents.quantityInput = widget.htmlContents.quantityBar.getElementsByTagName("input")[0];
         setupQuantityBar(widget.htmlContents.quantityBar, widget.htmlContents.quantityInput);
+
+        widget.htmlContents.showLockupButton = widget.htmlContents.container.getElementsByClassName("showlockup")[0];
+        setupShowLockupButton(widget.htmlContents.showLockupButton, symbol);
         widget.htmlContents.symbol.innerText = stock.symbol;
         widget.htmlContents.positionCount = widget.htmlContents.container.getElementsByClassName("positionCount")[0];
         widget.htmlContents.exitOrders = widget.htmlContents.container.getElementsByClassName("exitOrders")[0];

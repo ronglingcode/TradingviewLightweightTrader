@@ -199,10 +199,10 @@ window.TradingApp.TOS = (function () {
                 return;
             }
         }
-
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
-        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
-            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
+        let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
+        if (remainingSeconds > 0) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
             return;
         }
 
@@ -210,8 +210,6 @@ window.TradingApp.TOS = (function () {
         order.orderId = null;
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
-        console.log("new order");
-        console.log(newOrder);
         if (order.parentOrderId && order.siblingOrderId) {
             // adjust OCO order, need to candel the parent order and 
             // submit a new OCO order with 2 legs
