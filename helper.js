@@ -16,10 +16,16 @@ window.TradingApp.Helper = (function () {
     const roundToCents = (price) => {
         return Math.round(price * 100) / 100;
     };
+    const toUserTimeString = (seconds) => {
+        let m = Math.floor(seconds / 60);
+        let s = seconds - m * 60;
+        return `${m} minutes ${s} seconds`;
+    }
     return {
         tvTimestampToLocalJsDate,
         getMinutesSinceMarketOpen,
         getSecondsSinceMarketOpen,
-        roundToCents
+        roundToCents,
+        toUserTimeString,
     };
 })();

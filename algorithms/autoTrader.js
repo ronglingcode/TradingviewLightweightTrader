@@ -1,4 +1,5 @@
 window.TradingApp.AutoTrader = (function () {
+    const entryCoolDownInSeconds = 300; // 5 minutes
     let stateBySymbol = {};
     window.TradingApp.Watchlist.forEach(element => {
         stateBySymbol[element.symbol] = {};
@@ -155,8 +156,17 @@ window.TradingApp.AutoTrader = (function () {
         return seconds;
     };
 
+    const getRemainingCoolDownInSeconds = (symbol) => {
+        let entryTimeFromNow = getEntryTimeFromNowInSeconds(symbol);
+        if (entryTimeFromNow == -1 || entryTimeFromNow > entryCoolDownInSeconds)
+            return 0;
+        else
+            return entryCoolDownInSeconds - entryTimeFromNow;
+    };
+
     return {
         stateBySymbol,
+        getRemainingCoolDownInSeconds,
         manualTrigger,
         getStockBias,
         onFirstMinuteClose,
