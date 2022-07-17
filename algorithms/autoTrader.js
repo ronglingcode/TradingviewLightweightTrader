@@ -36,12 +36,7 @@ window.TradingApp.AutoTrader = (function () {
         if (candle0.high >= candle1.high && candle0.low <= candle1.low) {
             window.TradingApp.Firestore.logDebug("onSecondMinuteClose: triangle consolidation for " + symbol);
         }
-        let bias = getStockBias(symbol);
-        if (bias === 'long') {
-            checkFalseBreakdown(symbol, candle0.low, candle1);
-        } else if (bias === 'short') {
-            checkFalseBreakout(symbol, candle0.high, candle1);
-        }
+        checkBreakoutAfterCandleClose(symbol, candle0, candle1);
     };
 
     const onThirdMinuteClose = (symbol, candle0, candle1, candle2) => {
@@ -49,12 +44,20 @@ window.TradingApp.AutoTrader = (function () {
         if (candle0.high >= candle1.high && candle0.low <= candle1.low) {
             window.TradingApp.Firestore.logDebug("onSecondMinuteClose: triangle consolidation for " + symbol);
         }
+        checkBreakoutAfterCandleClose(symbol, candle0, candle2);
+    };
+
+    const checkBreakoutAfterCandleClose = (symbol, openCandle, closedCandle) => {
         let bias = getStockBias(symbol);
         // if long bias, check for false breakdown open range low
         if (bias === 'long') {
-            checkFalseBreakdown(symbol, candle0.low, candle2);
+            checkFalseBreakdown(symbol, openCandle.low, closedCandle);
         } else if (bias === 'short') {
-            checkFalseBreakout(symbol, candle0.high, candle2);
+            checkFalseBreakout(symbol, openCandle.high, closedCandle);
+        } else {
+            // if no bias, check both sides
+            checkFalseBreakdown(symbol, openCandle.low, closedCandle);
+            checkFalseBreakout(symbol, openCandle.high, closedCandle);
         }
     };
     const checkFalseBreakdown = (symbol, breakdownLevel, candle) => {
