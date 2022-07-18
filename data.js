@@ -58,5 +58,9 @@ window.TradingData = {
         '7/15/2022': [
             { symbol: 'AMD', news: 'chips strong' }, { symbol: 'NVDA', news: 'chips strong' },
             { symbol: 'QQQ', news: 'retail data' }, { symbol: 'SPY', news: 'retail data' }],
+        '7/18/2022': [
+            { symbol: 'BA', news: 'big order' }, { symbol: 'GS', news: 'earnings beat' },
+            { symbol: 'AMD', news: 'semi' }, { symbol: 'NVDA', news: 'semi' },
+            { symbol: 'QQQ', news: 'big gap' }, { symbol: 'SPY', news: 'big gap' }],
     }
 };

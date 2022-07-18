@@ -7,17 +7,17 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'JPM': {
-            volumeSum: 631613, tradingSum: 68567778, premktHigh: 0, premktLow: 99999999,
-            bias: 'short',
-            boxup: 110, boxdown: 107,
-            //longTargets: [{ price: 129.7, percentage: 0.5 }],
-            shortTargets: [{ price: 106.35, percentage: 0.4 }]
-        },
-        'TSM': {
-            volumeSum: 309756, tradingSum: 25643653, premktHigh: 0, premktLow: 99999999,
+        'BA': {
+            volumeSum: 225969, tradingSum: 34593503, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //boxup: 37.5, boxdown: 37,
+            boxup: 154.5, boxdown: 152,
+            longTargets: [{ price: 157.5, percentage: 0.3 }],
+            shortTargets: [{ price: 150.2, percentage: 0.3 }]
+        },
+        'GS': {
+            volumeSum: 153726, tradingSum: 46714177, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            boxup: 307, boxdown: 302,
             //longTargets: [{ price: 9.98, percentage: 0.3 }, { price: 10.05, percentage: 0.3 }],
             //shortTargets: [{ price: 36.51, percentage: 0.2 }, { price: 36.05, percentage: 0.5 }]
         },
@@ -38,7 +38,7 @@ window.TradingApp = {
         'TSLA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 725, boxdown: 718,
+            boxup: 737.5, boxdown: 730,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
