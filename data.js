@@ -61,6 +61,10 @@ window.TradingData = {
         '7/18/2022': [
             { symbol: 'BA', news: 'big order' }, { symbol: 'GS', news: 'earnings beat' },
             { symbol: 'AMD', news: 'semi' }, { symbol: 'NVDA', news: 'semi' },
-            { symbol: 'QQQ', news: 'big gap' }, { symbol: 'SPY', news: 'big gap' }],
+            { symbol: 'QQQ', news: 'big gap up' }, { symbol: 'SPY', news: 'big gap up' }],
+        '7/19/2022': [
+            { symbol: 'IBM', news: 'earnings, big gap down' }, { symbol: 'APLS', news: 'FDA granted priority review' },
+            { symbol: 'AAPL', news: 'slow hiring' }, { symbol: 'NVDA', news: 'ASML earnings coming' },
+            { symbol: 'QQQ', news: 'big gap up' }, { symbol: 'SPY', news: 'big gap up' }],
     }
 };
