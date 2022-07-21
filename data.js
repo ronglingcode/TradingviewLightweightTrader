@@ -49,7 +49,7 @@ window.TradingData = {
             { symbol: 'XLE', news: 'oil crash premarket' }, { symbol: 'TSLA', news: 'twitter news/lawsuit continues' },
             { symbol: 'QQQ', news: 'stronger than SPY' }, { symbol: 'SPY', news: 'gap below y-low' }],
         '7/13/2022': [
-            { symbol: 'U', news: 'buy IS for too much money' }, { symbol: 'SPY', news: 'CPI daa high' },
+            { symbol: 'U', news: 'buy IS for too much money' }, { symbol: 'SPY', news: 'CPI data high' },
             { symbol: 'QQQ', news: 'CPI data high' }],
         '7/14/2022': [
             { symbol: 'JPM', news: 'earnings miss' }, { symbol: 'TSM', news: 'earnings beat' },
@@ -66,5 +66,14 @@ window.TradingData = {
             { symbol: 'IBM', news: 'earnings, big gap down' }, { symbol: 'APLS', news: 'FDA granted priority review' },
             { symbol: 'AAPL', news: 'slow hiring' }, { symbol: 'NVDA', news: 'ASML earnings coming' },
             { symbol: 'QQQ', news: 'big gap up' }, { symbol: 'SPY', news: 'big gap up' }],
+        '7/20/2022': [
+            { symbol: 'NFLX', news: 'earnings, big gap up' }, { symbol: 'TSLA', news: 'TWTR wins fast trail agains Musk' },
+            { symbol: 'AMD', news: 'ASML earnings' }, { symbol: 'NVDA', news: 'ASML earnings' },
+            { symbol: 'QQQ', news: 'europ river dry' }, { symbol: 'SPY', news: 'europ river dry' }],
+        '7/21/2022': [
+            { symbol: 'MSFT', news: 'slow hiring' }, { symbol: 'DOCU', news: 'downgrade' },
+            { symbol: 'AMD', news: 'chips law' }, { symbol: 'TSLA', news: 'earnings' },
+            { symbol: 'UAL', news: 'earnings' }, { symbol: 'SMCI', news: 'earnings' },
+            { symbol: 'QQQ', news: 'job numbers' }, { symbol: 'SPY', news: 'job numbers' }],
     }
 };

@@ -7,18 +7,18 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'IBM': {
-            volumeSum: 505353, tradingSum: 65831075, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            boxup: 154.5, boxdown: 152,
-            //longTargets: [{ price: 157.5, percentage: 0.3 }],
-            //shortTargets: [{ price: 150.2, percentage: 0.3 }]
-        },
-        'APLS': {
-            volumeSum: 305174, tradingSum: 16781934, premktHigh: 0, premktLow: 99999999,
+        'DOCU': {
+            volumeSum: 27509, tradingSum: 1797126, premktHigh: 0, premktLow: 99999999,
             bias: 'short',
-            boxup: 58.5, boxdown: 53.5,
-            longTargets: [{ price: 59.95, percentage: 0.3 }],
+            //boxup: 214, boxdown: 208,
+            //longTargets: [{ price: 157.5, percentage: 0.3 }],
+            //shortTargets: [{ price: 207.4, percentage: 0.1 }, { price: 202.1, percentage: 0.2 }]
+        },
+        'MSFT': {
+            volumeSum: 107702, tradingSum: 28111761, premktHigh: 0, premktLow: 99999999,
+            //bias: 'short',
+            //boxup: 58.5, boxdown: 53.5,
+            //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
         'AMD': {
@@ -36,9 +36,9 @@ window.TradingApp = {
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
         'TSLA': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 485157, tradingSum: 370022378, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 737.5, boxdown: 730,
+            boxup: 775, boxdown: 759,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
@@ -49,15 +49,15 @@ window.TradingApp = {
             //longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'b': {
-            volumeSum: 289054, tradingSum: 22134159, premktHigh: 0, premktLow: 99999999,
+        'UAL': {
+            volumeSum: 508257, tradingSum: 19785249, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             //boxup: 75.75, boxdown: 75,
-            longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
+            //longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'COIN': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'SMCI': {
+            volumeSum: 41506, tradingSum: 2239405, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             //boxup: 61.2, boxdown: 60.2,,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],

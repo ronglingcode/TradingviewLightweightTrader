@@ -425,6 +425,8 @@ window.TradingApp.DB = (function () {
     };
 
     const updateFromLevelOneQuote = (quote) => {
+        if (!quote)
+            return;
         let symbol = quote.symbol;
         if (quote.bid) {
             window.TradingApp.Chart.updateUI(symbol, "bid", quote.bid);
