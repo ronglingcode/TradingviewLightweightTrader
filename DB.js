@@ -430,11 +430,13 @@ window.TradingApp.DB = (function () {
         let symbol = quote.symbol;
         if (quote.bid) {
             window.TradingApp.Chart.updateUI(symbol, "bid", quote.bid);
-            window.TradingApp.DB.dataBySymbol[symbol].bid = quote.bid;
+            if (window.TradingApp.DB.dataBySymbol[symbol])
+                window.TradingApp.DB.dataBySymbol[symbol].bid = quote.bid;
         }
         if (quote.ask) {
             window.TradingApp.Chart.updateUI(symbol, "ask", quote.ask);
-            window.TradingApp.DB.dataBySymbol[symbol].ask = quote.ask;
+            if (window.TradingApp.DB.dataBySymbol[symbol])
+                window.TradingApp.DB.dataBySymbol[symbol].ask = quote.ask;
         }
         let spread = window.TradingApp.DB.dataBySymbol[symbol].ask - window.TradingApp.DB.dataBySymbol[symbol].bid;
         spread = Math.round(spread * 100) / 100;
