@@ -211,13 +211,15 @@ window.TradingApp.TOS = (function () {
         order.orderId = null;
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
-        if (order.parentOrderId && order.siblingOrderId) {
+        if (order.parentOrderId && order.siblingOrder) {
             // adjust OCO order, need to candel the parent order and 
             // submit a new OCO order with 2 legs
             let newLeg = newOrder;
-            let otherLeg = order.siblingOrder;
-            cancelOrderById(oldLeg.parentOrderId);
+            let otherLeg = window.TradingApp.OrderFactory.copyOrder(order.siblingOrder);
+            cancelOrderById(order.parentOrderId);
+            console.log(`cancel ${order.parentOrderId}`);
             let orderToSubmit = window.TradingApp.OrderFactory.createOcoOrderFromTwoLegs(newLeg, otherLeg);
+            console.log(orderToSubmit);
             submitOrderAfterCancel(symbol, [order.parentOrderId], orderToSubmit, startTime);
         } else {
             replaceOrderBase(newOrder, oldOrderId);
@@ -227,6 +229,7 @@ window.TradingApp.TOS = (function () {
     // if orderIdsToCancel is [], that means all orders needs to be canceled,
     const submitOrderAfterCancel = async (symbol, orderIdsToCancel, orderToSubmit, startTime) => {
         let allCancelableOrderIds = getAllCancelableOrdersIds(symbol);
+        console.log(allCancelableOrderIds);
         let ordersAreCanceled = true;
         if (orderIdsToCancel.length == 0) {
             ordersAreCanceled = allCancelableOrderIds.length == 0;
