@@ -126,8 +126,58 @@ window.TradingApp.Algo.TakeProfit = (function () {
         window.TradingApp.Firestore.addPinnedTarget(symbol, profitTargets[1].price);
         return profitTargets;
     };
+    const checkRulesForAdjustingOrders = (symbol, order) => {
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+        let orderInstruction = order.orderLegCollection[0].instruction;
+        let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
+        if (!checkRuleForMinimumProfit(symbol, order, isBuyOrder, symbolData))
+            return false;
+
+        if (!checkRuleForPinnedPriceTargets(symbol, order))
+            return false;
+
+        if (!checkRuleForTimeSinceEntry(symbol))
+            return false;
+
+        return true;
+    };
+    const checkRuleForMinimumProfit = (symbol, order, isBuyOrder, symbolData) => {
+        if (order.orderType == "LIMIT") {
+            // check for 1R open range
+            if ((isBuyOrder && order.price > symbolData.openLow1R) ||
+                (!isBuyOrder && order.price < symbolData.openHigh1R)) {
+                window.TradingApp.Firestore.logInfo("cannot adjust exit order less than 1R for " + symbol);
+                return false;
+            }
+        } else {
+            return true;
+        }
+    };
+    const checkRuleForPinnedPriceTargets = (symbol, order) => {
+        if (order.orderType == "LIMIT") {
+            let pinnedPriceTargets = window.TradingApp.Firestore.getPinnedTargets(symbol);
+            if (pinnedPriceTargets.includes(order.price)) {
+                window.TradingApp.Firestore.logInfo("cannot adjust pinned price target for " + symbol);
+                return;
+            }
+        } else {
+            return true;
+        }
+    };
+    const checkRuleForTimeSinceEntry = (symbol) => {
+        let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
+        let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
+        let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
+        if (remainingSeconds > 0 && secondsSinceMarketOpen < 60 * 15) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes before 6:45 AM, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
+            return false;
+        }
+        return true;
+    };
+
     return {
         getProfitTargets,
+        checkRulesForAdjustingOrders,
         isTargetAtLeastHalfOpenRange
     };
 })();
