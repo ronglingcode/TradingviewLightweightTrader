@@ -7,24 +7,24 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'DOCU': {
-            volumeSum: 27509, tradingSum: 1797126, premktHigh: 0, premktLow: 99999999,
-            bias: 'short',
-            //boxup: 214, boxdown: 208,
-            //longTargets: [{ price: 157.5, percentage: 0.3 }],
-            //shortTargets: [{ price: 207.4, percentage: 0.1 }, { price: 202.1, percentage: 0.2 }]
-        },
-        'MSFT': {
-            volumeSum: 107702, tradingSum: 28111761, premktHigh: 0, premktLow: 99999999,
+        'META': {
+            volumeSum: 324283, tradingSum: 56584778, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //boxup: 58.5, boxdown: 53.5,
+            boxup: 174.5, boxdown: 172.5,
+            //longTargets: [{ price: 157.5, percentage: 0.3 }],
+            shortTargets: [{ price: 170.3, percentage: 0.3 }]
+        },
+        'TTD': {
+            volumeSum: 68352, tradingSum: 3242565, premktHigh: 0, premktLow: 99999999,
+            bias: 'short',
+            boxup: 47.5, boxdown: 46.5,
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'AMD': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'AXP': {
+            volumeSum: 77998, tradingSum: 12239350, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            //boxup: 79, boxdown: 78,
+            boxup: 162, boxdown: 156,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
@@ -36,9 +36,9 @@ window.TradingApp = {
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
         'TSLA': {
-            volumeSum: 485157, tradingSum: 370022378, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 417779, tradingSum: 344561578, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            boxup: 775, boxdown: 759,
+            boxup: 831, boxdown: 820,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
@@ -49,7 +49,7 @@ window.TradingApp = {
             //longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'UAL': {
+        'THC': {
             volumeSum: 508257, tradingSum: 19785249, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             //boxup: 75.75, boxdown: 75,
