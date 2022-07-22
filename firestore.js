@@ -167,7 +167,11 @@ window.TradingApp.Firestore = (function () {
             let firstChild = ul.children[0];
             firstChild.remove();
         }
-    }
+    };
+    const getAccountForSymbol = (symbol) => {
+        let account = window.TradingApp.TOS.filterAccountBySymbol(symbol, cache.tosAccount);
+        return account;
+    };
 
     return {
         addToLogView,
@@ -188,6 +192,7 @@ window.TradingApp.Firestore = (function () {
         clearPinnedTargets,
         removeLastPinnedTarget,
         getPinnedTargets,
-        getCache
+        getCache,
+        getAccountForSymbol
     };
 })();

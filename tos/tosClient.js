@@ -143,8 +143,7 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.Firestore.initializeAutoTraderState(account);
     };
     const flattenPosition = async (symbol) => {
-        let cache = window.TradingApp.Firestore.getCache(); //await getAccountBySymbol(symbol);
-        let account = window.TradingApp.TOS.filterAccountBySymbol(symbol, cache.tosAccount);
+        let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
         let position = account.position;
         if (!position) {
             return;
