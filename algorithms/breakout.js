@@ -3,6 +3,7 @@ window.TradingApp.Algo.Breakout = (function () {
     // 0 means cannot make the trade
     // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
+        let isLong = entryPrice > stopOutPrice;
         if (window.TradingApp.Secrets.isTestAccount) {
             // bypass check rules if this account is for testing
             return 1;
@@ -15,7 +16,7 @@ window.TradingApp.Algo.Breakout = (function () {
             window.TradingApp.Firestore.logError(`checkRule: Time Window rule failed for ${symbol}`);
             return 0;
         }
-        if (!checkRuleForTradesCount()) {
+        if (!checkRuleForTradesCount(symbol, isLong)) {
             window.TradingApp.Firestore.logError(`checkRule: Trades Count rule failed for ${symbol}`);
             return 0;
         }
@@ -41,17 +42,33 @@ window.TradingApp.Algo.Breakout = (function () {
             return 1;
         }
     };
-    const checkRuleForTradesCount = () => {
+    const checkRuleForTradesCount = (symbol, isLong) => {
         let count = window.TradingApp.Firestore.getTradesCount();
-        if (count >= 5) {
-            window.TradingApp.Firestore.logInfo(`no more than 5 trades/day`);
+        if (count < 5) {
+            return 1;
+        } else {
+            // 5 trades now, only allow add to existing positions
+            let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
+            let position = account.position;
+            if (!position) {
+                // new position, disallow
+                window.TradingApp.Firestore.logDebug(`no more than 5 trades/day for new position`);
+                return 0;
+            }
+            if (position.longQuantity > 0 && isLong) {
+                window.TradingApp.Firestore.logDebug(`add to existing long positions `);
+                return 1;
+            }
+            else if (position.shortQuantity > 0 && !isLong) {
+                window.TradingApp.Firestore.logDebug(`add to existing short positions`);
+                return 1;
+            }
+            window.TradingApp.Firestore.logError(`should not reach here`);
             return 0;
         }
-        return 1;
     };
     const checkRuleForTimeWindow = () => {
         let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
-        let minutesSinceMarketOpen = secondsSinceMarketOpen / 60;
         // only allow new trades after first 1 minute candle close
         // cannot take trades after 30 minutes of market open
         // add a few seconds as buffer
