@@ -95,7 +95,23 @@ window.TradingApp.OrderFactory = (function () {
         order.orderStrategyType = "SINGLE";
         return order;
     };
-
+    const copyOrder = (order) => {
+        if (order.orderType == OrderStrategyType.SINGLE) {
+            return copySingleOrder(order);
+        }
+    };
+    const copySingleOrder = (order) => {
+        let orderLegInstruction = order.orderLegCollection[0].instruction;
+        let symbol = order.orderLegCollection[0].instrument.symbol;
+        let quantity = order.orderLegCollection[0].quantity;
+        if (order.orderType == OrderType.LIMIT) {
+            return createLimitOrder(symbol, quantity, order.price, orderLegInstruction);
+        } else if (order.orderType == OrderType.STOP) {
+            return createStopOrder(symbol, quantity, order.stopPrice, orderLegInstruction);
+        } else if (order.orderType == OrderType.MARKET) {
+            return createMarketOrder(symbol, quantity, orderLegInstruction);
+        }
+    };
     /* #endregion */
 
     const createTestOrder = () => {
@@ -322,7 +338,7 @@ window.TradingApp.OrderFactory = (function () {
                 children[0].parentOrderId = order.orderId;
                 children[0].siblingOrder = children[1];
                 children[1].parentOrderId = order.orderId;
-                children[1].sibling = children[0];
+                children[1].siblingOrder = children[0];
                 workingOrders.push(...children);
             } else if (order.orderStrategyType === OrderStrategyType.SINGLE) {
                 if (order.orderType != OrderType.MARKET) {
@@ -400,6 +416,7 @@ window.TradingApp.OrderFactory = (function () {
     /* #endregion */
 
     return {
+        copyOrder,
         createMarketOrder,
         createPreMarketOrder,
         createOcoOrder,
