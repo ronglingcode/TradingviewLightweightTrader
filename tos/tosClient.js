@@ -202,7 +202,8 @@ window.TradingApp.TOS = (function () {
         }
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
         let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
-        if (remainingSeconds > 0) {
+        let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
+        if (remainingSeconds > 0 && secondsSinceMarketOpen < 60 * 15) {
             window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
             return;
         }
