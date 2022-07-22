@@ -181,30 +181,8 @@ window.TradingApp.TOS = (function () {
         }
 
         let order = widget.workingOrders[orderNumber - 1];
-        let orderInstruction = order.orderLegCollection[0].instruction;
-        let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
-        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
-        // order is profit taking order
-        if (order.orderType == "LIMIT") {
-            // check for 1R open range
-            if ((isBuyOrder && order.price > symbolData.openLow1R) ||
-                (!isBuyOrder && order.price < symbolData.openHigh1R)) {
-                window.TradingApp.Firestore.logInfo("cannot adjust exit order less than 1R for " + symbol);
-                return;
-            }
-
-            // check for pinned prices
-            let pinnedPriceTargets = window.TradingApp.Firestore.getPinnedTargets(symbol);
-            if (pinnedPriceTargets.includes(order.price)) {
-                window.TradingApp.Firestore.logInfo("cannot adjust pinned price target for " + symbol);
-                return;
-            }
-        }
-        let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
-        let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
-        let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
-        if (remainingSeconds > 0 && secondsSinceMarketOpen < 60 * 15) {
-            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
+        if (!allowed) {
             return;
         }
 
