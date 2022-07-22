@@ -63,9 +63,9 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (!stockSettings) {
             return [];
         }
-        if (isLong && !stockSettings.longTargets) {
+        if (isLong && stockSettings.longTargets && stockSettings.longTargets.length > 0) {
             return stockSettings.longTargets;
-        } else if (!isLong && !stockSettings.shortTargets) {
+        } else if (!isLong && stockSettings.shortTargets && stockSettings.shortTargets.length > 0) {
             return stockSettings.shortTargets;
         } else {
             return [];
