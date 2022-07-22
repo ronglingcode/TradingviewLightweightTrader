@@ -8,6 +8,10 @@ window.TradingApp.Algo.Breakout = (function () {
             // bypass check rules if this account is for testing
             return 1;
         }
+        if (!checkRuleForDeferTrading(symbol)) {
+            window.TradingApp.Firestore.logError(`checkRule: need to defer trading for ${symbol}`);
+            return 0;
+        }
         if (!checkRuleForDailyMaxLoss()) {
             window.TradingApp.Firestore.logError(`checkRule: Daily max loss exceeded`);
             return 0;
@@ -33,6 +37,19 @@ window.TradingApp.Algo.Breakout = (function () {
             return 0;
         }
         return 1;
+    };
+    const checkRuleForDeferTrading = (symbol) => {
+        let stockSettings = window.TradingApp.StockCandidates[symbol];
+        if (stockSettings.deferTrading) {
+            let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
+            if (secondsSinceMarketOpen >= 5 * 60 - 5) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return 1;
+        }
     };
     const checkRuleForDailyMaxLoss = () => {
         let currentLoss = window.TradingApp.Firestore.getProfitAndLossFromCache() * (-1);
@@ -68,7 +85,7 @@ window.TradingApp.Algo.Breakout = (function () {
         }
     };
     const checkRuleForTimeWindow = () => {
-        let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
+        let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
         // only allow new trades after first 1 minute candle close
         // cannot take trades after 30 minutes of market open
         // add a few seconds as buffer

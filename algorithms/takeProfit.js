@@ -167,7 +167,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
     const checkRuleForTimeSinceEntry = (symbol) => {
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
         let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
-        let secondsSinceMarketOpen = (new Date() - window.TradingApp.Settings.marketOpenTime) / 1000;
+        let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
         if (remainingSeconds > 0 && secondsSinceMarketOpen < 60 * 15) {
             window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes before 6:45 AM, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
             return false;
