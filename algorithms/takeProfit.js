@@ -1,12 +1,12 @@
 window.TradingApp.Algo.TakeProfit = (function () {
-    const applyProfitStrategyByPercentage = (totalShares, basePrice, stopOut, targetPrices, percentages) => {
+    const applyProfitStrategyByPercentage = (totalShares, basePrice, stopOut, profitTargets) => {
         let totalPercentages = 0.0;
         let results = [];
         let risk = basePrice - stopOut;
         let sum = 0;
-        for (let i = 0; i < targetPrices.length; i++) {
-            let target = targetPrices[i];
-            let percent = percentages[i];
+        for (let i = 0; i < profitTargets.length; i++) {
+            let target = profitTargets[i].price;
+            let percent = profitTargets[i].percentage;
             totalPercentages += percent;
             let shares = parseInt(totalShares * percent);
             if (shares <= 0) {
@@ -47,50 +47,59 @@ window.TradingApp.Algo.TakeProfit = (function () {
 
     const isTargetAtLeastHalfOpenRange = (symbol, isLong, targetPrice) => {
         let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
-        let openRange = symbolData.openHigh - symbolData.openLow;
+        let open = symbolData.openingCandle;
+        let openHigh = open.high;
+        let openLow = open.low;
+        let openRange = openHigh - openLow;
         if (isLong) {
-            return targetPrice >= (symbolData.openHigh + 0.5 * openRange);
+            return targetPrice >= (openHigh + 0.5 * openRange);
         } else {
-            return targetPrice <= (symbolData.openLow - 0.5 * openRange);
+            return targetPrice <= (openLow - 0.5 * openRange);
+        }
+    };
+
+    const getPresetTargets = (symbol, isLong) => {
+        let stockSettings = window.TradingApp.StockCandidates[symbol];
+        if (!stockSettings) {
+            return [];
+        }
+        if (isLong && !stockSettings.longTargets) {
+            return stockSettings.longTargets;
+        } else if (!isLong && !stockSettings.shortTargets) {
+            return stockSettings.shortTargets;
+        } else {
+            return [];
         }
     };
 
     const getProfitTargets = (symbol, totalShares, basePrice, stopOut, setupQuality) => {
         let isLong = basePrice > stopOut;
-        let risk = basePrice - stopOut;
-        let stockSettings = window.TradingApp.StockCandidates[symbol];
-        if (!stockSettings) {
-            return getDefaultProfitTargets(symbol, totalShares, basePrice, stopOut);
-        }
-        if ((isLong && !stockSettings.longTargets) || (!isLong && !stockSettings.shortTargets)) {
-            return getDefaultProfitTargets(symbol, totalShares, basePrice, stopOut);
-        }
-        let presetTargets = isLong ? stockSettings.longTargets : stockSettings.shortTargets;
-        let targetPrices = [];
-        let percentage = [];
+        let presetTargets = getPresetTargets(symbol, isLong);
+        let profitTargets = [];
+
         let remainingPercentage = 1;
         for (let i = 0; i < presetTargets.length; i++) {
             let t = presetTargets[i];
             if (isTargetAtLeastHalfOpenRange(symbol, isLong, t.price)) {
-                targetPrices.push(t.price);
-                percentage.push(t.percentage);
                 remainingPercentage -= t.percentage;
+                profitTargets.push({
+                    price: t.price,
+                    percentage: t.percentage
+                });
             } else {
                 window.TradingApp.Firestore.logInfo(`Target price $${t.price} is too close, skipped it.`)
             }
         }
-        // fill the rest with 2R and 3R
-        let target2R = basePrice + risk * 2;
-        let target3R = basePrice + risk * 3;
-        targetPrices.push(target2R);
-        percentage.push(remainingPercentage / 2);
-        targetPrices.push(target3R);
-        percentage.push(remainingPercentage / 2);
 
-        window.TradingApp.Firestore.addPinnedTarget(symbol, target2R);
-        return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, targetPrices, percentage);
+        let defaultTargets = getDefaultProfitTargets(symbol, remainingPercentage, basePrice, stopOut);
+        defaultTargets.forEach(t => {
+            profitTargets.push(t);
+        });
+
+        return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, profitTargets);
     };
-    const getDefaultProfitTargets = (symbol, totalShares, basePrice, stopOut) => {
+
+    const getDefaultProfitTargets = (symbol, remainingPercentage, basePrice, stopOut) => {
         /* set as:
          * 1.0 15%
          * 2.0 45%
@@ -99,18 +108,26 @@ window.TradingApp.Algo.TakeProfit = (function () {
         */
         let rrr = [1.0, 2.0, 3, 4];
         let percentage = [0.15, 0.45, 0.22, 0.18];
-        let targetPrices = [];
+        for (let i = 0; i < percentage.length; i++) {
+            percentage[i] = percentage[i] * remainingPercentage;
+        }
+        let profitTargets = [];
         let risk = basePrice - stopOut;
+
         for (let i = 0; i < rrr.length; i++) {
             let target = basePrice + risk * rrr[i];
             target = Math.round(target * 100) / 100;
-            targetPrices.push(target);
+            profitTargets.push({
+                price: target,
+                percentage: percentage[i]
+            })
         }
 
-        window.TradingApp.Firestore.addPinnedTarget(symbol, targetPrices[1]);
-        return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, targetPrices, percentage);
+        window.TradingApp.Firestore.addPinnedTarget(symbol, profitTargets[1].price);
+        return profitTargets;
     };
     return {
-        getProfitTargets
+        getProfitTargets,
+        isTargetAtLeastHalfOpenRange
     };
 })();
