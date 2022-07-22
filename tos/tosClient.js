@@ -143,6 +143,7 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.Firestore.initializeAutoTraderState(account);
     };
     const flattenPosition = async (symbol) => {
+        let startTime = new Date();
         let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
         let position = account.position;
         if (!position) {
@@ -163,10 +164,11 @@ window.TradingApp.TOS = (function () {
         }
         let orderToSubmit = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
         let orderIdsToCancel = [];// means all working orders need to be canceled
-        submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit);
+        submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit, startTime);
     };
     const adjustOrderWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
+        let startTime = new Date();
         let orderNumber = parseInt(keyCode[5]);
         if (keyCode == "Digit0") {
             orderNumber = 10;
@@ -216,14 +218,14 @@ window.TradingApp.TOS = (function () {
             let otherLeg = order.siblingOrder;
             cancelOrderById(oldLeg.parentOrderId);
             let orderToSubmit = window.TradingApp.OrderFactory.createOcoOrderFromTwoLegs(newLeg, otherLeg);
-            submitOrderAfterCancel(symbol, [order.parentOrderId], orderToSubmit);
+            submitOrderAfterCancel(symbol, [order.parentOrderId], orderToSubmit, startTime);
         } else {
             replaceOrderBase(newOrder, oldOrderId);
         }
     };
     // submit the order after orders in orderIdsToCancel are all canceled
     // if orderIdsToCancel is [], that means all orders needs to be canceled,
-    const submitOrderAfterCancel = async (symbol, orderIdsToCancel, orderToSubmit) => {
+    const submitOrderAfterCancel = async (symbol, orderIdsToCancel, orderToSubmit, startTime) => {
         let allCancelableOrderIds = getAllCancelableOrdersIds(symbol);
         let ordersAreCanceled = true;
         if (orderIdsToCancel.length == 0) {
@@ -232,11 +234,14 @@ window.TradingApp.TOS = (function () {
             ordersAreCanceled = checkOrdersAreCanceled(allCancelableOrderIds, orderIdsToCancel);
         }
         if (ordersAreCanceled) {
+            let endTime = new Date();
+            let latencyInSeconds = (endTime - startTime) / 1000;
             placeOrderBase(orderToSubmit);
+            window.TradingApp.Firestore.logDebug(`latency is ${latencyInSeconds} seconds.`);
         } else {
             console.log('still has orders not canceled, keep waiting');
             setTimeout(() => {
-                submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit);
+                submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit, startTime);
             }, 100);
         }
     };
