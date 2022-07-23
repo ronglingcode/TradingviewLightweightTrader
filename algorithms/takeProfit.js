@@ -149,20 +149,18 @@ window.TradingApp.Algo.TakeProfit = (function () {
                 window.TradingApp.Firestore.logInfo("cannot adjust exit order less than 1R for " + symbol);
                 return false;
             }
-        } else {
-            return true;
         }
+        return false;
     };
     const checkRuleForPinnedPriceTargets = (symbol, order) => {
         if (order.orderType == "LIMIT") {
             let pinnedPriceTargets = window.TradingApp.Firestore.getPinnedTargets(symbol);
             if (pinnedPriceTargets.includes(order.price)) {
                 window.TradingApp.Firestore.logInfo("cannot adjust pinned price target for " + symbol);
-                return;
+                return false;
             }
-        } else {
-            return true;
         }
+        return true;
     };
     const checkRuleForTimeSinceEntry = (symbol) => {
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
