@@ -520,6 +520,32 @@ window.TradingApp.TOS = (function () {
         });
     };
     /* #endregion */
+
+    const getFundamentals = async (symbol) => {
+        let url = "https://api.tdameritrade.com/v1/instruments";
+        url += `?symbol=${symbol}&projection=fundamental`;
+        return asyncGet(url).then(response => response.json())  // convert to json
+            .then(json => {
+                let result = json[symbol];
+                //console.log(result);
+                let fundamental = result.fundamental;
+                let summary = {
+                    "symbol": symbol,
+                    "cusip": result.cusip,
+                    "sharesOutstanding": fundamental.sharesOutstanding,
+                    "marketCapFloat": fundamental.marketCapFloat,
+                    "marketCap": fundamental.marketCap,
+                    "bookValuePerShare": fundamental.bookValuePerShare,
+                    "shortIntToFloat": fundamental.shortIntToFloat,
+                    "shortIntDayToCover": fundamental.shortIntDayToCover,
+                    "beta": fundamental.beta,
+                };
+                console.log(summary);
+                return summary;
+            })
+            .catch(err => console.log('Request Failed', err));
+    };
+
     return {
         createAccessToken,
         getPriceHistory,
@@ -545,6 +571,7 @@ window.TradingApp.TOS = (function () {
         getAccountBySymbol,
         filterAccountBySymbol,
         flattenPosition,
-        getTransactions
+        getTransactions,
+        getFundamentals
     }
 })();
