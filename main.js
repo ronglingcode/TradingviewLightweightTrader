@@ -85,7 +85,7 @@ const createWebSocket = async () => {
                         let act = window.TradingApp.Streaming.createAccountActivity(content);
                         //console.log(act);
                         if (['OrderFill', 'OrderPartialFill'].includes(act.messageType)) {
-                            window.TradingApp.Firestore.logInfo(act.messageType);
+                            window.TradingApp.Firestore.logDebug(act.messageType);
                         } else if (act.messageType == 'OrderRejection') {
                             window.TradingApp.Firestore.logInfo('Order rejected by TOS');
                         }

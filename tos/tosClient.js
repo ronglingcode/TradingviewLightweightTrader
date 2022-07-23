@@ -168,6 +168,7 @@ window.TradingApp.TOS = (function () {
     };
     const adjustOrderWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
+        window.TradingApp.Firestore.logDebug(`Adjust order for ${symbol}`);
         let startTime = new Date();
         let orderNumber = parseInt(keyCode[5]);
         if (keyCode == "Digit0") {
@@ -183,8 +184,10 @@ window.TradingApp.TOS = (function () {
         let order = widget.workingOrders[orderNumber - 1];
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
         if (!allowed) {
+            window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
         }
+        window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
 
         let oldOrderId = order.orderId;
         order.orderId = null;
@@ -315,7 +318,7 @@ window.TradingApp.TOS = (function () {
     };
 
     const reduceOrderGroupQuantityByHalf = async (symbol, orderType) => {
-        console.log(`reduce quantity for ${orderType} orders`);
+        console.log(`${symbol}: reduce quantity for ${orderType} orders`);
         let result = {
             'oldOrderIds': [],
             'remainingQuantity': 0
@@ -337,7 +340,6 @@ window.TradingApp.TOS = (function () {
             let q = order.orderLegCollection[0].quantity;
             let newQuantity = Math.ceil(q / 2);
             result.remainingQuantity += (q - newQuantity);
-            console.log(`q: ${q}, new: ${newQuantity}`);
             if (newQuantity != q) {
                 result.oldOrderIds.push(oldOrderId);
                 let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewQuantity(order, newQuantity);
