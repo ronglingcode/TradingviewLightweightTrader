@@ -121,7 +121,6 @@ window.TradingApp.DB = (function () {
                         totalTradingAmount = vwapCorrectionTradingAmount;
                         totalVolume = vwapCorrectionVolumeSum;
                         vwapCorrected = true;
-                        console.log('vwap corrected');
                     }
                 }
             } else {

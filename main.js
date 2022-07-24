@@ -1,22 +1,12 @@
 window.TradingApp.Main = { widgets: {} };
-for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
-    let symbol = window.TradingApp.Watchlist[i].symbol;
-    let chart = window.TradingApp.Chart.createChartWidget(i, window.TradingApp.Watchlist[i]);
-    window.TradingApp.Main.widgets[symbol] = chart;
-}
-
-for (let i = window.TradingApp.Watchlist.length; i < window.TradingApp.Settings.maxStocksCount; i++) {
-    let container = document.getElementById("chartContainer" + i);
-    if (container) {
-        container.style.display = 'none';
-    }
-}
 
 window.TradingApp.TOS.initialize().then(() => {
     console.log('initialized');
     // tos initialized with new access token
     // access token expires in 30 minutes, so refresh before that
     setInterval(window.TradingApp.TOS.createAccessToken, 1700 * 1000);
+    // create watchlist and setup chart
+    window.TradingApp.Chart.setup();
 
     // open web socket
     window.TradingApp.Streaming.socket = createWebSocket();
@@ -28,13 +18,6 @@ window.TradingApp.TOS.initialize().then(() => {
             window.TradingApp.DB.initialize(symbol, json);
             let symbolAccount = window.TradingApp.TOS.filterAccountBySymbol(symbol, window.TradingApp.TOS.initialAccount);
             window.TradingApp.Chart.updateAccountUIStatusForSymbol(symbol, symbolAccount);
-            let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
-            let lastPrice = symbolData.candles[symbolData.candles.length - 1].close;
-            let minPrice = window.TradingApp.Algo.RiskManager.MinimumStockPrice;
-            if (lastPrice < minPrice) {
-                window.TradingApp.Chart.hideChart(symbol);
-                window.TradingApp.Firestore.logInfo(`${symbol} is under $${minPrice}, trading is disabled.`);
-            }
         });
     }
 });

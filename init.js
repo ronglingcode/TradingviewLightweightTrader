@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date(), //('2022-01-28 6:30'),
+        'currentDay': new Date('2022-07-22 6:30'), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false,
         'maxStocksCount': 8
@@ -55,8 +55,8 @@ window.TradingApp = {
             //longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'THC': {
-            volumeSum: 508257, tradingSum: 19785249, premktHigh: 0, premktLow: 99999999,
+        'USEA': {
+            //volumeSum: 508257, tradingSum: 19785249, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
             //boxup: 75.75, boxdown: 75,
@@ -111,31 +111,6 @@ window.TradingApp = {
 // only pick the best stocks, stocks with biggest news to trade
 // be selective
 let currentDay = window.TradingApp.Settings.currentDay;
-let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
-window.TradingApp.Watchlist = [];
-let nonShortableStocks = ['GME'];
-let stocksNotGoodForDayTrading = [];
-bestStocksToTradeToday.forEach(stock => {
-    let symbol = stock.symbol;
-    let skipMessage = `skip ${symbol} because `;
-    if (nonShortableStocks.includes(symbol)) {
-        console.log(`${skipMessage}it's not shortable, it trades differently than regular stocks.`);
-        return;
-    }
-    if (stocksNotGoodForDayTrading.includes(symbol)) {
-        console.log(`${skipMessage}it's not good for day trading, even with news, it trades poorly in the past.`);
-        return;
-    }
-    if (!stock.news) {
-        console.log(`${skipMessage}has no news.`);
-        return;
-    }
-
-    let candidate = window.TradingApp.StockCandidates[symbol];
-    candidate.symbol = symbol;
-    window.TradingApp.Watchlist.push(candidate);
-});
-
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
 
 let dtStartTime = new Date(`${currentDayStr} 01:00`);
