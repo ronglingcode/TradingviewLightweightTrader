@@ -123,17 +123,17 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                 let estimatedEntryPrice = 0;
                 if (code === "KeyB") {
                     window.TradingApp.Firestore.logInfo("market buy for " + symbol);
-                    estimatedEntryPrice = ask + 2 * spread;
+                    estimatedEntryPrice = ask + 1 * spread;
                 } else if (code === "KeyS") {
                     window.TradingApp.Firestore.logInfo("market sell for " + symbol);
-                    estimatedEntryPrice = bid - 2 * spread;
+                    estimatedEntryPrice = bid - 1 * spread;
                 }
                 let checkResult = window.TradingApp.Algo.Breakout.checkRules(symbol, estimatedEntryPrice, stopOutPrice);
                 if (checkResult == 0) {
                     return;
                 }
                 orders = factory.createEntryOrdersWithFixedRisk(
-                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.45 * checkResult
+                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.5 * checkResult
                 );
                 orders.forEach(order => {
                     window.TradingApp.TOS.placeOrderBase(order);
