@@ -11,6 +11,10 @@ body {
     padding: 5px 10px 5px 10px;
 }
 
+.chartContainer {
+    display: none;
+}
+
 .chartContainer.active {
     border-color: #0091ea;
 }

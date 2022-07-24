@@ -349,6 +349,17 @@ window.TradingApp.Chart = (function () {
             }
         }
     };
+    const setup = () => {
+        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+            let symbol = window.TradingApp.Watchlist[i].symbol;
+            let chart = createChartWidget(i, window.TradingApp.Watchlist[i]);
+            window.TradingApp.Main.widgets[symbol] = chart;
+            let container = document.getElementById("chartContainer" + i);
+            if (container) {
+                container.style.display = 'block';
+            }
+        }
+    };
     return {
         createChartWidget,
         updateUI,
@@ -360,6 +371,7 @@ window.TradingApp.Chart = (function () {
         updateAccountUIStatusForSymbol,
         getMultiplier,
         addMarker,
-        hideChart
+        hideChart,
+        setup
     }
 })();

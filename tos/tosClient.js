@@ -4,8 +4,10 @@ window.TradingApp.TOS = (function () {
     let initialAccount = {};
     const initialize = async () => {
         await createAccessToken();
+        await createWatchlist();
         await getUserPrincipal();
         await setInitialAccount();
+
         window.TradingApp.TOS.initialized = true;
     };
     /* #region Utils */
@@ -545,9 +547,16 @@ window.TradingApp.TOS = (function () {
             })
             .catch(err => console.log('Request Failed', err));
     };
+    const createWatchlist = async () => {
+        let stocks = await window.TradingApp.Algo.StockSelection.createWatchlist();
+        window.TradingApp.Watchlist = stocks;
+        window.TradingApp.AutoTrader.addStocksFromWatchlist(stocks);
+        return stocks;
+    };
 
     return {
         createAccessToken,
+        createWatchlist,
         getPriceHistory,
         getQuote,
         getSamplePriceHistory,
