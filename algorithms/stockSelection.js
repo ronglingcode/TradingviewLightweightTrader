@@ -14,21 +14,21 @@ window.TradingApp.Algo.StockSelection = (function () {
             let symbol = stock.symbol;
             let skipMessage = `skip ${symbol} because `;
             if (nonShortableStocks.includes(symbol)) {
-                console.log(`${skipMessage}it's not shortable, it trades differently than regular stocks.`);
+                window.TradingApp.Firestore.logError(`${skipMessage}it's not shortable, it trades differently than regular stocks.`);
                 continue;
             }
             if (stocksNotGoodForDayTrading.includes(symbol)) {
-                console.log(`${skipMessage}it's not good for day trading, even with news, it trades poorly in the past.`);
+                window.TradingApp.Firestore.logError(`${skipMessage}it's not good for day trading, even with news, it trades poorly in the past.`);
                 continue;
             }
             if (!stock.news) {
-                console.log(`${skipMessage}has no news.`);
+                window.TradingApp.Firestore.logError(`${skipMessage}has no news.`);
                 continue;
             }
 
             let passed = await checkRuleForLowFloat(symbol);
             if (!passed) {
-                console.log(`${skipMessage}market cap float is too low.`);
+                window.TradingApp.Firestore.logError(`${skipMessage}market cap float is too low.`);
                 continue;
             }
 
@@ -36,7 +36,6 @@ window.TradingApp.Algo.StockSelection = (function () {
             candidate.symbol = symbol;
             stocks.push(candidate);
         }
-        console.log(stocks);
         return stocks;
     };
 
