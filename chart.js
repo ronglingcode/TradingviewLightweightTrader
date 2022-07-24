@@ -338,17 +338,6 @@ window.TradingApp.Chart = (function () {
         }
         widget.htmlContents.exitOrders.innerText = exitOrdersString;
     };
-    const hideChart = (symbol) => {
-        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
-            if (window.TradingApp.Watchlist[i].symbol == symbol) {
-                let container = document.getElementById("chartContainer" + i);
-                if (container) {
-                    container.style.display = 'none';
-                }
-                return;
-            }
-        }
-    };
     const setup = () => {
         for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
             let symbol = window.TradingApp.Watchlist[i].symbol;
@@ -371,7 +360,6 @@ window.TradingApp.Chart = (function () {
         updateAccountUIStatusForSymbol,
         getMultiplier,
         addMarker,
-        hideChart,
         setup
     }
 })();
