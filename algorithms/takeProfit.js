@@ -150,7 +150,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
                 return false;
             }
         }
-        return false;
+        return true;
     };
     const checkRuleForPinnedPriceTargets = (symbol, order) => {
         if (order.orderType == "LIMIT") {
