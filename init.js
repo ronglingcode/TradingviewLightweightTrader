@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date('2022-07-22 6:30'), //('2022-01-28 6:30'),
+        'currentDay': new Date(), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
         'preMarketTrading': false,
         'maxStocksCount': 8
@@ -8,10 +8,10 @@ window.TradingApp = {
     'Algo': {},
     'StockCandidates': {
         'META': {
-            volumeSum: 324283, tradingSum: 56584778, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 94374, tradingSum: 15990346, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 174.5, boxdown: 172.5,
+            //boxup: 174.5, boxdown: 172.5,
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
@@ -23,11 +23,11 @@ window.TradingApp = {
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'AXP': {
-            volumeSum: 77998, tradingSum: 12239350, premktHigh: 0, premktLow: 99999999,
+        'AMD': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 162, boxdown: 156,
+            //boxup: 162, boxdown: 156,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
@@ -42,8 +42,8 @@ window.TradingApp = {
         'TSLA': {
             volumeSum: 417779, tradingSum: 344561578, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            deferTrading: false,
-            boxup: 831, boxdown: 820,
+            deferTrading: true,
+            boxup: 828, boxdown: 820,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
@@ -74,7 +74,7 @@ window.TradingApp = {
         'SPY': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            deferTrading: false,
+            deferTrading: true,
             //boxdown: 80, boxup: 88,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
@@ -82,7 +82,7 @@ window.TradingApp = {
         'QQQ': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            deferTrading: false,
+            deferTrading: true,
             //boxup: 22, boxdown: 21.1,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 277.85, percentage: 0.25 }, { price: 277.1, percentage: 0.25 }]

@@ -77,8 +77,10 @@ window.TradingData = {
             { symbol: 'QQQ', news: 'job numbers' }, { symbol: 'SPY', news: 'job numbers' }],
         '7/22/2022': [
             { symbol: 'META', news: 'snap earnings' }, { symbol: 'TTD', news: 'snap earnings' },
-            { symbol: 'AXP', news: 'earnings beat' }, { symbol: 'TSLA', news: 'upgrade' },
-            //{ symbol: 'QQQ', news: 'meta google bad ads' }, { symbol: 'SPY', news: 'meta google bad ads' }
+            { symbol: 'AXP', news: 'earnings beat' }, { symbol: 'TSLA', news: 'upgrade' }],
+        '7/25/2022': [
+            { symbol: 'NVDA', news: 'chips price cut' }, { symbol: 'AMD', news: 'chips price cut' },
+            { symbol: 'META', news: 'price cut' }, { symbol: 'TSLA', news: 'upgrade' }
         ],
     }
 };
