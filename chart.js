@@ -88,12 +88,14 @@ window.TradingApp.Chart = (function () {
     };
 
     const getMultiplier = (widget) => {
+        return 1;
+        /*
         let qty = widget.htmlContents.quantityInput.value;
         if (!qty || !qty.endsWith("%")) {
             return 1;
         }
         let multiplier = parseFloat(qty.substring(0, qty.length - 1));
-        return multiplier / 100;
+        return multiplier / 100;*/
     };
     const addMarker = (symbol, marker) => {
         let widget = window.TradingApp.Main.widgets[symbol];
@@ -115,7 +117,7 @@ window.TradingApp.Chart = (function () {
         };
         widget.htmlContents.quantityBar = widget.htmlContents.container.getElementsByClassName("quantityBar")[0];
         widget.htmlContents.quantityInput = widget.htmlContents.quantityBar.getElementsByTagName("input")[0];
-        setupQuantityBar(widget.htmlContents.quantityBar, widget.htmlContents.quantityInput);
+        //setupQuantityBar(widget.htmlContents.quantityBar, widget.htmlContents.quantityInput);
 
         widget.htmlContents.showLockupButton = widget.htmlContents.container.getElementsByClassName("showlockup")[0];
         setupShowLockupButton(widget.htmlContents.showLockupButton, symbol);
