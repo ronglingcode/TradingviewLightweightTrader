@@ -126,16 +126,12 @@ window.TradingApp.AutoTrader = (function () {
     };
 
     const getEntryTimeFromNowInSeconds = (symbol) => {
-        let accountData = window.TradingApp.Firestore.accountFromCache;
-        if (!accountData || !accountData.securitiesAccount) {
+        let accountData = window.TradingApp.Firestore.getAccountForSymbol(symbol);
+        if (!accountData || !accountData.orders) {
             return -1;
         }
-        let orders = accountData.securitiesAccount.orderStrategies;
-        if (!orders) {
-            return -1;
-        }
+        let orders = accountData.orders;
         let filledOrders = window.TradingApp.OrderFactory.extractFilledOrders(orders);
-
         let foundFirst = false;
         let earliestTime = null;
         for (let i = 0; i < filledOrders.length; i++) {
@@ -155,7 +151,7 @@ window.TradingApp.AutoTrader = (function () {
         let now = new Date();
         let tradeTime = new Date(earliestTime);
         let seconds = (now - tradeTime) / 1000;
-        console.log(`${seconds} seconds ago`);
+        console.log(`${symbol} first entry ${seconds} seconds ago`);
         return seconds;
     };
 
