@@ -1,7 +1,12 @@
 window.TradingApp.Algo.StockSelection = (function () {
     const checkRuleForLowFloat = async (symbol) => {
         let fundamental = await window.TradingApp.TOS.getFundamentals(symbol);
-        return fundamental.marketCapFloat > 100; // should be more than $100 million
+        if (fundamental.marketCapFloat < 90) {
+            window.TradingApp.Firestore.logError(`${symbol} market cap float: ${fundamental.marketCapFloat}`);
+            return false;
+        } else {
+            return true;
+        }
     };
     const createWatchlist = async () => {
         let currentDay = window.TradingApp.Settings.currentDay;

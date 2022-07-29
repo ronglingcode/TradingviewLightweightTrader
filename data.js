@@ -80,7 +80,17 @@ window.TradingData = {
             { symbol: 'AXP', news: 'earnings beat' }, { symbol: 'TSLA', news: 'upgrade' }],
         '7/25/2022': [
             { symbol: 'NVDA', news: 'chips price cut' }, { symbol: 'AMD', news: 'chips price cut' },
-            { symbol: 'META', news: 'price cut' }, { symbol: 'TSLA', news: 'upgrade' }
-        ],
+            { symbol: 'META', news: 'price cut' }, { symbol: 'TSLA', news: 'upgrade' }],
+        '7/26/2022': [
+            { symbol: 'WMT', news: 'cut outlook' }, { symbol: 'SHOP', news: 'layoff' },
+            { symbol: 'COST', news: 'WMT down' }, { symbol: 'COIN', news: 'SEC investigation' },
+            { symbol: 'CHWY', news: 'downgrade' }, { symbol: 'BABA', news: 'listing' }],
+        '7/27/2022': [
+            { symbol: 'BA', news: 'earnings' }, { symbol: 'SAVA', news: 'criminal investigation' },
+            { symbol: 'SPOT', news: 'earnings' }, { symbol: 'SHOP', news: 'earnings' },
+            { symbol: 'QQQ', news: 'consumer condifident at 10am' }, { symbol: 'SPY', news: 'consumer condifident at 10am' }],
+        '7/28/2022': [
+            { symbol: 'TSLA', news: 'energy bill' }, { symbol: 'META', news: 'earnings' },
+            { symbol: 'QQQ', news: 'gdp numbers' }, { symbol: 'SPY', news: 'gdp numbers' }],
     }
 };
