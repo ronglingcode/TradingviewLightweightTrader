@@ -92,5 +92,8 @@ window.TradingData = {
         '7/28/2022': [
             { symbol: 'TSLA', news: 'energy bill' }, { symbol: 'META', news: 'earnings' },
             { symbol: 'QQQ', news: 'gdp numbers' }, { symbol: 'SPY', news: 'gdp numbers' }],
+        '8/1/2022': [
+            { symbol: 'BA', news: 'clear delivery' }, { symbol: 'TSLA', news: 'chinese EV delivery numbers' },
+            { symbol: 'QQQ', news: 'US china news' }, { symbol: 'SPY', news: 'US china news' }],
     }
 };
