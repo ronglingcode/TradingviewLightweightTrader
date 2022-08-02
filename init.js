@@ -7,19 +7,19 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'FSLR': {
+        'PINS': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            //boxup: 162.5, boxdown: 159,
+            boxup: 24.25, boxdown: 23.2
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'META': {
+        'SNOW': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 163.5, boxdown: 160.5,
+            boxup: 145, boxdown: 139,
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
