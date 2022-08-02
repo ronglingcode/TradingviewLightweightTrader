@@ -164,6 +164,9 @@ window.TradingApp.TOS = (function () {
         else {
             return;
         }
+        if (!window.TradingApp.Algo.Flatten.checkRules(symbol)) {
+            return;
+        }
         let orderToSubmit = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLegInstruction);
         let orderIdsToCancel = [];// means all working orders need to be canceled
         submitOrderAfterCancel(symbol, orderIdsToCancel, orderToSubmit, startTime);
