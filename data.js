@@ -98,5 +98,9 @@ window.TradingData = {
         '8/2/2022': [
             { symbol: 'PINS', news: 'earnings' }, { symbol: 'SNOW', news: 'downgrade' },
             { symbol: 'QQQ', news: 'US china news' }, { symbol: 'SPY', news: 'US china news' }],
+        '8/3/2022': [
+            { symbol: 'PYPL', news: 'earnings' }, { symbol: 'MTCH', news: 'earnings' },
+            { symbol: 'AMD', news: 'earnings' }, { symbol: 'NVDA', news: 'AMD earnings' },
+            { symbol: 'QQQ', news: 'FED says soft landing' }, { symbol: 'SPY', news: 'FED says soft landing' }],
     }
 };
