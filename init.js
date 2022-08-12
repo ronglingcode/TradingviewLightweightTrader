@@ -7,35 +7,35 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'PYPL': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'ILMN': {
+            volumeSum: 93093, tradingSum: 18023663, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 102.5, boxdown: 100
+            boxup: 198, boxdown: 194
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'MTCH': {
+        'BABA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 61.5, boxdown: 60,
+            boxup: 93, boxdown: 91,
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'AMD': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'U': {
+            volumeSum: 1414602, tradingSum: 76244990, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 96, boxdown: 92,
+            boxup: 56.25, boxdown: 52,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'NVDA': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'RBLX': {
+            volumeSum: 2356639, tradingSum: 98459952, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            //boxup: 152.5, boxdown: 151,
+            boxup: 44.25, boxdown: 42,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
@@ -43,7 +43,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: true,
-            boxup: 828, boxdown: 820,
+            boxup: 870, boxdown: 866,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
@@ -63,23 +63,23 @@ window.TradingApp = {
             //longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'SPOT': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'DOCS': {
+            volumeSum: 49051, tradingSum: 1654707, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
             boxup: 115, boxdown: 112,
             //longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'SHOP': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'DASH': {
+            volumeSum: 375828, tradingSum: 32768638, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
-            //boxup: 61.2, boxdown: 60.2,,
+            boxup: 87.5, boxdown: 84,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'BABA': {
+        'ABC': {
             volumeSum: 614499, tradingSum: 64755940, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,

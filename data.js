@@ -102,5 +102,20 @@ window.TradingData = {
             { symbol: 'PYPL', news: 'earnings' }, { symbol: 'MTCH', news: 'earnings' },
             { symbol: 'AMD', news: 'earnings' }, { symbol: 'NVDA', news: 'AMD earnings' },
             { symbol: 'QQQ', news: 'FED says soft landing' }, { symbol: 'SPY', news: 'FED says soft landing' }],
+        '8/5/2022': [
+            { symbol: 'TWLO', news: 'earnings' }, { symbol: 'NET', news: 'AMD earnings' },
+            { symbol: 'SQ', news: 'earnings' }, { symbol: 'DASH', news: 'earnings' },
+            { symbol: 'QQQ', news: 'nonfarm payroll' }, { symbol: 'SPY', news: 'nonfarm payroll' }],
+        '8/9/2022': [
+            { symbol: 'NVAX', news: 'guidance down' }, { symbol: 'UPST', news: 'earnings' },
+            { symbol: 'TSLA', news: 'delivery numbers' }, { symbol: 'U', news: 'Chatter' },
+            { symbol: 'QQQ', news: 'small gap down' }, { symbol: 'SPY', news: 'small gap down' }],
+        '8/10/2022': [
+            { symbol: 'TSLA', news: 'elon done selling' }, { symbol: 'RBLX', news: 'earnings' },
+            { symbol: 'TTD', news: 'earnings' }, { symbol: 'NVAX', news: 'price cuts' },
+            { symbol: 'QQQ', news: 'CPI good' }, { symbol: 'SPY', news: 'CPI good' }],
+        '8/12/2022': [
+            { symbol: 'BABA', news: 'china news' }, { symbol: 'ILMN', news: 'earnings' },
+            { symbol: 'QQQ', news: 'consumer sentiment' }, { symbol: 'SPY', news: 'consumer sentiment' }],
     }
 };
