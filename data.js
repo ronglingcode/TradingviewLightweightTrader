@@ -92,5 +92,10 @@ window.TradingData = {
         '7/28/2022': [
             { symbol: 'TSLA', news: 'energy bill' }, { symbol: 'META', news: 'earnings' },
             { symbol: 'QQQ', news: 'gdp numbers' }, { symbol: 'SPY', news: 'gdp numbers' }],
+        '7/29/2022': [
+            { symbol: 'ROKU', news: 'earnings' }, { symbol: 'BABA', news: 'Jack Ma give up ant control' },
+            { symbol: 'AAPL', news: 'earnings' }, { symbol: 'AMZN', news: 'earnings' },
+            { symbol: 'INTC', news: 'earnings' }, { symbol: 'TSLA', news: 'market move' },
+            { symbol: 'QQQ', news: 'PCE numbers' }, { symbol: 'SPY', news: 'PCE numbers' }],
     }
 };
