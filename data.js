@@ -97,5 +97,30 @@ window.TradingData = {
             { symbol: 'AAPL', news: 'earnings' }, { symbol: 'AMZN', news: 'earnings' },
             { symbol: 'INTC', news: 'earnings' }, { symbol: 'TSLA', news: 'market move' },
             { symbol: 'QQQ', news: 'PCE numbers' }, { symbol: 'SPY', news: 'PCE numbers' }],
+        '8/1/2022': [
+            { symbol: 'BA', news: 'clear delivery' }, { symbol: 'TSLA', news: 'chinese EV delivery numbers' },
+            { symbol: 'QQQ', news: 'US china news' }, { symbol: 'SPY', news: 'US china news' }],
+        '8/2/2022': [
+            { symbol: 'PINS', news: 'earnings' }, { symbol: 'SNOW', news: 'downgrade' },
+            { symbol: 'QQQ', news: 'US china news' }, { symbol: 'SPY', news: 'US china news' }],
+        '8/3/2022': [
+            { symbol: 'PYPL', news: 'earnings' }, { symbol: 'MTCH', news: 'earnings' },
+            { symbol: 'AMD', news: 'earnings' }, { symbol: 'NVDA', news: 'AMD earnings' },
+            { symbol: 'QQQ', news: 'FED says soft landing' }, { symbol: 'SPY', news: 'FED says soft landing' }],
+        '8/5/2022': [
+            { symbol: 'TWLO', news: 'earnings' }, { symbol: 'NET', news: 'AMD earnings' },
+            { symbol: 'SQ', news: 'earnings' }, { symbol: 'DASH', news: 'earnings' },
+            { symbol: 'QQQ', news: 'nonfarm payroll' }, { symbol: 'SPY', news: 'nonfarm payroll' }],
+        '8/9/2022': [
+            { symbol: 'NVAX', news: 'guidance down' }, { symbol: 'UPST', news: 'earnings' },
+            { symbol: 'TSLA', news: 'delivery numbers' }, { symbol: 'U', news: 'Chatter' },
+            { symbol: 'QQQ', news: 'small gap down' }, { symbol: 'SPY', news: 'small gap down' }],
+        '8/10/2022': [
+            { symbol: 'TSLA', news: 'elon done selling' }, { symbol: 'RBLX', news: 'earnings' },
+            { symbol: 'TTD', news: 'earnings' }, { symbol: 'NVAX', news: 'price cuts' },
+            { symbol: 'QQQ', news: 'CPI good' }, { symbol: 'SPY', news: 'CPI good' }],
+        '8/12/2022': [
+            { symbol: 'BABA', news: 'china news' }, { symbol: 'ILMN', news: 'earnings' },
+            { symbol: 'QQQ', news: 'consumer sentiment' }, { symbol: 'SPY', news: 'consumer sentiment' }],
     }
 };
