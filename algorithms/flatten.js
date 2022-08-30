@@ -20,6 +20,9 @@ window.TradingApp.Algo.Flatten = (function () {
     };
 
     const flattenPosition = async (symbol) => {
+        if (!window.TradingApp.Algo.Flatten.checkRules(symbol)) {
+            return;
+        }
         if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
         }
