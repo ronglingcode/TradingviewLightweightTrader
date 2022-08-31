@@ -7,11 +7,11 @@ window.TradingApp = {
     },
     'Algo': {},
     'StockCandidates': {
-        'ILMN': {
-            volumeSum: 93093, tradingSum: 18023663, premktHigh: 0, premktLow: 99999999,
+        'SNAP': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 198, boxdown: 194
+            boxup: 0, boxdown: 0
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
@@ -23,11 +23,11 @@ window.TradingApp = {
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'U': {
-            volumeSum: 1414602, tradingSum: 76244990, premktHigh: 0, premktLow: 99999999,
+        'CHWY': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 56.25, boxdown: 52,
+            boxup: 34, boxdown: 33,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },

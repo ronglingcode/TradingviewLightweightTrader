@@ -122,5 +122,8 @@ window.TradingData = {
         '8/12/2022': [
             { symbol: 'BABA', news: 'china news' }, { symbol: 'ILMN', news: 'earnings' },
             { symbol: 'QQQ', news: 'consumer sentiment' }, { symbol: 'SPY', news: 'consumer sentiment' }],
+        '8/31/2022': [
+            { symbol: 'SNAP', news: 'layoff news' }, { symbol: 'BABA', news: 'china news' },
+            { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
     }
 };
