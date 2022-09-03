@@ -122,5 +122,18 @@ window.TradingData = {
         '8/12/2022': [
             { symbol: 'BABA', news: 'china news' }, { symbol: 'ILMN', news: 'earnings' },
             { symbol: 'QQQ', news: 'consumer sentiment' }, { symbol: 'SPY', news: 'consumer sentiment' }],
+        '8/31/2022': [
+            { symbol: 'SNAP', news: 'layoff news' }, { symbol: 'BABA', news: 'china news' },
+            { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
+        '9/1/2022': [
+            { symbol: 'OKTA', news: 'earnings' }, { symbol: 'MDB', news: 'earnings' },
+            { symbol: 'NVDA', news: 'china license' }, { symbol: 'AMD', news: 'NVDA news' },
+            { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
+        '9/2/2022': [
+            { symbol: 'TSLA', news: 'new month sales' }, { symbol: 'LULU', news: 'earnings' },
+            { symbol: 'AAPL', news: 'xiao lang pick' },
+            { symbol: 'BABA', news: 'china lockdown' },
+            { symbol: 'NVDA', news: 'downgrade' },
+            { symbol: 'QQQ', news: 'non farm payroll' }, { symbol: 'SPY', news: 'non farm payroll' }],
     }
 };
