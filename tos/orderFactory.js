@@ -350,6 +350,57 @@ window.TradingApp.OrderFactory = (function () {
         });
         return workingOrders;
     };
+
+    /*
+        extract exit orders and put them into pairs
+        return a list of pairs
+        each pair has a stop order and a limit order
+        it only expects triggered OTO orders
+        output: [
+            {
+                'stop':{}, 
+                'limit':{}
+            },
+        ]
+    */
+    const extractWorkingExitPairs = (orders) => {
+        let exitOrders = [];
+        orders.forEach(order => {
+            if (!isFilledOTO(order))
+                return;
+
+            // OTO should have only one child order as OCO
+            if (order.childOrderStrategies.length != 1) {
+                window.TradingApp.Firestore.logError(`OTO should have only 1 child order, but got ${order.childOrderStrategies.length} instead`);
+                return;
+            }
+            let firstChild = order.childOrderStrategies[0];
+            if (firstChild.orderStrategyType != OrderStrategyType.OCO) {
+                window.TradingApp.Firestore.logError(`OTO child is not OCO, but ${firstChild.orderStrategyType} instead`);
+                return;
+            }
+            let children = extractWorkingChildOrdersFromOCO(firstChild);
+            if (children.length != 2) {
+                window.TradingApp.Firestore.logError(`OCO should have 2 legs, but got ${children.length} instead`);
+            }
+            let exitPair = {
+                'STOP': {},
+                'LIMIT': {},
+            };
+            children.forEach(childOrder => {
+                let orderType = childOrder.orderType;
+                exitPair[orderType] = childOrder
+            });
+
+            exitOrders.push(exitPair);
+        });
+        return exitOrders;
+    };
+
+    const isFilledOTO = (order) => {
+        return order.orderStrategyType === OrderStrategyType.TRIGGER && order.status === "FILLED";
+    };
+
     const extractWorkingChildOrdersFromOCO = (oco) => {
         let workingChildOrders = [];
         oco.childOrderStrategies.forEach(order => {
@@ -436,6 +487,7 @@ window.TradingApp.OrderFactory = (function () {
         extractStopOrders,
         extractOrderPrice,
         extractFilledOrders,
+        extractWorkingExitPairs,
         isBuyOrder,
         isSellOrder,
         getOrderTypeShortString,
