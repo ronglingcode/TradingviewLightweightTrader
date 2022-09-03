@@ -262,13 +262,21 @@ window.TradingApp.OrderFactory = (function () {
         return ids;
     };
 
-    const extractEntryOrdersIds = (orders) => {
+    const extractEntryOrders = (orders) => {
         // assume entry orders are all OTO orders
-        let ids = [];
+        let entryOrders = [];
         orders.forEach(order => {
             if (order.cancelable && order.orderStrategyType == OrderStrategyType.TRIGGER) {
-                ids.push(order.orderId);
+                entryOrders.push(order);
             }
+        });
+        return entryOrders;
+    };
+    const extractEntryOrdersIds = (orders) => {
+        let entryOrders = extractEntryOrders(orders);
+        let ids = [];
+        entryOrders.forEach(order => {
+            ids.push(order.orderId);
         });
         return ids;
     };
@@ -483,6 +491,7 @@ window.TradingApp.OrderFactory = (function () {
         filterWorkingOrders,
         extractAllCancelableOrdersIds,
         extractTopLevelCancelableOrdersIds,
+        extractEntryOrders,
         extractEntryOrdersIds,
         extractStopOrders,
         extractOrderPrice,
