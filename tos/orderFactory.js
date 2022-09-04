@@ -394,6 +394,7 @@ window.TradingApp.OrderFactory = (function () {
             let exitPair = {
                 'STOP': {},
                 'LIMIT': {},
+                'source': 'OTO' // the top level order is OTO
             };
             children.forEach(childOrder => {
                 let orderType = childOrder.orderType;
