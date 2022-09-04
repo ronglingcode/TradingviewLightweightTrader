@@ -263,80 +263,98 @@ window.TradingApp.Chart = (function () {
         widget.filledPriceLine = createPriceLine(widget.candleSeries, price, "Filled", "black");
     };
 
-    const drawWorkingOrders = async (symbol, account, widget) => {
-        // clear previous orders before re-draw every order
-        if (widget.workingOrdersPriceLines && widget.workingOrdersPriceLines.length > 0) {
-            widget.workingOrdersPriceLines.forEach(l => {
+    const clearDrawnOrders = (widget, widgetPriceLines) => {
+        if (widgetPriceLines && widgetPriceLines.length > 0) {
+            widgetPriceLines.forEach(l => {
                 widget.candleSeries.removePriceLine(l);
             });
-            widget.htmlContents.exitOrders.innerText = "Exits:";
+            widgetPriceLines = [];
         }
-        widget.workingOrdersPriceLines = [];
-        widget.workingOrders = [];
+    };
+
+    const createDrawingOrder = (symbol, order, entryPrice) => {
+        let price = window.TradingApp.OrderFactory.extractOrderPrice(order, symbol);
+        let orderInstruction = order.orderLegCollection[0].instruction;
+        let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
+        let color = isBuyOrder ? 'green' : 'red';
+        let q = Math.abs(order.quantity);
+        let isLongPosition = !isBuyOrder; // assume buy order is buy to cover
+        let riskMultiples = getRiskMultiplesForDisplay(symbol, isLongPosition, entryPrice, q);
+        return {
+            'price': price,
+            'color': color,
+            'isBuyOrder': isBuyOrder,
+            'orderType': order.orderType,
+            'q': q,
+            'riskMultiples': riskMultiples,
+            'orderData': order
+        };
+    };
+
+    const getRiskMultiplesForDisplay = (symbol, isLongPosition, entryPrice, quantity) => {
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+        let riskManager = window.TradingApp.Algo.RiskManager;
+        let riskMultiples = 100;
+        if (isLongPosition) {
+            riskMultiples = riskManager.quantityToRiskMultiples(symbolData.highOfDay - entryPrice, quantity);
+        } else {
+            riskMultiples = riskManager.quantityToRiskMultiples(entryPrice - symbolData.lowOfDay, quantity);
+        }
+        return riskMultiples;
+    };
+
+    const drawWorkingOrders = async (symbol, account, widget) => {
+        // clear previous orders before re-draw every order
+        clearDrawnOrders(widget, widget.entryOrdersPriceLines);
+        widget.entryOrdersPriceLines = [];
+        widget.entryOrders = [];
+
+        clearDrawnOrders(widget, widget.exitOrdersPriceLines);
+        widget.htmlContents.exitOrders.innerText = "Exits:";
+        widget.exitOrdersPriceLines = [];
+        widget.exitOrderPairs = [];
 
         if (account.orders.length === 0)
             return;
-        let orders = window.TradingApp.OrderFactory.filterWorkingOrders(account.orders);
-        if (orders.length === 0)
-            return;
-        orders.sort(function (a, b) {
-            if (a.orderType > b.orderType) {
-                return 1;
-            } else if (a.orderType < b.orderType) {
-                return -1;
-            } else {
-                return a.quantity - b.quantity;
-            }
-        });
 
-        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
-        let riskManager = window.TradingApp.Algo.RiskManager;
+        let exitOrderPairs = window.TradingApp.OrderFactory.extractWorkingExitPairs(account.orders);
+        widget.exitOrderPairs = exitOrderPairs;
+        let entryOrders = window.TradingApp.OrderFactory.extractEntryOrders(account.orders);
+        widget.entryOrders = entryOrders;
+
+        if (entryOrders.length === 0 && exitOrderPairs.length === 0)
+            return;
 
         let exitOrdersString = "Exits: ";
-        for (let i = 0; i < orders.length; i++) {
-            let price = window.TradingApp.OrderFactory.extractOrderPrice(orders[i], symbol);
-            let orderInstruction = orders[i].orderLegCollection[0].instruction;
-            let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
-            let color = 'green';
-            let orderTypeString = window.TradingApp.OrderFactory.getOrderTypeShortString(orders[i].orderType);
-            let q = orders[i].quantity;
-            let entryPrice = orders[i].stopPrice;
-            let riskMultiples = 100;
-            // has positions, working orders are exit orders
-            if (account.position && account.position.averagePrice) {
-                entryPrice = account.position.averagePrice;
-            }
-            riskMultiples = riskManager.quantityToRiskMultiples(entryPrice - symbolData.lowOfDay, q);
-            if (!isBuyOrder) {
-                riskMultiples = riskManager.quantityToRiskMultiples(symbolData.highOfDay - entryPrice, q);
-                color = 'red';
-                q = -q;
-                riskMultiples = -riskMultiples;
-            }
-            let hasOrdersAtSamePrice = false;
-            for (let j = 0; j < widget.workingOrdersPriceLines.length; j++) {
-                let oldPriceLine = widget.workingOrdersPriceLines[j];
-                if (oldPriceLine.options().price === price) {
-                    hasOrdersAtSamePrice = true;
-                    // assume it's the same order type
-                    let text = `${i + 1}: (${q})`;
-                    text = `${i + 1}: (${riskMultiples}%)`;
-                    oldPriceLine.applyOptions({
-                        ...oldPriceLine.options(),
-                        title: oldPriceLine.options().title + "," + text
-                    })
-                    break;
+        // draw exit orders
+        for (let i = 0; i < exitOrderPairs.length; i++) {
+            //let entryPrice = orders[i].stopPrice;
+            let entryPrice = account.position.averagePrice;
+            let drawingStopOrder = createDrawingOrder(symbol, exitOrderPairs[i]['STOP'], entryPrice);
+            let drawingLimitOrder = createDrawingOrder(symbol, exitOrderPairs[i]['LIMIT'], entryPrice);
+            let text = `${i + 1}: (${drawingStopOrder.riskMultiples}%)`;
+            exitOrdersString += text;
+
+            let ordersToDraw = [drawingStopOrder, drawingLimitOrder];
+            ordersToDraw.forEach(orderToDraw => {
+                let hasOrdersAtSamePrice = false;
+                for (let j = 0; j < widget.exitOrdersPriceLines.length; j++) {
+                    let oldPriceLine = widget.exitOrdersPriceLines[j];
+                    if (oldPriceLine.options().price === orderToDraw.price) {
+                        hasOrdersAtSamePrice = true;
+                        oldPriceLine.applyOptions({
+                            ...oldPriceLine.options(),
+                            title: oldPriceLine.options().title + "," + text
+                        })
+                        break;
+                    }
                 }
-            }
-            if (!hasOrdersAtSamePrice) {
-                let l = createPriceLine(widget.candleSeries, price, `${i + 1}: ${orderTypeString}(${riskMultiples}%)`, color);
-                l.orderData = orders[i];
-                widget.workingOrdersPriceLines.push(l);
-            }
-            widget.workingOrders.push(orders[i]);
-            if (orderTypeString == "Lmt") {
-                exitOrdersString += `${i + 1}(${riskMultiples}%),`;
-            }
+                if (!hasOrdersAtSamePrice) {
+                    let l = createPriceLine(widget.candleSeries, orderToDraw.price, text, orderToDraw.color);
+                    l.orderData = orderToDraw.orderData; // debug info, not used for now
+                    widget.exitOrdersPriceLines.push(l);
+                }
+            });
         }
         widget.htmlContents.exitOrders.innerText = exitOrdersString;
     };
