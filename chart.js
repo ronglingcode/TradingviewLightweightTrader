@@ -272,13 +272,18 @@ window.TradingApp.Chart = (function () {
         }
     };
 
-    const createDrawingOrder = (symbol, order, entryPrice) => {
+    const createDrawingOrder = (symbol, order, entryPrice, orderClosePositions) => {
         let price = window.TradingApp.OrderFactory.extractOrderPrice(order, symbol);
         let orderInstruction = order.orderLegCollection[0].instruction;
         let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
         let color = isBuyOrder ? 'green' : 'red';
         let q = Math.abs(order.quantity);
-        let isLongPosition = !isBuyOrder; // assume buy order is buy to cover
+        let isLongPosition = !isBuyOrder;
+        if (orderClosePositions) {
+            isLongPosition = !isBuyOrder;
+        } else {
+            isLongPosition = isBuyOrder;
+        }
         let riskMultiples = getRiskMultiplesForDisplay(symbol, isLongPosition, entryPrice, q);
         return {
             'price': price,
@@ -328,10 +333,9 @@ window.TradingApp.Chart = (function () {
         let exitOrdersString = "Exits: ";
         // draw exit orders
         for (let i = 0; i < exitOrderPairs.length; i++) {
-            //let entryPrice = orders[i].stopPrice;
             let entryPrice = account.position.averagePrice;
-            let drawingStopOrder = createDrawingOrder(symbol, exitOrderPairs[i]['STOP'], entryPrice);
-            let drawingLimitOrder = createDrawingOrder(symbol, exitOrderPairs[i]['LIMIT'], entryPrice);
+            let drawingStopOrder = createDrawingOrder(symbol, exitOrderPairs[i]['STOP'], entryPrice, true);
+            let drawingLimitOrder = createDrawingOrder(symbol, exitOrderPairs[i]['LIMIT'], entryPrice, true);
             let text = `${i + 1}: (${drawingStopOrder.riskMultiples}%)`;
             exitOrdersString += text;
 
@@ -357,6 +361,20 @@ window.TradingApp.Chart = (function () {
             });
         }
         widget.htmlContents.exitOrders.innerText = exitOrdersString;
+
+        if (entryOrders.length > 0) {
+            // assume all entry orders are the same price
+            // assume all entry orders are stop orders
+            let entryPrice = entryOrders[i].stopPrice;
+            let firstEntryOrderToDraw = createDrawingOrder(symbol, entryOrders[0], entryPrice, false);
+            for (let i = i; i < entryOrders.length; i++) {
+                let nextEntryORderToDraw = createDrawingOrder(symbol, entryOrders[i], entryPrice, false);
+                firstEntryOrderToDraw.riskMultiples += nextEntryORderToDraw.riskMultiples;
+            }
+            let l = createPriceLine(widget.candleSeries, firstEntryOrderToDraw.price, `entry: (${drawingStopOrder.riskMultiples}%)`, firstEntryOrderToDraw.color);
+            l.orderData = firstEntryOrderToDraw.orderData; // debug info, not used for now
+            widget.entryOrdersPriceLines.push(l);
+        }
     };
     const setup = () => {
         for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
