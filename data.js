@@ -135,5 +135,8 @@ window.TradingData = {
             { symbol: 'BABA', news: 'china lockdown' },
             { symbol: 'NVDA', news: 'downgrade' },
             { symbol: 'QQQ', news: 'non farm payroll' }, { symbol: 'SPY', news: 'non farm payroll' }],
+        '9/6/2022': [
+            { symbol: 'TSLA', news: 'upgrade' }, { symbol: 'AAPL', news: 'new product conference' },
+            { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
     }
 };
