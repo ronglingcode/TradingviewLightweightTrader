@@ -6,6 +6,7 @@ window.TradingApp = {
         'maxStocksCount': 8
     },
     'Algo': {},
+    'Controller': {},
     'StockCandidates': {
         'AAPL': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
