@@ -20,10 +20,12 @@ window.TradingApp.Controller.OrderFlow = (function () {
         let lastCandle = candles[candles.length - 1];
         let currentPrice = lastCandle.close;
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
-        let order = null;
-
-
-        let order = pair['STOP'];
+        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+        let order = pair['LIMIT'];
+        if ((netQuantity > 0 && newPrice < currentPrice) ||
+            (netQuantity < 0 && newPrice > currentPrice)) {
+            order = pair['STOP'];
+        }
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
@@ -34,19 +36,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
         let oldOrderId = order.orderId;
         order.orderId = null;
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
-        if (order.parentOrderId && order.siblingOrder) {
-            // adjust OCO order, need to candel the parent order and 
-            // submit a new OCO order with 2 legs
-            let newLeg = newOrder;
-            let otherLeg = window.TradingApp.OrderFactory.copyOrder(order.siblingOrder);
-            cancelOrderById(order.parentOrderId);
-            console.log(`cancel ${order.parentOrderId}`);
-            let orderToSubmit = window.TradingApp.OrderFactory.createOcoOrderFromTwoLegs(newLeg, otherLeg);
-            console.log(orderToSubmit);
-            submitOrderAfterCancel(symbol, [order.parentOrderId], orderToSubmit, startTime);
-        } else {
-            replaceOrderBase(newOrder, oldOrderId);
-        }
+        replaceOrderBase(newOrder, oldOrderId);
     };
     return {
         adjustExitOrdersPairWithNewPrice
