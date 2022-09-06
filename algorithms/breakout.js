@@ -65,18 +65,17 @@ window.TradingApp.Algo.Breakout = (function () {
             return 1;
         } else {
             // 5 trades now, only allow add to existing positions
-            let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
-            let position = account.position;
-            if (!position) {
+            let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+            if (netQuantity == 0) {
                 // new position, disallow
                 window.TradingApp.Firestore.logDebug(`no more than 5 trades/day for new position`);
                 return 0;
             }
-            if (position.longQuantity > 0 && isLong) {
+            if (netQuantity > 0 && isLong) {
                 window.TradingApp.Firestore.logDebug(`add to existing long positions `);
                 return 1;
             }
-            else if (position.shortQuantity > 0 && !isLong) {
+            else if (netQuantity < 0 && !isLong) {
                 window.TradingApp.Firestore.logDebug(`add to existing short positions`);
                 return 1;
             }

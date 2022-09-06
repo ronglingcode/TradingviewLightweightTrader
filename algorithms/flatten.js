@@ -32,16 +32,12 @@ window.TradingApp.Algo.Flatten = (function () {
     };
 
     const swapPosition = async (symbol) => {
-        let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
-        let position = account.position;
-        let isLong = true;
-        if (position.longQuantity > 0) {
-            isLong = true;
-        } else if (position.shortQuantity > 0) {
-            isLong = false;
-        } else {
+        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+        if (netQuantity == 0) {
             return;
         }
+        let isLong = netQuantity > 0;
+
         flattenPosition(symbol);
         // entry orders and exit orders can submit at the same time
         let code = isLong ? 'KeyB' : 'KeyS';
