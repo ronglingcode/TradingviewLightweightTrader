@@ -16,11 +16,11 @@ window.TradingApp = {
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'LULU': {
+        'DWAC': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 93, boxdown: 91,
+            boxup: 21, boxdown: 18.5,
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
@@ -32,8 +32,8 @@ window.TradingApp = {
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'RBLX': {
-            volumeSum: 2356639, tradingSum: 98459952, premktHigh: 0, premktLow: 99999999,
+        'BBBY': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
             boxup: 44.25, boxdown: 42,
@@ -43,8 +43,8 @@ window.TradingApp = {
         'TSLA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
-            deferTrading: true,
-            boxup: 870, boxdown: 866,
+            deferTrading: false,
+            boxup: 273.5, boxdown: 270,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },

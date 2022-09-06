@@ -333,6 +333,9 @@ window.TradingApp.Chart = (function () {
         let exitOrdersString = "Exits: ";
         // draw exit orders
         for (let i = 0; i < exitOrderPairs.length; i++) {
+            if (exitOrderPairs[i]['source'] != 'OTO') {
+                window.TradingApp.Firestore.logError(`exit order pair is not from OTO, got ${exitOrderPairs[i]} instead`);
+            }
             let entryPrice = account.position.averagePrice;
             let drawingStopOrder = createDrawingOrder(symbol, exitOrderPairs[i]['STOP'], entryPrice, true);
             let drawingLimitOrder = createDrawingOrder(symbol, exitOrderPairs[i]['LIMIT'], entryPrice, true);

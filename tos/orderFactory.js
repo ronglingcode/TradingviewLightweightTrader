@@ -388,6 +388,9 @@ window.TradingApp.OrderFactory = (function () {
                 return;
             }
             let children = extractWorkingChildOrdersFromOCO(firstChild);
+            if (children.length == 0) {
+                return; // all child legs are filled.
+            }
             if (children.length != 2) {
                 window.TradingApp.Firestore.logError(`OCO should have 2 legs, but got ${children.length} instead`);
             }

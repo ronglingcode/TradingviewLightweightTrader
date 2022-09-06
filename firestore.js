@@ -173,6 +173,24 @@ window.TradingApp.Firestore = (function () {
         return account;
     };
 
+    // return 0 if no position
+    // return +x if long position
+    // return -x if short position
+    const getPositionNetQuantity = (symbol) => {
+        let account = getAccountForSymbol(symbol);
+        let position = account.position;
+        if (!position) {
+            return 0;
+        }
+        if (position.longQuantity > 0) {
+            return position.longQuantity;
+        }
+        else if (position.shortQuantity > 0) {
+            return -position.shortQuantity;
+        }
+        return 0;
+    };
+
     return {
         addToLogView,
         logDebug,
@@ -193,6 +211,7 @@ window.TradingApp.Firestore = (function () {
         removeLastPinnedTarget,
         getPinnedTargets,
         getCache,
-        getAccountForSymbol
+        getAccountForSymbol,
+        getPositionNetQuantity
     };
 })();
