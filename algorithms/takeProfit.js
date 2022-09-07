@@ -100,14 +100,23 @@ window.TradingApp.Algo.TakeProfit = (function () {
     };
 
     const getDefaultProfitTargets = (symbol, remainingPercentage, basePrice, stopOut) => {
-        /* set as:
+        /* old default:
          * 1.0 15%
          * 2.0 45%
          * 3.0 22%
          * 4.0 18%
+         * new default:
+         * 1.0 12.5%
+         * 1.5 12.5%
+         * 1.9 12.5%
+         * 1.9 12.5%
+         * 2.1 12.5%
+         * 2.1 12.5%
+         * 3.0 12.5%
+         * 4.0 12.5%
         */
-        let rrr = [1.0, 2.0, 3, 4];
-        let percentage = [0.15, 0.45, 0.22, 0.18];
+        let rrr = [1.0, 1.5, 1.9, 1.9, 2.1, 2.1, 3, 4];
+        let percentage = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125];
         for (let i = 0; i < percentage.length; i++) {
             percentage[i] = percentage[i] * remainingPercentage;
         }
