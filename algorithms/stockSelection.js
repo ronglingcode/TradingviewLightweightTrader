@@ -1,7 +1,7 @@
 window.TradingApp.Algo.StockSelection = (function () {
     const checkRuleForLowFloat = async (symbol) => {
         let fundamental = await window.TradingApp.TOS.getFundamentals(symbol);
-        if (fundamental.marketCapFloat < 90) {
+        if (fundamental.marketCapFloat < 90 && fundamental.marketCapFloat != 0) {
             window.TradingApp.Firestore.logError(`${symbol} market cap float: ${fundamental.marketCapFloat}`);
             return false;
         } else {
