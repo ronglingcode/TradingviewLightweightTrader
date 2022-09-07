@@ -330,6 +330,18 @@ window.TradingApp.Chart = (function () {
         if (entryOrders.length === 0 && exitOrderPairs.length === 0)
             return;
 
+        exitOrderPairs.sort(function (a, b) {
+            let limitA = a['LIMIT'];
+            let limitB = b['LIMIT'];
+            let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(limitB.orderLegCollection[0].instruction);
+            let isLong = !isBuyOrder;
+            if (isLong) {
+                return limitA.price - limitB.price;
+            } else {
+                return limitB.price - limitA.price;
+            }
+        });
+
         let exitOrdersString = "Exits: ";
         // draw exit orders
         for (let i = 0; i < exitOrderPairs.length; i++) {
