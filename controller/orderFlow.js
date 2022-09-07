@@ -38,7 +38,40 @@ window.TradingApp.Controller.OrderFlow = (function () {
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
         replaceOrderBase(newOrder, oldOrderId);
     };
+
+    const marketOutExitOrderPair = async (symbol, keyCode) => {
+        // "Numpad1" -> 1, "Numpad2" -> 2
+        window.TradingApp.Firestore.logDebug(`Marketout exit order pair for ${symbol}`);
+        let startTime = new Date();
+        let orderNumber = parseInt(keyCode[6]);
+        if (keyCode == "Numpad0") {
+            orderNumber = 10;
+        }
+
+        let widget = window.TradingApp.Main.widgets[symbol];
+        if (widget.exitOrderPairs.length < orderNumber) {
+            window.TradingApp.Firestore.logInfo("out of range");
+            return;
+        }
+
+        let pair = widget.exitOrderPairs[orderNumber - 1];
+        let stopOrderPrice = pair['STOP'].stopPrice;
+        let order = pair['LIMIT'];
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
+        if (!allowed) {
+            window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
+            return;
+        }
+        window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
+
+        let oldOrderId = order.orderId;
+        order.orderId = null;
+        let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, stopOrderPrice);
+        replaceOrderBase(newOrder, oldOrderId);
+    };
+
     return {
-        adjustExitOrdersPairWithNewPrice
+        adjustExitOrdersPairWithNewPrice,
+        marketOutExitOrderPair
     };
 })();
