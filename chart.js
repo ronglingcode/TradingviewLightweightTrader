@@ -341,7 +341,7 @@ window.TradingApp.Chart = (function () {
                 return limitB.price - limitA.price;
             }
         });
-
+        widget.exitOrderPairs = exitOrderPairs;
         let exitOrdersString = "Exits: ";
         // draw exit orders
         for (let i = 0; i < exitOrderPairs.length; i++) {
@@ -380,13 +380,13 @@ window.TradingApp.Chart = (function () {
         if (entryOrders.length > 0) {
             // assume all entry orders are the same price
             // assume all entry orders are stop orders
-            let entryPrice = entryOrders[i].stopPrice;
+            let entryPrice = entryOrders[0].stopPrice;
             let firstEntryOrderToDraw = createDrawingOrder(symbol, entryOrders[0], entryPrice, false);
-            for (let i = i; i < entryOrders.length; i++) {
+            for (let i = 1; i < entryOrders.length; i++) {
                 let nextEntryORderToDraw = createDrawingOrder(symbol, entryOrders[i], entryPrice, false);
                 firstEntryOrderToDraw.riskMultiples += nextEntryORderToDraw.riskMultiples;
             }
-            let l = createPriceLine(widget.candleSeries, firstEntryOrderToDraw.price, `entry: (${drawingStopOrder.riskMultiples}%)`, firstEntryOrderToDraw.color);
+            let l = createPriceLine(widget.candleSeries, firstEntryOrderToDraw.price, `entry: (${firstEntryOrderToDraw.riskMultiples}%)`, firstEntryOrderToDraw.color);
             l.orderData = firstEntryOrderToDraw.orderData; // debug info, not used for now
             widget.entryOrdersPriceLines.push(l);
         }
