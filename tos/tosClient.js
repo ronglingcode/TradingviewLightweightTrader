@@ -566,6 +566,7 @@ window.TradingApp.TOS = (function () {
         initialized,
         userPrincipal,
         placeOrderBase,
+        replaceOrderBase,
         adjustOrderWithNewPrice,
         reduceOrderQuantityByHalf,
         adjustStopOrders,

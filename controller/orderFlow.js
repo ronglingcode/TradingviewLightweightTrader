@@ -36,13 +36,12 @@ window.TradingApp.Controller.OrderFlow = (function () {
         let oldOrderId = order.orderId;
         order.orderId = null;
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
-        replaceOrderBase(newOrder, oldOrderId);
+        window.TradingApp.TOS.replaceOrderBase(newOrder, oldOrderId);
     };
 
     const marketOutExitOrderPair = async (symbol, keyCode) => {
         // "Numpad1" -> 1, "Numpad2" -> 2
         window.TradingApp.Firestore.logDebug(`Marketout exit order pair for ${symbol}`);
-        let startTime = new Date();
         let orderNumber = parseInt(keyCode[6]);
         if (keyCode == "Numpad0") {
             orderNumber = 10;
@@ -53,9 +52,12 @@ window.TradingApp.Controller.OrderFlow = (function () {
             window.TradingApp.Firestore.logInfo("out of range");
             return;
         }
-
         let pair = widget.exitOrderPairs[orderNumber - 1];
-        let stopOrderPrice = pair['STOP'].stopPrice;
+        instantOutOneExitPair(symbol, pair);
+    }
+
+    // Replace one leg with market order
+    const instantOutOneExitPair = async (symbol, pair) => {
         let order = pair['LIMIT'];
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
         if (!allowed) {
@@ -65,13 +67,30 @@ window.TradingApp.Controller.OrderFlow = (function () {
         window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
 
         let oldOrderId = order.orderId;
-        order.orderId = null;
-        let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, stopOrderPrice);
-        replaceOrderBase(newOrder, oldOrderId);
+        let orderLeg = order.orderLegCollection[0];
+        let quantity = orderLeg.quantity;
+        let orderToSubmit = window.TradingApp.OrderFactory.createMarketOrder(symbol, quantity, orderLeg.instruction);
+        window.TradingApp.TOS.replaceOrderBase(orderToSubmit, oldOrderId);
+    };
+
+    const marketOutHalfExitOrders = async (symbol) => {
+        let widget = TradingApp.Main.widgets[symbol];
+        let pairs = widget.exitOrderPairs;
+        // TODO: check rule, only used once
+        let pairsToExit = [];
+        for (let i = 0; i < pairs.length; i++) {
+            if (i % 2 == 1)
+                continue;
+            pairsToExit.push(pairs[i]);
+        }
+        pairsToExit.forEach(pte => {
+            instantOutOneExitPair(symbol, pte);
+        });
     };
 
     return {
         adjustExitOrdersPairWithNewPrice,
-        marketOutExitOrderPair
+        marketOutExitOrderPair,
+        marketOutHalfExitOrders,
     };
 })();

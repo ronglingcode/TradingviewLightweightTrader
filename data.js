@@ -138,5 +138,7 @@ window.TradingData = {
         '9/6/2022': [
             { symbol: 'TSLA', news: 'upgrade' }, { symbol: 'AAPL', news: 'new product conference' },
             { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
+        '9/7/2022': [
+            { symbol: 'UPRO', news: 'gap up' }],
     }
 };

@@ -181,7 +181,11 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         window.TradingApp.TOS.adjustStopOrders(symbol);
     } else if (code === 'KeyG') {
         let marketOut = keyboardEvent.shiftKey;
-        window.TradingApp.TOS.reduceOrderQuantityByHalf(symbol, marketOut);
+        if (marketOut) {
+            window.TradingApp.Controller.OrderFlow.marketOutHalfExitOrders(symbol);
+        } else {
+            window.TradingApp.TOS.reduceOrderQuantityByHalf(symbol, marketOut);
+        }
     } else if (code === 'KeyW') {
         window.TradingApp.Algo.Flatten.swapPosition(symbol);
         window.TradingApp.Firestore.logInfo("swap for " + symbol);
