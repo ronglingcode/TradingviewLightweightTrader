@@ -300,7 +300,7 @@ window.TradingApp.Chart = (function () {
         let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
         let riskManager = window.TradingApp.Algo.RiskManager;
         let riskMultiples = 100;
-        if (isLongPosition) {
+        if (!isLongPosition) {
             riskMultiples = riskManager.quantityToRiskMultiples(symbolData.highOfDay - entryPrice, quantity);
         } else {
             riskMultiples = riskManager.quantityToRiskMultiples(entryPrice - symbolData.lowOfDay, quantity);
@@ -386,7 +386,7 @@ window.TradingApp.Chart = (function () {
                 let nextEntryORderToDraw = createDrawingOrder(symbol, entryOrders[i], entryPrice, false);
                 firstEntryOrderToDraw.riskMultiples += nextEntryORderToDraw.riskMultiples;
             }
-            let l = createPriceLine(widget.candleSeries, firstEntryOrderToDraw.price, `entry: (${firstEntryOrderToDraw.riskMultiples}%)`, firstEntryOrderToDraw.color);
+            let l = createPriceLine(widget.candleSeries, firstEntryOrderToDraw.price, `entry: ${firstEntryOrderToDraw.riskMultiples}%`, firstEntryOrderToDraw.color);
             l.orderData = firstEntryOrderToDraw.orderData; // debug info, not used for now
             widget.entryOrdersPriceLines.push(l);
         }
