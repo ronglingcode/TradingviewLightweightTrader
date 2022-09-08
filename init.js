@@ -2,7 +2,6 @@ window.TradingApp = {
     'Settings': {
         'currentDay': new Date(), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
-        'preMarketTrading': false,
         'maxStocksCount': 8
     },
     'Algo': {},
