@@ -157,17 +157,14 @@ window.TradingApp.Algo.Breakout = (function () {
 
     const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
         let orders = [];
-        if (window.TradingApp.Settings.preMarketTrading) {
-            orders = window.TradingApp.OrderFactory.createPreMarketOrderWithFixedRisk(symbol, entryPrice, stopOut, setupQuality, multiplier);
-        } else {
-            let checkResult = checkRules(symbol, entryPrice, stopOut);
-            if (checkResult == 0) {
-                return;
-            }
-            multiplier = multiplier * checkResult;
-            let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
-            orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
+        let checkResult = checkRules(symbol, entryPrice, stopOut);
+        if (checkResult == 0) {
+            return;
         }
+        multiplier = multiplier * checkResult;
+        let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
+        orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
+
         orders.forEach(order => {
             window.TradingApp.TOS.placeOrderBase(order);
         });
