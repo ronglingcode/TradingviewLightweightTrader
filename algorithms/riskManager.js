@@ -33,6 +33,24 @@ window.TradingApp.Algo.RiskManager = (function () {
         let riskMultiples = riskSize / DefaultMaxRiskPerTrade * 100;
         return Math.round(riskMultiples);
     };
+    const getExistingRiskMultiples = (symbol, account) => {
+        if (!account || !account.position)
+            return 0;
+        let position = account.position;
+        let filledPrice = position.averagePrice;
+        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
+
+        if (position.longQuantity) {
+            let riskPerShare = filledPrice - symbolData.lowOfDay;
+            let riskMultiples = quantityToRiskMultiples(riskPerShare, position.longQuantity);
+            return riskMultiples / 100;
+        } else if (position.shortQuantity) {
+            let riskPerShare = symbolData.highOfDay - filledPrice;
+            let riskMultiples = quantityToRiskMultiples(riskPerShare, position.shortQuantity);
+            return riskMultiples / 100;
+        }
+        return 0;
+    };
     return {
         getMaxRiskPerTrade,
         MaxCapitalPerTrade,
@@ -40,6 +58,7 @@ window.TradingApp.Algo.RiskManager = (function () {
         MinimumStockPrice,
         addCents,
         minusCents,
-        quantityToRiskMultiples
+        quantityToRiskMultiples,
+        getExistingRiskMultiples
     }
 })();
