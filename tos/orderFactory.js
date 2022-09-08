@@ -164,9 +164,16 @@ window.TradingApp.OrderFactory = (function () {
         return entryOrder;
     };
 
-    const calculateTotalShares = (entryPrice, stopOutPrice, setupQuality, multiplier) => {
+    const calculateTotalShares = (symbol, entryPrice, stopOutPrice, setupQuality, multiplier) => {
         let RiskManager = window.TradingApp.Algo.RiskManager;
         let riskPerShare = Math.abs(entryPrice - stopOutPrice);
+
+        let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
+        let existingRiskMultiples = RiskManager.getExistingRiskMultiples(symbol, account);
+        if (existingRiskMultiples > 0) {
+            let remainingRiskMultiples = 1 - existingRiskMultiples;
+            multiplier = Math.min(multiplier, remainingRiskMultiples);
+        }
         let maxRiskPerTrade = RiskManager.getMaxRiskPerTrade(setupQuality, multiplier);
         let totalShares1 = Math.max(2, parseInt(Math.floor(maxRiskPerTrade / riskPerShare)));
         let totalShares2 = Math.max(2, parseInt(Math.floor(RiskManager.MaxCapitalPerTrade / entryPrice)));
@@ -184,7 +191,7 @@ window.TradingApp.OrderFactory = (function () {
             entryPrice = RiskManager.minusCents(entryPrice, 1);
             stopOutPrice = RiskManager.addCents(stopOutPrice, 1);
         }
-        let totalShares = calculateTotalShares(entryPrice, stopOutPrice, setupQuality, multiplier);
+        let totalShares = calculateTotalShares(symbol, entryPrice, stopOutPrice, setupQuality, multiplier);
 
         let TakeProfit = window.TradingApp.Algo.TakeProfit;
         let profitTargets = TakeProfit.getProfitTargets(symbol, totalShares, entryPrice, stopOutPrice, setupQuality);
