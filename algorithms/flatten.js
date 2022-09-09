@@ -20,14 +20,15 @@ window.TradingApp.Algo.Flatten = (function () {
     };
 
     const flattenPosition = async (symbol) => {
-        if (!window.TradingApp.Algo.Flatten.checkRules(symbol)) {
+        if (!checkRules(symbol)) {
             return;
         }
         if (window.TradingApp.Firestore.pendingOrdersBySymbol[symbol]) {
             clearTimeout(window.TradingApp.Firestore.pendingOrdersBySymbol[symbol])
         }
         window.TradingApp.Firestore.clearPinnedTargets(symbol);
-        let finished = window.TradingApp.TOS.flattenPosition(symbol);
+        //let finished = window.TradingApp.TOS.flattenPosition(symbol);
+        let finished = window.TradingApp.Controller.OrderFlow.flatternPosition(symbol);
         return finished;
     };
 

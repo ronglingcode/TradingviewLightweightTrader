@@ -144,6 +144,9 @@ window.TradingApp.TOS = (function () {
         window.TradingApp.TOS.initialAccount = account;
         window.TradingApp.Firestore.initializeAutoTraderState(account);
     };
+
+    // this method is not used now
+    // use orderFlow's flatten position instead
     const flattenPosition = async (symbol) => {
         let startTime = new Date();
         let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
@@ -582,6 +585,7 @@ window.TradingApp.TOS = (function () {
         filterAccountBySymbol,
         flattenPosition,
         getTransactions,
-        getFundamentals
+        getFundamentals,
+        filterOrdersForSymbol,
     }
 })();
