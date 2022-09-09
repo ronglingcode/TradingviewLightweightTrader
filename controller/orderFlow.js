@@ -89,9 +89,37 @@ window.TradingApp.Controller.OrderFlow = (function () {
         });
     };
 
+    const flatternPosition = async (symbol) => {
+        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+        let remainingQuantity = Math.abs(netQuantity);
+        let orderLegInstruction = netQuantity > 0 ? window.TradingApp.OrderFactory.OrderLegInstruction.SELL : window.TradingApp.OrderFactory.OrderLegInstruction.BUY_TO_COVER;
+
+        let widget = TradingApp.Main.widgets[symbol];
+        // cancel entry orders
+        if (widget.entryOrders && widget.entryOrders.length > 0) {
+            widget.entryOrders.forEach(order => {
+                window.TradingApp.TOS.cancelOrderById(order.orderId);
+            });
+        }
+        // market out exit orders
+        let pairsToExit = widget.exitOrderPairs;
+        pairsToExit.forEach(pte => {
+            remainingQuantity -= pte['LIMIT'].quantity;
+            instantOutOneExitPair(symbol, pte);
+        });
+        // market out leftover shares
+        if (remainingQuantity > 0) {
+            console.log(`remaining q: ${remainingQuantity}`);
+            let orderToSubmit = window.TradingApp.OrderFactory.createMarketOrder(symbol, remainingQuantity, orderLegInstruction);
+            window.TradingApp.TOS.placeOrderBase(orderToSubmit);
+        }
+        return true;
+    };
+
     return {
         adjustExitOrdersPairWithNewPrice,
         marketOutExitOrderPair,
         marketOutHalfExitOrders,
+        flatternPosition,
     };
 })();

@@ -317,8 +317,10 @@ window.TradingApp.OrderFactory = (function () {
             } else if (order.orderStrategyType === OrderStrategyType.OCO) {
                 let children = extractWorkingChildOrdersFromOCO(order);
                 if (children.length != 2) {
-                    if (children.length != 0)
+                    if (children.length != 0) {
                         window.TradingApp.Firestore.logError(`OCO order should have 2 legs, but got ${children.length} instead`);
+                        console.log(order);
+                    }
                     return;
                 }
                 children[0].parentOrderId = order.orderId;
