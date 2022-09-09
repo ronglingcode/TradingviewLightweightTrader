@@ -141,5 +141,8 @@ window.TradingData = {
         '9/8/2022': [
             { symbol: 'ASAN', news: 'earnings' }, { symbol: 'FSLR', news: 'upgrade' },
             { symbol: 'QQQ', news: 'gap down' }, { symbol: 'SPY', news: 'gap down' }],
+        '9/9/2022': [
+            { symbol: 'DOCU', news: 'earnings' }, { symbol: 'ZS', news: 'earnings' },
+            { symbol: 'QQQ', news: 'gap down' }, { symbol: 'SPY', news: 'gap down' }],
     }
 };

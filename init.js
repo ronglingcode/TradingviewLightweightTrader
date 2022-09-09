@@ -15,19 +15,19 @@ window.TradingApp = {
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'ASAN': {
+        'DOCU': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 24, boxdown: 23,
+            boxup: 67, boxdown: 65,
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'FSLR': {
+        'ZS': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 139.5, boxdown: 137,
+            boxup: 177, boxdown: 173,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },

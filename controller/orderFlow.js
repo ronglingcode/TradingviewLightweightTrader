@@ -53,19 +53,20 @@ window.TradingApp.Controller.OrderFlow = (function () {
             return;
         }
         let pair = widget.exitOrderPairs[orderNumber - 1];
-        instantOutOneExitPair(symbol, pair);
-    }
 
-    // Replace one leg with market order
-    const instantOutOneExitPair = async (symbol, pair) => {
-        let order = pair['LIMIT'];
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, pair['LIMIT']);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
         }
         window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
 
+        instantOutOneExitPair(symbol, pair);
+    }
+
+    // Replace one leg with market order
+    const instantOutOneExitPair = async (symbol, pair) => {
+        let order = pair['LIMIT'];
         let oldOrderId = order.orderId;
         let orderLeg = order.orderLegCollection[0];
         let quantity = orderLeg.quantity;
@@ -76,7 +77,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
     const marketOutHalfExitOrders = async (symbol) => {
         let widget = TradingApp.Main.widgets[symbol];
         let pairs = widget.exitOrderPairs;
-        // TODO: check rule, only used once
+        // TODO: check rule that should only used once
         let pairsToExit = [];
         for (let i = 0; i < pairs.length; i++) {
             if (i % 2 == 1)
