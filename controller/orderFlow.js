@@ -2,7 +2,6 @@ window.TradingApp.Controller.OrderFlow = (function () {
     const adjustExitOrdersPairWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
-        let startTime = new Date();
         let orderNumber = parseInt(keyCode[5]);
         if (keyCode == "Digit0") {
             orderNumber = 10;
@@ -37,6 +36,38 @@ window.TradingApp.Controller.OrderFlow = (function () {
         order.orderId = null;
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
         window.TradingApp.TOS.replaceOrderBase(newOrder, oldOrderId);
+    };
+
+    const adjustExitOrdersPairsWithNewPriceBatch = async (symbol, pairs) => {
+        // get current price
+        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
+        let lastCandle = candles[candles.length - 1];
+        let currentPrice = lastCandle.close;
+        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+        let orders = [];
+        for (let i = 0; i < pairs.length; i++) {
+            let order = pairs[i]['LIMIT'];
+            if ((netQuantity > 0 && newPrice < currentPrice) ||
+                (netQuantity < 0 && newPrice > currentPrice)) {
+                order = pairs[0]['STOP'];
+            }
+            orders.push(order);
+        }
+
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, orders[0]);
+        if (!allowed) {
+            window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
+            return;
+        }
+        window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
+
+        orders.forEach(order => {
+            let oldOrderId = order.orderId;
+            order.orderId = null;
+            let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
+            window.TradingApp.TOS.replaceOrderBase(newOrder, oldOrderId);
+        });
     };
 
     const marketOutExitOrderPair = async (symbol, keyCode) => {
@@ -75,18 +106,32 @@ window.TradingApp.Controller.OrderFlow = (function () {
     };
 
     const marketOutHalfExitOrders = async (symbol) => {
-        let widget = TradingApp.Main.widgets[symbol];
-        let pairs = widget.exitOrderPairs;
         // TODO: check rule that should only used once
-        let pairsToExit = [];
-        for (let i = 0; i < pairs.length; i++) {
-            if (i % 2 == 1)
-                continue;
-            pairsToExit.push(pairs[i]);
-        }
+        let pairsToExit = getHalfExitOrdersPairs(symbol);
         pairsToExit.forEach(pte => {
             instantOutOneExitPair(symbol, pte);
         });
+    };
+
+    const adjustHalfExitOrdersWithNewPrice = async (symbol) => {
+        // TODO: check rule that should only used once
+        let pairs = getHalfExitOrdersPairs(symbol);
+        pairs.forEach(pte => {
+            instantOutOneExitPair(symbol, pte);
+        });
+    };
+
+    const getHalfExitOrdersPairs = (symbol) => {
+        let widget = TradingApp.Main.widgets[symbol];
+        let pairs = widget.exitOrderPairs;
+        // TODO: check rule that should only used once
+        let halfOfPairs = [];
+        for (let i = 0; i < pairs.length; i++) {
+            if (i % 2 == 0) {
+                halfOfPairs.push(pairs[i]);
+            }
+        }
+        return halfOfPairs;
     };
 
     const flatternPosition = async (symbol) => {
@@ -120,6 +165,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
         adjustExitOrdersPairWithNewPrice,
         marketOutExitOrderPair,
         marketOutHalfExitOrders,
+        adjustHalfExitOrdersWithNewPrice,
         flatternPosition,
     };
 })();
