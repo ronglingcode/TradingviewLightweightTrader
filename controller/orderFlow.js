@@ -43,7 +43,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
         return halfOfPairs;
     };
 
-    const flatternPosition = async (symbol) => {
+    const flattenPosition = async (symbol) => {
         let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
         let remainingQuantity = Math.abs(netQuantity);
         let orderLegInstruction = netQuantity > 0 ? window.TradingApp.OrderFactory.OrderLegInstruction.SELL : window.TradingApp.OrderFactory.OrderLegInstruction.BUY_TO_COVER;
@@ -94,7 +94,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
         instantOutOneExitPair,
         marketOutHalfExitOrders,
         adjustHalfExitOrdersWithNewPrice,
-        flatternPosition,
+        flattenPosition,
         chooseOrderLeg,
     };
 })();

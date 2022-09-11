@@ -28,7 +28,7 @@ window.TradingApp.Algo.Flatten = (function () {
         }
         window.TradingApp.Firestore.clearPinnedTargets(symbol);
         //let finished = window.TradingApp.TOS.flattenPosition(symbol);
-        let finished = window.TradingApp.Controller.OrderFlow.flatternPosition(symbol);
+        let finished = window.TradingApp.Controller.OrderFlow.flattenPosition(symbol);
         return finished;
     };
 
