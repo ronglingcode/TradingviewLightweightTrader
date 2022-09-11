@@ -25,8 +25,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
         });
     };
 
-    const adjustHalfExitOrdersWithNewPrice = async (symbol) => {
-        // TODO: check rule that should only used once
+    const adjustHalfExitOrdersWithNewPrice = async (symbol, newPrice) => {
         let pairs = getHalfExitOrdersPairs(symbol);
         pairs.forEach(pte => {
             instantOutOneExitPair(symbol, pte);
