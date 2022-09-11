@@ -12,4 +12,7 @@ window.TradingApp.Controller.Handler = (function () {
         }
         return widget.exitOrderPairs[index];
     };
+    return {
+        getExitPairFromKeyCode,
+    };
 })();
