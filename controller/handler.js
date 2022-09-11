@@ -12,24 +12,7 @@ window.TradingApp.Controller.Handler = (function () {
         }
         return widget.exitOrderPairs[index];
     };
-    const chooseOrderLeg = (symbol, pairs, newPrice) => {
-        // get current price
-        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
-        let lastCandle = candles[candles.length - 1];
-        let currentPrice = lastCandle.close;
 
-        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
-        let chooseStopLeg = (netQuantity > 0 && newPrice < currentPrice) ||
-            (netQuantity < 0 && newPrice > currentPrice);
-        let orders = [];
-        pairs.forEach(pair => {
-            if (chooseStopLeg)
-                orders.push(pair['STOP']);
-            else
-                orders.push(pair['LIMIT']);
-        });
-        return orders;
-    };
     const numberKeyPressed = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
@@ -37,7 +20,7 @@ window.TradingApp.Controller.Handler = (function () {
         let widget = window.TradingApp.Main.widgets[symbol];
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
 
-        let orders = chooseOrderLeg(symbol, [pair], newPrice);
+        let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, orders[0]);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
@@ -68,7 +51,7 @@ window.TradingApp.Controller.Handler = (function () {
             return;
         }
         window.TradingApp.Firestore.logInfo(`${symbol}: Rules passed for ${action}`);
-
+        window.TradingApp.Controller.OrderFlow.adjustHalfExitOrdersWithNewPrice(symbol, newPrice);
     };
     const keyGPressedWithShift = async (symbol) => {
         let action = "market out half positions";

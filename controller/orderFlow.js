@@ -25,18 +25,15 @@ window.TradingApp.Controller.OrderFlow = (function () {
         });
     };
 
-    const adjustHalfExitOrdersWithNewPrice = async (symbol) => {
-        // TODO: check rule that should only used once
+    const adjustHalfExitOrdersWithNewPrice = async (symbol, newPrice) => {
         let pairs = getHalfExitOrdersPairs(symbol);
-        pairs.forEach(pte => {
-            instantOutOneExitPair(symbol, pte);
-        });
+        let orders = chooseOrderLeg(symbol, pairs, newPrice);
+        adjustOrdersWithNewPrice(symbol, orders, newPrice);
     };
 
     const getHalfExitOrdersPairs = (symbol) => {
         let widget = TradingApp.Main.widgets[symbol];
         let pairs = widget.exitOrderPairs;
-        // TODO: check rule that should only used once
         let halfOfPairs = [];
         for (let i = 0; i < pairs.length; i++) {
             if (i % 2 == 0) {
@@ -73,11 +70,31 @@ window.TradingApp.Controller.OrderFlow = (function () {
         return true;
     };
 
+    const chooseOrderLeg = (symbol, pairs, newPrice) => {
+        // get current price
+        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
+        let lastCandle = candles[candles.length - 1];
+        let currentPrice = lastCandle.close;
+
+        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+        let chooseStopLeg = (netQuantity > 0 && newPrice < currentPrice) ||
+            (netQuantity < 0 && newPrice > currentPrice);
+        let orders = [];
+        pairs.forEach(pair => {
+            if (chooseStopLeg)
+                orders.push(pair['STOP']);
+            else
+                orders.push(pair['LIMIT']);
+        });
+        return orders;
+    };
+
     return {
         adjustOrdersWithNewPrice,
         instantOutOneExitPair,
         marketOutHalfExitOrders,
         adjustHalfExitOrdersWithNewPrice,
         flatternPosition,
+        chooseOrderLeg,
     };
 })();
