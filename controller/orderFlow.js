@@ -60,20 +60,6 @@ window.TradingApp.Controller.OrderFlow = (function () {
         });
     };
 
-    const marketOutExitOrderPair = async (symbol, keyCode) => {
-        // "Numpad1" -> 1, "Numpad2" -> 2
-        window.TradingApp.Firestore.logDebug(`Marketout exit order pair for ${symbol}`);
-        let pair = window.TradingApp.Controller.Handler.getExitPairFromKeyCode(symbol, keyCode, "Numpad");
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, pair['LIMIT']);
-        if (!allowed) {
-            window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
-            return;
-        }
-        window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
-
-        instantOutOneExitPair(symbol, pair);
-    }
-
     // Replace one leg with market order
     const instantOutOneExitPair = async (symbol, pair) => {
         let order = pair['LIMIT'];
@@ -142,7 +128,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
 
     return {
         adjustExitOrdersPairWithNewPrice,
-        marketOutExitOrderPair,
+        instantOutOneExitPair,
         marketOutHalfExitOrders,
         adjustHalfExitOrdersWithNewPrice,
         flatternPosition,
