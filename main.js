@@ -173,7 +173,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         window.TradingApp.Algo.Flatten.flattenPosition(symbol);
         window.TradingApp.Firestore.logInfo("flatten for " + symbol);
     } else if (["Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9", "Digit0"].includes(code)) {
-        window.TradingApp.Controller.OrderFlow.adjustExitOrdersPairWithNewPrice(symbol, code);
+        window.TradingApp.Controller.Handler.numberKeyPressed(symbol, code);
     } else if (["Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "Numpad0"].includes(code)) {
         window.TradingApp.Controller.Handler.numberPadPressed(symbol, code);
     } else if (code === 'KeyT') {
