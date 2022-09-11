@@ -48,8 +48,29 @@ window.TradingApp.Controller.Handler = (function () {
         window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
         window.TradingApp.Controller.OrderFlow.instantOutOneExitPair(symbol, pair);
     };
+    const keyGPressed = async (symbol) => {
+        window.TradingApp.Firestore.logInfo(`Move half exit targets for ${symbol}`);
+        let allowed = checkUsageLimit(symbol, "limitOutHalf");
+    };
+    const keyGPressedWithShift = async (symbol) => {
+        window.TradingApp.Firestore.logInfo(`Market out half positions for ${symbol}`);
+        let allowed = usageAllowedOnce(symbol, "marketOutHalf");
+        window.TradingApp.Controller.OrderFlow.marketOutHalfExitOrders(symbol);
+    };
+    // allow used once, returns true if allowed this time
+    const usageAllowedOnce = (symbol, fieldToCheck) => {
+        let hasDoneIt = window.TradingApp.Firestore.getStockState(symbol, fieldToCheck);
+        if (!window.TradingApp.Secrets.isTestAccount && hasDoneIt === true) {
+            window.TradingApp.Firestore.logInfo(`has already done ${fieldToCheck} for ${symbol}, skipping this time.`);
+            return false;
+        }
+        window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
+        return true;
+    };
     return {
         numberPadPressed,
         numberKeyPressed,
+        keyGPressed,
+        keyGPressedWithShift,
     };
 })();
