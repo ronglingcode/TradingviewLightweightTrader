@@ -60,12 +60,25 @@ window.TradingApp.Controller.Handler = (function () {
         window.TradingApp.Controller.OrderFlow.instantOutOneExitPair(symbol, pair);
     };
     const keyGPressed = async (symbol) => {
-        window.TradingApp.Firestore.logInfo(`Move half exit targets for ${symbol}`);
-        let allowed = checkUsageLimit(symbol, "limitOutHalf");
+        let action = "move half exit orders";
+        window.TradingApp.Firestore.logInfo(`${symbol}: ${action}`);
+        let allowed = usageAllowedOnce(symbol, "limitOutHalf");
+        if (!allowed) {
+            window.TradingApp.Firestore.logError(`${symbol}: Rules blocked for ${action} `);
+            return;
+        }
+        window.TradingApp.Firestore.logInfo(`${symbol}: Rules passed for ${action}`);
+
     };
     const keyGPressedWithShift = async (symbol) => {
-        window.TradingApp.Firestore.logInfo(`Market out half positions for ${symbol}`);
+        let action = "market out half positions";
+        window.TradingApp.Firestore.logInfo(`${symbol}: ${action}`);
         let allowed = usageAllowedOnce(symbol, "marketOutHalf");
+        if (!allowed) {
+            window.TradingApp.Firestore.logError(`${symbol}: Rules blocked for ${action} `);
+            return;
+        }
+        window.TradingApp.Firestore.logInfo(`${symbol}: Rules passed for ${action}`);
         window.TradingApp.Controller.OrderFlow.marketOutHalfExitOrders(symbol);
     };
     // allow used once, returns true if allowed this time
