@@ -19,7 +19,6 @@ window.TradingApp.Controller.OrderFlow = (function () {
     };
 
     const marketOutHalfExitOrders = async (symbol) => {
-        // TODO: check rule that should only used once
         let pairsToExit = getHalfExitOrdersPairs(symbol);
         pairsToExit.forEach(pte => {
             instantOutOneExitPair(symbol, pte);

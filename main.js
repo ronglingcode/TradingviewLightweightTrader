@@ -180,11 +180,11 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
         // move stop orders
         window.TradingApp.TOS.adjustStopOrders(symbol);
     } else if (code === 'KeyG') {
-        let marketOut = keyboardEvent.shiftKey;
-        if (marketOut) {
-            window.TradingApp.Controller.OrderFlow.marketOutHalfExitOrders(symbol);
+        if (keyboardEvent.shiftKey) {
+            window.TradingApp.Controller.Handler.keyGPressedWithShift(symbol);
         } else {
-            window.TradingApp.TOS.reduceOrderQuantityByHalf(symbol, marketOut);
+            window.TradingApp.Controller.Handler.keyGPressed(symbol);
+            //window.TradingApp.TOS.reduceOrderQuantityByHalf(symbol, marketOut);
         }
     } else if (code === 'KeyW') {
         window.TradingApp.Algo.Flatten.swapPosition(symbol);
