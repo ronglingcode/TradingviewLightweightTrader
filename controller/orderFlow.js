@@ -2,18 +2,8 @@ window.TradingApp.Controller.OrderFlow = (function () {
     const adjustExitOrdersPairWithNewPrice = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
-        let orderNumber = parseInt(keyCode[5]);
-        if (keyCode == "Digit0") {
-            orderNumber = 10;
-        }
 
-        let widget = window.TradingApp.Main.widgets[symbol];
-        if (widget.exitOrderPairs.length < orderNumber) {
-            window.TradingApp.Firestore.logInfo("out of range");
-            return;
-        }
-
-        let pair = widget.exitOrderPairs[orderNumber - 1];
+        let pair = window.TradingApp.Controller.Handler.getExitPairFromKeyCode(symbol, keyCode, "Digit");
         // get current price
         let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
         let lastCandle = candles[candles.length - 1];
@@ -73,18 +63,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
     const marketOutExitOrderPair = async (symbol, keyCode) => {
         // "Numpad1" -> 1, "Numpad2" -> 2
         window.TradingApp.Firestore.logDebug(`Marketout exit order pair for ${symbol}`);
-        let orderNumber = parseInt(keyCode[6]);
-        if (keyCode == "Numpad0") {
-            orderNumber = 10;
-        }
-
-        let widget = window.TradingApp.Main.widgets[symbol];
-        if (widget.exitOrderPairs.length < orderNumber) {
-            window.TradingApp.Firestore.logInfo("out of range");
-            return;
-        }
-        let pair = widget.exitOrderPairs[orderNumber - 1];
-
+        let pair = window.TradingApp.Controller.Handler.getExitPairFromKeyCode(symbol, keyCode, "Numpad");
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, pair['LIMIT']);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
