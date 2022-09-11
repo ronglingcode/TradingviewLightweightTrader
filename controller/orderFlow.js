@@ -56,11 +56,13 @@ window.TradingApp.Controller.OrderFlow = (function () {
             });
         }
         // market out exit orders
-        let pairsToExit = widget.exitOrderPairs;
-        pairsToExit.forEach(pte => {
-            remainingQuantity -= pte['LIMIT'].quantity;
-            instantOutOneExitPair(symbol, pte);
-        });
+        if (widget.exitOrderPairs && widget.exitOrderPairs.length > 0) {
+            let pairsToExit = widget.exitOrderPairs;
+            pairsToExit.forEach(pte => {
+                remainingQuantity -= pte['LIMIT'].quantity;
+                instantOutOneExitPair(symbol, pte);
+            });
+        }
         // market out leftover shares
         if (remainingQuantity > 0) {
             console.log(`remaining q: ${remainingQuantity}`);
