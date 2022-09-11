@@ -15,7 +15,7 @@ window.TradingApp.Controller.Handler = (function () {
     const numberKeyPressed = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
-        let pair = window.TradingApp.Controller.Handler.getExitPairFromKeyCode(symbol, keyCode, "Digit");
+        let pair = getExitPairFromKeyCode(symbol, keyCode, "Digit");
         // get current price
         let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
         let lastCandle = candles[candles.length - 1];
@@ -49,7 +49,6 @@ window.TradingApp.Controller.Handler = (function () {
         window.TradingApp.Controller.OrderFlow.instantOutOneExitPair(symbol, pair);
     };
     return {
-        getExitPairFromKeyCode,
         numberPadPressed,
         numberKeyPressed,
     };
