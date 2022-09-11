@@ -12,28 +12,39 @@ window.TradingApp.Controller.Handler = (function () {
         }
         return widget.exitOrderPairs[index];
     };
-    const numberKeyPressed = async (symbol, keyCode) => {
-        // "Digit1" -> 1, "Digit2" -> 2
-        window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
-        let pair = getExitPairFromKeyCode(symbol, keyCode, "Digit");
+    const chooseOrderLeg = (symbol, pairs, newPrice) => {
         // get current price
         let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
         let lastCandle = candles[candles.length - 1];
         let currentPrice = lastCandle.close;
-        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+
         let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
-        let order = pair['LIMIT'];
-        if ((netQuantity > 0 && newPrice < currentPrice) ||
-            (netQuantity < 0 && newPrice > currentPrice)) {
-            order = pair['STOP'];
-        }
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
+        let chooseStopLeg = (netQuantity > 0 && newPrice < currentPrice) ||
+            (netQuantity < 0 && newPrice > currentPrice);
+        let orders = [];
+        pairs.forEach(pair => {
+            if (chooseStopLeg)
+                orders.push(pair['STOP']);
+            else
+                orders.push(pair['LIMIT']);
+        });
+        return orders;
+    };
+    const numberKeyPressed = async (symbol, keyCode) => {
+        // "Digit1" -> 1, "Digit2" -> 2
+        window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
+        let pair = getExitPairFromKeyCode(symbol, keyCode, "Digit");
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+
+        let orders = chooseOrderLeg(symbol, [pair], newPrice);
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, orders[0]);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
         }
         window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
-        window.TradingApp.Controller.OrderFlow.adjustOrdersWithNewPrice(symbol, [order], newPrice);
+        window.TradingApp.Controller.OrderFlow.adjustOrdersWithNewPrice(symbol, orders, newPrice);
     };
 
     const numberPadPressed = async (symbol, keyCode) => {
