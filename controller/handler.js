@@ -13,8 +13,29 @@ window.TradingApp.Controller.Handler = (function () {
         return widget.exitOrderPairs[index];
     };
     const numberKeyPressed = async (symbol, keyCode) => {
-
+        // "Digit1" -> 1, "Digit2" -> 2
+        window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
+        let pair = window.TradingApp.Controller.Handler.getExitPairFromKeyCode(symbol, keyCode, "Digit");
+        // get current price
+        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
+        let lastCandle = candles[candles.length - 1];
+        let currentPrice = lastCandle.close;
+        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+        let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
+        let order = pair['LIMIT'];
+        if ((netQuantity > 0 && newPrice < currentPrice) ||
+            (netQuantity < 0 && newPrice > currentPrice)) {
+            order = pair['STOP'];
+        }
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
+        if (!allowed) {
+            window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
+            return;
+        }
+        window.TradingApp.Firestore.logInfo(`Rules passed adjusting order for ${symbol}`);
+        window.TradingApp.Controller.OrderFlow.adjustOrdersWithNewPrice(symbol, [order], newPrice);
     };
+
     const numberPadPressed = async (symbol, keyCode) => {
         // "Numpad1" -> 1, "Numpad2" -> 2
         window.TradingApp.Firestore.logDebug(`Market out 1 exit order pair for ${symbol}`);
@@ -30,5 +51,6 @@ window.TradingApp.Controller.Handler = (function () {
     return {
         getExitPairFromKeyCode,
         numberPadPressed,
+        numberKeyPressed,
     };
 })();
