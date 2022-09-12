@@ -144,5 +144,8 @@ window.TradingData = {
         '9/9/2022': [
             { symbol: 'DOCU', news: 'earnings' }, { symbol: 'ZS', news: 'earnings' },
             { symbol: 'QQQ', news: 'gap down' }, { symbol: 'SPY', news: 'gap down' }],
+        '9/12/2022': [
+            { symbol: 'RBLX', news: 'down rating' }, { symbol: 'AAPL', news: 'stronger' },
+            { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
     }
 };
