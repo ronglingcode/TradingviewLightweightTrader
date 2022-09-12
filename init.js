@@ -15,7 +15,7 @@ window.TradingApp = {
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'DOCU': {
+        'RBLX': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
@@ -23,7 +23,7 @@ window.TradingApp = {
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'ZS': {
+        'CVNA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
@@ -96,7 +96,7 @@ window.TradingApp = {
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
         'QQQ': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            volumeSum: 869912, tradingSum: 268353417, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
             //boxup: 22, boxdown: 21.1,

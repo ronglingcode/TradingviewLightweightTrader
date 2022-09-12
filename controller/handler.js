@@ -13,12 +13,16 @@ window.TradingApp.Controller.Handler = (function () {
         return widget.exitOrderPairs[index];
     };
 
+    const getCursorPrice = (symbol) => {
+        let widget = window.TradingApp.Main.widgets[symbol];
+        return window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+    };
+
     const numberKeyPressed = async (symbol, keyCode) => {
         // "Digit1" -> 1, "Digit2" -> 2
         window.TradingApp.Firestore.logDebug(`Adjust exit order pair for ${symbol}`);
         let pair = getExitPairFromKeyCode(symbol, keyCode, "Digit");
-        let widget = window.TradingApp.Main.widgets[symbol];
-        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+        let newPrice = getCursorPrice(symbol);
 
         let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, orders[0]);
@@ -51,6 +55,7 @@ window.TradingApp.Controller.Handler = (function () {
             return;
         }
         window.TradingApp.Firestore.logInfo(`${symbol}: Rules passed for ${action}`);
+        let newPrice = getCursorPrice(symbol);
         window.TradingApp.Controller.OrderFlow.adjustHalfExitOrdersWithNewPrice(symbol, newPrice);
     };
     const keyGPressedWithShift = async (symbol) => {
