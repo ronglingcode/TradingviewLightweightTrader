@@ -48,7 +48,7 @@ window.TradingApp.OrderFactory = (function () {
             return getOrderSymbol(childOrder);
         }
         return "";
-    }
+    };
     /* #endregion */
 
     /* #region Basic Orders */
@@ -429,6 +429,52 @@ window.TradingApp.OrderFactory = (function () {
         else if (orderType === OrderType.MARKET)
             return 'Mkt';
     }
+    // Return a list of executions: symbol, action, shares. 
+    const extractTradeExecutions = (orders) => {
+        let filledOrders = extractFilledOrders(orders);
+        let trades = [];
+        filledOrders.forEach(order => {
+            let tradeSymbol = window.TradingApp.OrderFactory.getOrderSymbol(order);
+            let orderInstruction = order.orderLegCollection[0].instruction;
+            let activities = order.orderActivityCollection;
+            if (!activities || activities.length != 1) {
+                window.TradingApp.Firestore.logError(`unexpected activity ${activities}`);
+                return;
+            }
+            let executions = activities[0].executionLegs;
+            if (!executions || executions.length != 1) {
+                window.TradingApp.Firestore.logError(`unexpected activity ${executions}`);
+                return;
+            }
+            let price = executions[0].price;
+            let time = executions[0].time;
+
+            let minutesSinceOpen = window.TradingApp.Helper.getMinutesSinceMarketOpen(new Date(time));
+            minutesSinceOpen = Math.floor(minutesSinceOpen) * 60;
+            trades.push({
+                'symbol': tradeSymbol,
+                'action': orderInstruction,
+                'quantity': order.filledQuantity,
+                'price': price,
+                'time': time,
+                'minutesSinceOpen': minutesSinceOpen,
+                'key': tradeSymbol + orderInstruction + price + minutesSinceOpen
+            });
+        });
+        let map = {};
+        for (let i = 0; i < trades.length; i++) {
+            if (trades[i].key in map) {
+                map[trades[i].key].quantity += trades[i].quantity;
+            } else {
+                map[trades[i].key] = trades[i];
+            }
+        }
+        let combinedTrades = [];
+        for (let t in map) {
+            combinedTrades.push(map[t]);
+        }
+        return combinedTrades;
+    };
     /* #endregion */
     /* #region Replicate Orders */
     const replicateOrderWithNewPrice = (order, newPrice) => {
@@ -458,6 +504,24 @@ window.TradingApp.OrderFactory = (function () {
     }
     /* #endregion */
 
+    const generateExecutionScript = (symbol) => {
+        let accountData = window.TradingApp.Firestore.getAccountForSymbol(symbol);
+        if (!accountData || !accountData.orders) {
+            return -1;
+        }
+        let orders = accountData.orders;
+        let trades = extractTradeExecutions(orders);
+        let text = "";
+        trades.forEach(trade => {
+            if (trade.action === "BUY") {
+                text += `AddChartBubble(time == ${trade.minutesSinceOpen}, ${trade.price}, "+${trade.quantity}", createColor(165,214,167), 0);\n`;
+            } else {
+                text += `AddChartBubble(time == ${trade.minutesSinceOpen}, ${trade.price}, "-${trade.quantity}", createColor(239,154,154), 1);\n`;
+            }
+        });
+        return text;
+    };
+
     return {
         copyOrder,
         createMarketOrder,
@@ -479,11 +543,13 @@ window.TradingApp.OrderFactory = (function () {
         extractStopOrders,
         extractOrderPrice,
         extractFilledOrders,
+        extractTradeExecutions,
         extractWorkingExitPairs,
         isBuyOrder,
         isSellOrder,
         getOrderTypeShortString,
         replicateOrderWithNewPrice,
-        replicateOrderWithNewQuantity
+        replicateOrderWithNewQuantity,
+        generateExecutionScript
     }
 })();
