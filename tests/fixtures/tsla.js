@@ -1,4 +1,4 @@
-orders = [
+window.TradingApp.Test.Fixtures['tsla'] = [
     {
         "session": "NORMAL",
         "duration": "DAY",

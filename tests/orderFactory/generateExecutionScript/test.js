@@ -1,6 +1,6 @@
 let testLib = window.TradingApp.Test;
 let fixtures = testLib.Fixtures;
-let orders = fixtures['coin'];
+let orders = fixtures['tsla'];
 let f = window.TradingApp.OrderFactory;
 
 let tradeData = f.extractTradeExecutions(orders);
