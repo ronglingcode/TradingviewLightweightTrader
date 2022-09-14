@@ -351,7 +351,7 @@ window.TradingApp.Chart = (function () {
             let entryPrice = account.position.averagePrice;
             let drawingStopOrder = createDrawingOrder(symbol, exitOrderPairs[i]['STOP'], entryPrice, true);
             let drawingLimitOrder = createDrawingOrder(symbol, exitOrderPairs[i]['LIMIT'], entryPrice, true);
-            let text = `${i + 1}: ${drawingStopOrder.riskMultiples}%`;
+            let text = `(${i + 1}:${drawingStopOrder.riskMultiples}%),`;
             exitOrdersString += text;
 
             let ordersToDraw = [drawingStopOrder, drawingLimitOrder];
