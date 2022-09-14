@@ -132,7 +132,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
             })
         }
 
-        window.TradingApp.Firestore.addPinnedTarget(symbol, profitTargets[1].price);
+        //window.TradingApp.Firestore.addPinnedTarget(symbol, profitTargets[1].price);
         return profitTargets;
     };
     const checkRulesForAdjustingOrders = (symbol, order) => {
