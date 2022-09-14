@@ -147,5 +147,9 @@ window.TradingData = {
         '9/12/2022': [
             { symbol: 'RBLX', news: 'down rating' }, { symbol: 'AAPL', news: 'stronger' },
             { symbol: 'QQQ', news: 'gap up' }, { symbol: 'SPY', news: 'gap up' }],
+        '9/13/2022': [
+            { symbol: 'CVNA', news: 'gap down' }, { symbol: 'TSLA', news: 'every day' },
+            { symbol: 'COIN', news: 'weaker' }, { symbol: 'AAPL', news: 'stronger' },
+            { symbol: 'QQQ', news: 'CPI' }, { symbol: 'SPY', news: 'CPI' }],
     }
 };

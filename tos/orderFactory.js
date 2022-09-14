@@ -429,12 +429,14 @@ window.TradingApp.OrderFactory = (function () {
         else if (orderType === OrderType.MARKET)
             return 'Mkt';
     }
-    // Return a list of executions: symbol, action, shares. 
-    const extractTradeExecutions = (orders) => {
-        let filledOrders = extractFilledOrders(orders);
+    // Assume all orders are for the same symbol to keep it simple 
+    const extractTradeExecutions = (ordersForSymbol) => {
+        let filledOrders = extractFilledOrders(ordersForSymbol);
         let trades = [];
+        let l1Trades = [];
+        let l2Trades = [];
+        let tradeMap = {};
         filledOrders.forEach(order => {
-            let tradeSymbol = window.TradingApp.OrderFactory.getOrderSymbol(order);
             let orderInstruction = order.orderLegCollection[0].instruction;
             let activities = order.orderActivityCollection;
             if (!activities || activities.length != 1) {
@@ -450,30 +452,53 @@ window.TradingApp.OrderFactory = (function () {
             let time = executions[0].time;
 
             let minutesSinceOpen = window.TradingApp.Helper.getMinutesSinceMarketOpen(new Date(time));
-            minutesSinceOpen = Math.floor(minutesSinceOpen) * 60;
-            trades.push({
-                'symbol': tradeSymbol,
+            minutesSinceOpen = Math.floor(minutesSinceOpen);
+            let secondsSinceOpen = minutesSinceOpen * 60;
+            let key = orderInstruction + price + minutesSinceOpen;
+            let perMinuteKey = orderInstruction + minutesSinceOpen;
+            let tradeObject = {
                 'action': orderInstruction,
                 'quantity': order.filledQuantity,
                 'price': price,
                 'time': time,
                 'minutesSinceOpen': minutesSinceOpen,
-                'key': tradeSymbol + orderInstruction + price + minutesSinceOpen
-            });
-        });
-        let map = {};
-        for (let i = 0; i < trades.length; i++) {
-            if (trades[i].key in map) {
-                map[trades[i].key].quantity += trades[i].quantity;
+                'secondsSinceOpen': secondsSinceOpen,
+                'key': key,
+                'perMinuteKey': perMinuteKey,
+            };
+            if (tradeObject.key in tradeMap) {
+                tradeMap[tradeObject.key].quantity += tradeObject.quantity;
             } else {
-                map[trades[i].key] = trades[i];
+                tradeMap[tradeObject.key] = tradeObject;
             }
+        });
+
+        for (let t in tradeMap) {
+            trades.push(tradeMap[t]);
         }
-        let combinedTrades = [];
-        for (let t in map) {
-            combinedTrades.push(map[t]);
+        let minuteMap = {};
+        trades.forEach(trade => {
+            let key = trade.perMinuteKey;
+            if (key in minuteMap) {
+                minuteMap[key].quantity += trade.quantity;
+                minuteMap[key].dollarAmount += (trade.quantity * trade.price);
+            } else {
+                minuteMap[key] = {
+                    'action': trade.action,
+                    'quantity': trade.quantity,
+                    'dollarAmount': trade.quantity * trade.price,
+                    'secondsSinceOpen': trade.secondsSinceOpen,
+                };
+            }
+        });
+        let tradePerMinute = [];
+        for (let t in minuteMap) {
+            tradePerMinute.push(minuteMap[t]);
         }
-        return combinedTrades;
+        return {
+            'trades': trades,
+            'tradePerMinute': tradePerMinute,
+        };
     };
     /* #endregion */
     /* #region Replicate Orders */
@@ -510,15 +535,18 @@ window.TradingApp.OrderFactory = (function () {
             return -1;
         }
         let orders = accountData.orders;
-        let trades = extractTradeExecutions(orders);
+        let tradeData = extractTradeExecutions(orders);
+        console.log(tradeData);
         let text = "";
-        trades.forEach(trade => {
-            if (trade.action === "BUY") {
-                text += `AddChartBubble(time == ${trade.minutesSinceOpen}, ${trade.price}, "+${trade.quantity}", createColor(165,214,167), 0);\n`;
+        tradeData.tradePerMinute.forEach(trade => {
+            let price = trade.dollarAmount / trade.quantity;
+            if (trade.action === "BUY" || trade.action === "BUY_TO_COVER") {
+                text += `AddChartBubble(time == ${trade.secondsSinceOpen}, ${price}, "+${trade.quantity}", createColor(165,214,167), 0);\n`;
             } else {
-                text += `AddChartBubble(time == ${trade.minutesSinceOpen}, ${trade.price}, "-${trade.quantity}", createColor(239,154,154), 1);\n`;
+                text += `AddChartBubble(time == ${trade.secondsSinceOpen}, ${price}, "-${trade.quantity}", createColor(239,154,154), 1);\n`;
             }
         });
+        console.log(text);
         return text;
     };
 
