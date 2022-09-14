@@ -151,5 +151,9 @@ window.TradingData = {
             { symbol: 'CVNA', news: 'gap down' }, { symbol: 'TSLA', news: 'every day' },
             { symbol: 'COIN', news: 'weaker' }, { symbol: 'AAPL', news: 'stronger' },
             { symbol: 'QQQ', news: 'CPI' }, { symbol: 'SPY', news: 'CPI' }],
+        '9/14/2022': [
+            { symbol: 'SQ', news: 'downgrade' }, { symbol: 'TSLA', news: 'every day' },
+            { symbol: 'META', news: 'weaker' }, { symbol: 'AAPL', news: 'in play' },
+            { symbol: 'QQQ', news: 'range day' }, { symbol: 'SPY', news: 'range day' }],
     }
 };
