@@ -159,5 +159,8 @@ window.TradingData = {
             { symbol: 'ADBE', news: 'acquisition' }, { symbol: 'NFLX', news: 'upgrade' },
             { symbol: 'META', news: 'weaker' }, { symbol: 'TSLA', news: 'stronger' },
             { symbol: 'QQQ', news: 'retail sales' }, { symbol: 'SPY', news: 'retail sales' }],
+        '9/16/2022': [
+            { symbol: 'FDX', news: 'earnings' }, { symbol: 'AMZN', news: 'FDX drag' },
+            { symbol: 'QQQ', news: 'gap down, big trend' }, { symbol: 'SPY', news: 'gap down, big trend' }],
     }
 };

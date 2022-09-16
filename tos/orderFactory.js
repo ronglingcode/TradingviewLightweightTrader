@@ -437,38 +437,46 @@ window.TradingApp.OrderFactory = (function () {
         filledOrders.forEach(order => {
             let orderInstruction = order.orderLegCollection[0].instruction;
             let activities = order.orderActivityCollection;
-            if (!activities || activities.length != 1) {
-                window.TradingApp.Firestore.logError(`unexpected activity ${activities}`);
+            if (!activities || activities.length == 0) {
                 return;
             }
-            let executions = activities[0].executionLegs;
-            if (!executions || executions.length != 1) {
-                window.TradingApp.Firestore.logError(`unexpected activity ${executions}`);
-                return;
-            }
-            let price = executions[0].price;
-            let time = executions[0].time;
+            activities.forEach(activity => {
+                if (activity.activityType != "EXECUTION" || activity.executionType != "FILL") {
+                    window.TradingApp.Firestore.logError(`unexpected activity ${JSON.stringify(activity)}`);
+                    return;
+                }
+                let executions = activity.executionLegs;
+                if (!executions || executions.length == 0) {
+                    return;
+                }
+                executions.forEach(execution => {
+                    let price = execution.price;
+                    let time = execution.time;
 
-            let minutesSinceOpen = window.TradingApp.Helper.getMinutesSinceMarketOpen(new Date(time));
-            minutesSinceOpen = Math.floor(minutesSinceOpen);
-            let secondsSinceOpen = minutesSinceOpen * 60;
-            let key = orderInstruction + price + minutesSinceOpen;
-            let perMinuteKey = orderInstruction + minutesSinceOpen;
-            let tradeObject = {
-                'action': orderInstruction,
-                'quantity': order.filledQuantity,
-                'price': price,
-                'time': time,
-                'minutesSinceOpen': minutesSinceOpen,
-                'secondsSinceOpen': secondsSinceOpen,
-                'key': key,
-                'perMinuteKey': perMinuteKey,
-            };
-            if (tradeObject.key in tradeMap) {
-                tradeMap[tradeObject.key].quantity += tradeObject.quantity;
-            } else {
-                tradeMap[tradeObject.key] = tradeObject;
-            }
+                    let minutesSinceOpen = window.TradingApp.Helper.getMinutesSinceMarketOpen(new Date(time));
+                    minutesSinceOpen = Math.floor(minutesSinceOpen);
+                    let secondsSinceOpen = minutesSinceOpen * 60;
+                    let key = orderInstruction + price + minutesSinceOpen;
+                    let perMinuteKey = orderInstruction + minutesSinceOpen;
+                    let tradeObject = {
+                        'action': orderInstruction,
+                        'quantity': order.filledQuantity,
+                        'price': price,
+                        'time': time,
+                        'minutesSinceOpen': minutesSinceOpen,
+                        'secondsSinceOpen': secondsSinceOpen,
+                        'key': key,
+                        'perMinuteKey': perMinuteKey,
+                    };
+                    if (tradeObject.key in tradeMap) {
+                        tradeMap[tradeObject.key].quantity += tradeObject.quantity;
+                    } else {
+                        tradeMap[tradeObject.key] = tradeObject;
+                    }
+                });
+
+            });
+
         });
 
         for (let t in tradeMap) {
@@ -541,9 +549,9 @@ window.TradingApp.OrderFactory = (function () {
             price = window.TradingApp.Helper.roundToCents(price);
             let condition = `GetSymbol() == "${symbol}" and time == ${trade.secondsSinceOpen}`;
             if (trade.action === "BUY" || trade.action === "BUY_TO_COVER") {
-                text += `AddChartBubble(${condition}, ${price}, "+${trade.quantity}", createColor(165,214,167), 0);\n`;
+                text += `AddChartBubble(${condition}, ${price}, "+${trade.quantity}", GlobalColor("BubbleGreen"), 0);\n`;
             } else {
-                text += `AddChartBubble(${condition}, ${price}, "-${trade.quantity}", createColor(239,154,154), 1);\n`;
+                text += `AddChartBubble(${condition}, ${price}, "-${trade.quantity}", GlobalColor("BubbleRed"), 1);\n`;
             }
         });
         //console.log(text);

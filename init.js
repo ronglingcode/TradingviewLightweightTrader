@@ -15,11 +15,11 @@ window.TradingApp = {
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'COIN': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+        'FDX': {
+            volumeSum: 1110529, tradingSum: 181129926, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 76.5, boxdown: 74,
+            boxup: 162.5, boxdown: 158,
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
@@ -63,11 +63,11 @@ window.TradingApp = {
             //longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'DOCS': {
-            volumeSum: 49051, tradingSum: 1654707, premktHigh: 0, premktLow: 99999999,
+        'AMZN': {
+            volumeSum: 406313, tradingSum: 49897991, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
-            boxup: 115, boxdown: 112,
+            //boxup: 115, boxdown: 112,
             //longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
@@ -91,7 +91,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            //boxdown: 80, boxup: 88,
+            boxup: 394.36, boxdown: 389.5,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
