@@ -155,5 +155,9 @@ window.TradingData = {
             { symbol: 'SQ', news: 'downgrade' }, { symbol: 'TSLA', news: 'every day' },
             { symbol: 'META', news: 'weaker' }, { symbol: 'AAPL', news: 'in play' },
             { symbol: 'QQQ', news: 'range day' }, { symbol: 'SPY', news: 'range day' }],
+        '9/15/2022': [
+            { symbol: 'ADBE', news: 'acquisition' }, { symbol: 'NFLX', news: 'upgrade' },
+            { symbol: 'META', news: 'weaker' }, { symbol: 'TSLA', news: 'stronger' },
+            { symbol: 'QQQ', news: 'retail sales' }, { symbol: 'SPY', news: 'retail sales' }],
     }
 };

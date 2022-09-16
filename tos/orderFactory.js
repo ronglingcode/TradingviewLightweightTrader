@@ -536,18 +536,34 @@ window.TradingApp.OrderFactory = (function () {
         }
         let orders = accountData.orders;
         let tradeData = extractTradeExecutions(orders);
-        console.log(tradeData);
+        //console.log(tradeData);
         let text = "";
         tradeData.tradePerMinute.forEach(trade => {
             let price = trade.dollarAmount / trade.quantity;
+            price = window.TradingApp.Helper.roundToCents(price);
+            let condition = `GetSymbol() == "${symbol}" and time == ${trade.secondsSinceOpen}`;
             if (trade.action === "BUY" || trade.action === "BUY_TO_COVER") {
-                text += `AddChartBubble(time == ${trade.secondsSinceOpen}, ${price}, "+${trade.quantity}", createColor(165,214,167), 0);\n`;
+                text += `AddChartBubble(${condition}, ${price}, "+${trade.quantity}", createColor(165,214,167), 0);\n`;
             } else {
-                text += `AddChartBubble(time == ${trade.secondsSinceOpen}, ${price}, "-${trade.quantity}", createColor(239,154,154), 1);\n`;
+                text += `AddChartBubble(${condition}, ${price}, "-${trade.quantity}", createColor(239,154,154), 1);\n`;
             }
         });
-        console.log(text);
+        //console.log(text);
         return text;
+    };
+    const generateExecutionScriptForAllStocks = () => {
+        let allSymbols = {};
+        let cache = window.TradingApp.Firestore.getCache();
+        let account = cache.tosAccount;
+        let orders = account.securitiesAccount.orderStrategies;
+        orders.forEach(order => {
+            allSymbols[getOrderSymbol(order)] = 1;
+        });
+        let text = '';
+        for (let symbol in allSymbols) {
+            text += generateExecutionScript(symbol);
+        }
+        console.log(text);
     };
 
     return {
@@ -578,6 +594,7 @@ window.TradingApp.OrderFactory = (function () {
         getOrderTypeShortString,
         replicateOrderWithNewPrice,
         replicateOrderWithNewQuantity,
-        generateExecutionScript
+        generateExecutionScript,
+        generateExecutionScriptForAllStocks,
     }
 })();
