@@ -163,6 +163,27 @@ window.TradingApp.AutoTrader = (function () {
             return entryCoolDownInSeconds - entryTimeFromNow;
     };
 
+    // 1: up trend
+    // 0: range
+    // -1: down trend
+    const getMarketTrendType = () => {
+        let spyData = window.TradingApp.DB.dataBySymbol[symbol];
+        if (!spyData || !spyData.openingCandle)
+            return 0;
+        let openPrice = spyData.openingCandle.open;
+
+        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
+            let stock = window.TradingApp.Watchlist[i];
+            if (stock.symbol === 'SPY') {
+                if (stock.boxup && openPrice > stock.boxup)
+                    return 1;
+                if (stock.boxdown && openPrice < stock.boxdown)
+                    return -1;
+            }
+        };
+        return 0;
+    };
+
     return {
         stateBySymbol,
         addStocksFromWatchlist,
@@ -173,6 +194,7 @@ window.TradingApp.AutoTrader = (function () {
         onSecondMinuteClose,
         onThirdMinuteClose,
         countTrades,
-        getEntryTimeFromNowInSeconds
+        getEntryTimeFromNowInSeconds,
+        getMarketTrendType,
     }
 })();

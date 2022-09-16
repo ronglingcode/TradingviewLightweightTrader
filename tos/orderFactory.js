@@ -433,8 +433,6 @@ window.TradingApp.OrderFactory = (function () {
     const extractTradeExecutions = (ordersForSymbol) => {
         let filledOrders = extractFilledOrders(ordersForSymbol);
         let trades = [];
-        let l1Trades = [];
-        let l2Trades = [];
         let tradeMap = {};
         filledOrders.forEach(order => {
             let orderInstruction = order.orderLegCollection[0].instruction;
