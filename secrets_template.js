@@ -15,6 +15,7 @@ window.TradingApp.Secrets = (function () {
         measurementId: "a123"
     };
     const isTestAccount = false;// or true if this account is for testing
+    const activeProfile = 'dayTrading'; // file names in /profiles folder
 
     return {
         accountId,
@@ -24,6 +25,7 @@ window.TradingApp.Secrets = (function () {
         code,
         clientId,
         redirectUrl,
-        firebaseConfig
+        firebaseConfig,
+        activeProfile,
     }
 })();
