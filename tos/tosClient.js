@@ -356,8 +356,9 @@ window.TradingApp.TOS = (function () {
 
     const adjustStopOrders = async (symbol) => {
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
-        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60) {
-            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes, ${secondsSinceEntry} seconds so far`);
+        let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
+        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60 && secondsSinceMarketOpen < 60 * 15) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes before 6:45 AM, ${secondsSinceEntry} seconds so far`);
             return;
         }
 
