@@ -11,6 +11,9 @@ window.TradingApp.Algo.StockSelection = (function () {
     const createWatchlist = async () => {
         let currentDay = window.TradingApp.Settings.currentDay;
         let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
+        if (window.TradingApp.Profiles.getActiveProfile().settings.indexOnly) {
+            bestStocksToTradeToday = window.TradingData.StockSelection['index'];
+        }
         let nonShortableStocks = ['GME'];
         let stocksNotGoodForDayTrading = [];
         let stocks = [];
