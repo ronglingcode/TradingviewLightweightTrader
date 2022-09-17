@@ -10,11 +10,19 @@ window.TradingApp.Firestore = (function () {
     const firebaseConfig = window.TradingApp.Secrets.firebaseConfig;
     let dateobj = new Date();
     let date = dateobj.getDate(), month = dateobj.getMonth() + 1, year = dateobj.getFullYear();
-    let collectionNamePrefix = `${year}-${month}-${date}`;
+
     let pendingOrdersBySymbol = {};
     let cache = {
         'autoTraderState': {},
         'tosAccount': {}
+    };
+
+    const getCollectionNamePrefix = () => {
+        `${year}-${month}-${date}-${window.TradingApp.Secrets.accountId}`;
+    };
+
+    const getStatePrefix = () => {
+        return `state-${window.TradingApp.Secrets.accountId}`
     };
 
     // Initialize Firebase
@@ -36,7 +44,7 @@ window.TradingApp.Firestore = (function () {
     };
     /*
     const log = async (msgType, msg) => {
-        addDoc(collection(db, `${collectionNamePrefix}-Logs`), {
+        addDoc(collection(db, `${(getCollectionNamePrefix())}-Logs`), {
             msg: msg,
             type: msgType,
             timestamp: new Date()
@@ -46,7 +54,7 @@ window.TradingApp.Firestore = (function () {
     const log = async (msgType, msg) => {
         let now = new Date();
         let docId = now.getTime();
-        let docRef = await doc(db, `${collectionNamePrefix}-Logs/${docId}`) // create this document newDoc at this path
+        let docRef = await doc(db, `${getCollectionNamePrefix()}-Logs/${docId}`) // create this document newDoc at this path
         await setDoc(docRef, {
             msg: msg,
             type: msgType,
@@ -55,13 +63,13 @@ window.TradingApp.Firestore = (function () {
     };
     const logOrder = async (order) => {
         console.log(order);
-        addDoc(collection(db, `${collectionNamePrefix}-Orders`), {
+        addDoc(collection(db, `${getCollectionNamePrefix()}-Orders`), {
             timestamp: new Date(),
             ...order
         });
     };
     const getAutoTraderStateFromFirestore = async () => {
-        const docRef = doc(db, "state", "autoTrader");
+        const docRef = doc(db, `${getStatePrefix()}`, "autoTrader");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -76,7 +84,7 @@ window.TradingApp.Firestore = (function () {
         setAutoTraderStateInFirestore(newState);
     };
     const setAutoTraderStateInFirestore = async (newState) => {
-        let docRef = await doc(db, "state/autoTrader")
+        let docRef = await doc(db, `${getStatePrefix()}/autoTrader`)
         await setDoc(docRef, newState);
     };
     const initializeAutoTraderState = async (account) => {
@@ -84,7 +92,7 @@ window.TradingApp.Firestore = (function () {
         let currentDate = new Date();
         currentDate = window.TradingApp.Settings.currentDay;
         let dateString = currentDate.toLocaleDateString();
-        if (dateString !== state.date) {
+        if (state == null || dateString !== state.date) {
             // start a new day
             let dayTrades = window.TradingApp.AutoTrader.countTrades(account);
             let initialState = {
