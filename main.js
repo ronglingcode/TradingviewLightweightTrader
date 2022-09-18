@@ -134,7 +134,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                     return;
                 }
                 let orderType = factory.OrderType.MARKET;
-                if (!window.TradingApp.Profiles.getActiveProfile().settings.fixedRisk) {
+                if (window.TradingApp.Profiles.getActiveProfile().settings.fixedRisk) {
                     orders = factory.createEntryOrdersWithFixedRisk(
                         symbol, orderType, estimatedEntryPrice, stopOutPrice, "A", 0.5 * checkResult
                     );
