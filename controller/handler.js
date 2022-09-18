@@ -79,10 +79,16 @@ window.TradingApp.Controller.Handler = (function () {
         window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
         return true;
     };
+    const buySellKeyPressed = async (symbol, keyCode) => { };
+    const buySellKeyPressedWithShift = async (symbol, keyCode) => {
+
+    };
     return {
         numberPadPressed,
         numberKeyPressed,
         keyGPressed,
         keyGPressedWithShift,
+        buySellKeyPressed,
+        buySellKeyPressedWithShift,
     };
 })();
