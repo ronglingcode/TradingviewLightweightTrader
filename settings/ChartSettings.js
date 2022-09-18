@@ -51,6 +51,13 @@ window.TradingApp.ChartSettings = (function () {
         let wideWidth = 1628;
         let threeStocksWidth = 525;
         let fourStocksWidth = 387;
+
+        // always return 1/3 of the screen as 3 stock width
+        return {
+            ...chartSettings,
+            width: threeStocksWidth,
+        };
+
         let stocksCount = window.TradingApp.Watchlist.length;
         if (stocksCount == 4 || stocksCount == 1) {
             return chartSettings;
