@@ -3,6 +3,7 @@ window.TradingApp.Profiles.indexOnly = (function () {
         indexOnly: true,
         entryRulesEnabled: false,
         exitRulesEnabled: false,
+        flattenRulesEnabled: false,
         fixedRisk: false,
     };
 

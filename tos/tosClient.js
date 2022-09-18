@@ -187,7 +187,7 @@ window.TradingApp.TOS = (function () {
         }
 
         let order = widget.workingOrders[orderNumber - 1];
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, order);
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, order);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
