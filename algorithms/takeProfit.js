@@ -99,6 +99,15 @@ window.TradingApp.Algo.TakeProfit = (function () {
         return applyProfitStrategyByPercentage(totalShares, basePrice, stopOut, profitTargets);
     };
 
+    const getTempProfitTargets = (entryPrice, isLong) => {
+        let delta = isLong ? 1 : -1;
+        return [
+            { target: entryPrice + delta, quantity: 5 },
+            { target: entryPrice + 2 * delta, quantity: 5 },
+            { target: entryPrice + 3 * delta, quantity: 5 },
+        ];
+    };
+
     const getDefaultProfitTargets = (symbol, remainingPercentage, basePrice, stopOut) => {
         /* old default:
          * 1.0 15%
@@ -184,6 +193,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
 
     return {
         getProfitTargets,
+        getTempProfitTargets,
         checkRulesForAdjustingOrders,
         isTargetAtLeastHalfOpenRange
     };
