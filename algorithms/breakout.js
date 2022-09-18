@@ -8,6 +8,9 @@ window.TradingApp.Algo.Breakout = (function () {
             // bypass check rules if this account is for testing
             return 1;
         }
+        if (!window.TradingApp.Profiles.getActiveProfile().settings.entryRulesEnabled) {
+            return 1;
+        }
         if (!checkRuleForDeferTrading(symbol)) {
             window.TradingApp.Firestore.logError(`checkRule: need to defer trading for ${symbol}`);
             return 0;
