@@ -117,6 +117,7 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                 window.TradingApp.Firestore.logDebug(`${symbol} quote => bid: ${bid}, ask: ${ask}`);
 
                 let spread = ask - bid;
+                let isLong = code == "KeyB";
                 let factory = window.TradingApp.OrderFactory;
                 let orders = [];
                 let stopOutPrice = window.TradingApp.Algo.Breakout.getStopLossPrice(symbol, code);
@@ -132,9 +133,17 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                 if (checkResult == 0) {
                     return;
                 }
-                orders = factory.createEntryOrdersWithFixedRisk(
-                    symbol, factory.OrderType.MARKET, estimatedEntryPrice, stopOutPrice, "A", 0.5 * checkResult
-                );
+                let orderType = factory.OrderType.MARKET;
+                if (!window.TradingApp.Profiles.getActiveProfile().settings.fixedRisk) {
+                    orders = factory.createEntryOrdersWithFixedRisk(
+                        symbol, orderType, estimatedEntryPrice, stopOutPrice, "A", 0.5 * checkResult
+                    );
+                } else {
+                    let entryInstruction = isLong ? "BUY" : "SELL_SHORT";
+                    stopOutPrice = isLong ? estimatedEntryPrice - 5 : estimatedEntryPrice + 5;
+                    let tempProfitTargets = window.TradingApp.Algo.TakeProfit.getTempProfitTargets(estimatedEntryPrice, isLong);
+                    orders = factory.createEntryOrders(symbol, entryInstruction, orderType, estimatedEntryPrice, stopOutPrice, tempProfitTargets)
+                }
                 orders.forEach(order => {
                     window.TradingApp.TOS.placeOrderBase(order);
                 });

@@ -199,6 +199,10 @@ window.TradingApp.OrderFactory = (function () {
         if (entryPrice < stopOutPrice) {
             entryInstruction = OrderLegInstruction.SELL_SHORT;
         }
+        return createEntryOrders(symbol, entryInstruction, orderType, entryPrice, stopOutPrice, profitTargets);
+    };
+
+    const createEntryOrders = (symbol, entryInstruction, orderType, entryPrice, stopOutPrice, profitTargets) => {
         let orders = [];
         profitTargets.forEach(profitTarget => {
             let quantity = profitTarget.quantity;
@@ -206,7 +210,6 @@ window.TradingApp.OrderFactory = (function () {
             let order = createOneEntryWithTwoExits(symbol, entryInstruction, orderType, quantity, entryPrice, quantity, limitPrice, quantity, stopOutPrice);
             orders.push(order);
         });
-
         return orders;
     };
 
@@ -581,6 +584,7 @@ window.TradingApp.OrderFactory = (function () {
         createTestOrder,
         createTestOcoOrder,
         createEntryOrdersWithFixedRisk,
+        createEntryOrders,
         getOrderSymbol,
         OrderType,
         OrderStrategyType,
