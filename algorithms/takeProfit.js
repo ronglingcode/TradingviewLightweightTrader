@@ -144,7 +144,10 @@ window.TradingApp.Algo.TakeProfit = (function () {
         //window.TradingApp.Firestore.addPinnedTarget(symbol, profitTargets[1].price);
         return profitTargets;
     };
-    const checkRulesForAdjustingOrders = (symbol, order) => {
+    const checkRulesForAdjustingExitOrders = (symbol, order) => {
+        if (!window.TradingApp.Profiles.getActiveProfile().settings.exitRulesEnabled) {
+            return true;
+        }
         let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
         let orderInstruction = order.orderLegCollection[0].instruction;
         let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
@@ -194,7 +197,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
     return {
         getProfitTargets,
         getTempProfitTargets,
-        checkRulesForAdjustingOrders,
+        checkRulesForAdjustingExitOrders,
         isTargetAtLeastHalfOpenRange
     };
 })();

@@ -3,6 +3,7 @@ window.TradingApp.Profiles.dayTrading = (function () {
         indexOnly: false,
         entryRulesEnabled: true,
         exitRulesEnabled: true,
+        flattenRulesEnabled: true,
         fixedRisk: true,
     };
 

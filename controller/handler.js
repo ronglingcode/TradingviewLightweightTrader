@@ -25,7 +25,7 @@ window.TradingApp.Controller.Handler = (function () {
         let newPrice = getCursorPrice(symbol);
 
         let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, orders[0]);
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, orders[0]);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
@@ -38,7 +38,7 @@ window.TradingApp.Controller.Handler = (function () {
         // "Numpad1" -> 1, "Numpad2" -> 2
         window.TradingApp.Firestore.logDebug(`Market out 1 exit order pair for ${symbol}`);
         let pair = getExitPairFromKeyCode(symbol, keyCode, "Numpad");
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingOrders(symbol, pair['LIMIT']);
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, pair['LIMIT']);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
