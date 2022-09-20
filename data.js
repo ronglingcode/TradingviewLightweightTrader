@@ -163,5 +163,11 @@ window.TradingData = {
         '9/16/2022': [
             { symbol: 'FDX', news: 'earnings' }, { symbol: 'AMZN', news: 'FDX drag' },
             { symbol: 'QQQ', news: 'gap down, big trend' }, { symbol: 'SPY', news: 'gap down, big trend' }],
+        '9/20/2022': [
+            { symbol: 'F', news: 'production stuck' }, { symbol: 'PYPL', news: 'downgrade' },
+            { symbol: 'BNTX', news: 'covid over' }, { symbol: 'MRNA', news: 'covid over' },
+            { symbol: 'TSLA', news: 'momemutum' }, { symbol: 'BA', news: 'supply deal' },
+            { symbol: 'QQQ', news: 'gap down range day' }, { symbol: 'SPY', news: 'gap down range day' }
+        ],
     }
 };
