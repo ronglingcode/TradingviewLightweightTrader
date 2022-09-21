@@ -2,7 +2,9 @@ window.TradingApp = {
     'Settings': {
         'currentDay': new Date(), //('2022-01-28 6:30'),
         'drawIndicatorsAsSeries': true,
-        'maxStocksCount': 8
+        // I can focus on no more than 4 stocks at the same time,
+        // see details in https://sunrisetrading.atlassian.net/browse/TPS-161
+        'maxStocksCount': 4,
     },
     'Algo': {},
     'Controller': {},
@@ -72,11 +74,11 @@ window.TradingApp = {
             //longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'DASH': {
-            volumeSum: 375828, tradingSum: 32768638, premktHigh: 0, premktLow: 99999999,
+        'PYPL': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
-            boxup: 87.5, boxdown: 84,
+            boxup: 93.5, boxdown: 92,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },

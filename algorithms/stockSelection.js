@@ -44,6 +44,10 @@ window.TradingApp.Algo.StockSelection = (function () {
             candidate.symbol = symbol;
             stocks.push(candidate);
         }
+        if (stocks.length > window.TradingApp.Settings.maxStocksCount) {
+            alert("Too many stocks to trade, see reasoning in https://sunrisetrading.atlassian.net/browse/TPS-161");
+            return stocks.slice(0, 4);
+        }
         return stocks;
     };
 
