@@ -168,8 +168,8 @@ window.TradingData = {
             { symbol: 'BNTX', news: 'covid over' }, { symbol: 'MRNA', news: 'covid over' },
             { symbol: 'TSLA', news: 'momemutum' }, { symbol: 'BA', news: 'supply deal' },
             { symbol: 'QQQ', news: 'gap down range day' }, { symbol: 'SPY', news: 'gap down range day' }],
-        '9/20/2022': [
+        '9/21/2022': [
             { symbol: 'TSLA', news: 'relative strength' }, { symbol: 'AAPL', news: 'heavy weight' },
-            { symbol: 'QQQ', news: 'FOMC day' }, { symbol: 'SPY', news: 'FOMC day' }],
+            { symbol: 'LMT', news: 'war escalate' }, { symbol: 'SPY', news: 'FOMC day' }],
     }
 };
