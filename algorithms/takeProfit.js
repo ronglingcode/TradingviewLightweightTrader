@@ -144,13 +144,22 @@ window.TradingApp.Algo.TakeProfit = (function () {
         //window.TradingApp.Firestore.addPinnedTarget(symbol, profitTargets[1].price);
         return profitTargets;
     };
-    const checkRulesForAdjustingExitOrders = (symbol, order) => {
+    const checkRulesForAdjustingExitOrders = (symbol, order, newPrice) => {
         if (!window.TradingApp.Profiles.getActiveProfile().settings.exitRulesEnabled) {
             return true;
         }
         let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
         let orderInstruction = order.orderLegCollection[0].instruction;
         let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
+        // allow increasing profit targets
+        if (newPrice && order.orderType == 'LIMIT') {
+            let oldPrice = order.price;
+            // isBuyOrder means it is buy to cover, it's a short sell. 
+            if ((isBuyOrder && newPrice < oldPrice) || 
+                (!isBuyOrder && newPrice > oldPrice)) {
+                return true;
+            }
+        }
         if (!checkRuleForMinimumProfit(symbol, order, isBuyOrder, symbolData))
             return false;
 
