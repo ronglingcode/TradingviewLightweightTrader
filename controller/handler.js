@@ -24,8 +24,8 @@ window.TradingApp.Controller.Handler = (function () {
         let pair = getExitPairFromKeyCode(symbol, keyCode, "Digit");
         let newPrice = getCursorPrice(symbol);
 
-        let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, orders[0]);
+        let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);        
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, orders[0], newPrice);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;

@@ -187,7 +187,9 @@ window.TradingApp.TOS = (function () {
         }
 
         let order = widget.workingOrders[orderNumber - 1];
-        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, order);
+        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+        
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, order, newPrice);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
             return;
@@ -196,7 +198,6 @@ window.TradingApp.TOS = (function () {
 
         let oldOrderId = order.orderId;
         order.orderId = null;
-        let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
         let newOrder = window.TradingApp.OrderFactory.replicateOrderWithNewPrice(order, newPrice);
         if (order.parentOrderId && order.siblingOrder) {
             // adjust OCO order, need to candel the parent order and 
