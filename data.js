@@ -171,5 +171,11 @@ window.TradingData = {
         '9/21/2022': [
             { symbol: 'TSLA', news: 'relative strength' }, { symbol: 'AAPL', news: 'heavy weight' },
             { symbol: 'LMT', news: 'war escalate' }, { symbol: 'SPY', news: 'FOMC day' }],
+        '9/22/2022': [
+            { symbol: 'TSLA', news: 'recall' }, { symbol: 'LI', news: 'launch new SUV' },
+            { symbol: 'CRM', news: 'raise guidance' }, { symbol: 'SQ', news: 'downgrade' }],
+        '9/23/2022': [
+            { symbol: 'COIN', news: 'downgrade' }, { symbol: 'FDX', news: 'earnings' },
+            { symbol: 'QQQ', news: 'big gap down' }, { symbol: 'SPY', news: 'big gap down' }],
     }
 };
