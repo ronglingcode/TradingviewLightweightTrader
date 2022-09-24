@@ -8,6 +8,7 @@ window.TradingApp = {
     },
     'Algo': {},
     'Controller': {},
+    'Models': {},
     'Profiles': {},
     'StockCandidates': {
         'LI': {

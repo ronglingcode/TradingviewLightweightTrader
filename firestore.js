@@ -199,6 +199,17 @@ window.TradingApp.Firestore = (function () {
         return 0;
     };
 
+    // allow used once, returns true if allowed this time
+    const usageAllowedOnce = (symbol, fieldToCheck) => {
+        let hasDoneIt = window.TradingApp.Firestore.getStockState(symbol, fieldToCheck);
+        if (!window.TradingApp.Secrets.isTestAccount && hasDoneIt === true) {
+            logInfo(`has already done ${fieldToCheck} for ${symbol}, skipping this time.`);
+            return false;
+        }
+        setStockState(symbol, fieldToCheck, true);
+        return true;
+    };
+
     return {
         addToLogView,
         logDebug,
@@ -220,6 +231,7 @@ window.TradingApp.Firestore = (function () {
         getPinnedTargets,
         getCache,
         getAccountForSymbol,
-        getPositionNetQuantity
+        getPositionNetQuantity,
+        usageAllowedOnce,
     };
 })();
