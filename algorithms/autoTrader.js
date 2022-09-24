@@ -1,7 +1,19 @@
 window.TradingApp.AutoTrader = (function () {
-    const entryCoolDownInSeconds = 300; // 5 minutes
+    const defaultEntryCoolDownInSeconds = {
+        'bigTrendDay': 300, // 5 minutes
+        'rangeDay': 210 // 3.5 minutes
+    };
+
     let stateBySymbol = {};
 
+    const getEntryCoolDownInSeconds = () => {
+        let trend = getMarketTrendType();
+        if (trend == 0) {
+            return defaultEntryCoolDownInSeconds.rangeDay;
+        } else {
+            return defaultEntryCoolDownInSeconds.bigTrendDay;
+        }
+    };
     const addStocksFromWatchlist = (stocks) => {
         stocks.forEach(stock => {
             stateBySymbol[stock.symbol] = {};
@@ -157,6 +169,7 @@ window.TradingApp.AutoTrader = (function () {
 
     const getRemainingCoolDownInSeconds = (symbol) => {
         let entryTimeFromNow = getEntryTimeFromNowInSeconds(symbol);
+        let entryCoolDownInSeconds = getEntryCoolDownInSeconds();
         if (entryTimeFromNow == -1 || entryTimeFromNow > entryCoolDownInSeconds)
             return 0;
         else
