@@ -155,7 +155,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (newPrice && order.orderType == 'LIMIT') {
             let oldPrice = order.price;
             // isBuyOrder means it is buy to cover, it's a short sell. 
-            if ((isBuyOrder && newPrice < oldPrice) || 
+            if ((isBuyOrder && newPrice < oldPrice) ||
                 (!isBuyOrder && newPrice > oldPrice)) {
                 return true;
             }
@@ -169,6 +169,31 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (!checkRuleForTimeSinceEntry(symbol))
             return false;
 
+        return true;
+    };
+    const checkRulesForHalfOut = (symbol, usageKey, action) => {
+        if (!checkForMinimumPositionSize(symbol)) {
+            return false;
+        }
+        if (!checkUsageAllowedOnce(symbol, usageKey, action)) {
+            return false;
+        }
+        return true;
+    };
+    const checkUsageAllowedOnce = (symbol, usageKey, action) => {
+        let allowed = window.TradingApp.Firestore.usageAllowedOnce(symbol, usageKey);
+        if (!allowed) {
+            window.TradingApp.Firestore.logError(`${symbol}: Rules blocked for ${action} `);
+        }
+        return allowed;
+    };
+    const checkForMinimumPositionSize = (symbol) => {
+        // this rule applies to both day trading and indexOnly profile
+        let riskMultiple = window.TradingApp.Models.Account.getRiskMultiples(symbol);
+        if (riskMultiple < 45) {
+            window.TradingApp.Firestore.logInfo(`${symbol}'s position is less than half left.`);
+            return false;
+        }
         return true;
     };
     const checkRuleForMinimumProfit = (symbol, order, isBuyOrder, symbolData) => {
@@ -207,6 +232,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         getProfitTargets,
         getTempProfitTargets,
         checkRulesForAdjustingExitOrders,
+        checkRulesForHalfOut,
         isTargetAtLeastHalfOpenRange
     };
 })();
