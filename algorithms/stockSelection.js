@@ -13,7 +13,13 @@ window.TradingApp.Algo.StockSelection = (function () {
     };
     const createWatchlist = async () => {
         let currentDay = window.TradingApp.Settings.currentDay;
-        let bestStocksToTradeToday = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
+        let todayData = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
+        if (!todayData.SPYRange || !todayData.SPYRange.high || !todayData.SPYRange.low) {
+            alert("missing SPY price range to determine Big Trend Day or Range Day");
+            return;
+        }
+
+        let bestStocksToTradeToday = todayData.stocks;
         if (window.TradingApp.Profiles.getActiveProfile().settings.indexOnly) {
             bestStocksToTradeToday = window.TradingData.StockSelection['index'];
         }

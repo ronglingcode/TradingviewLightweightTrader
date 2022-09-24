@@ -174,8 +174,11 @@ window.TradingData = {
         '9/22/2022': [
             { symbol: 'TSLA', news: 'recall' }, { symbol: 'LI', news: 'launch new SUV' },
             { symbol: 'CRM', news: 'raise guidance' }, { symbol: 'SQ', news: 'downgrade' }],
-        '9/23/2022': [
-            { symbol: 'COIN', highQualityNews: 'downgrade' }, { symbol: 'FDX', highQualityNews: 'earnings' },
-            { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+        '9/23/2022': {
+            'SPYRange': { 'high': 123, 'low': 567 },
+            'stocks': [
+                { symbol: 'COIN', highQualityNews: 'downgrade' }, { symbol: 'FDX', highQualityNews: 'earnings' },
+                { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+        },
     }
 };
