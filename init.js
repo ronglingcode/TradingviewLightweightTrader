@@ -1,5 +1,3 @@
-// only pick the best stocks, stocks with biggest news to trade
-// be selective
 let currentDay = window.TradingApp.Settings.currentDay;
 let currentDayStr = `${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()}`;
 

@@ -1,4 +1,7 @@
 window.TradingApp.Algo.StockSelection = (function () {
+    // don't trade stocks just because it has relative strength/weakness
+    // https://sunrisetrading.atlassian.net/browse/TPS-162
+    const lowQualityNewsWords = ['relative', 'stronger', 'weaker', 'strength', 'weakness'];
     const checkRuleForLowFloat = async (symbol) => {
         let fundamental = await window.TradingApp.TOS.getFundamentals(symbol);
         if (fundamental.marketCapFloat < 90 && fundamental.marketCapFloat != 0) {
@@ -29,9 +32,20 @@ window.TradingApp.Algo.StockSelection = (function () {
                 window.TradingApp.Firestore.logError(`${skipMessage}it's not good for day trading, even with news, it trades poorly in the past.`);
                 continue;
             }
-            if (!stock.news) {
+
+            // only pick the best stocks, stocks with biggest news to trade
+            // be selective
+            if (!stock.highQualityNews) {
                 window.TradingApp.Firestore.logError(`${skipMessage}has no news.`);
                 continue;
+            }
+
+            let newsWords = stock.highQualityNews.split(" ");
+            for (let j = 0; j < newsWords.length; j++) {
+                if (lowQualityNewsWords.includes(newsWords[j])) {
+                    window.TradingApp.Firestore.logError(`${skipMessage}news contains low quality words: ${lowQualityNewsWords}`);
+                    continue;
+                }
             }
 
             let passed = await checkRuleForLowFloat(symbol);
