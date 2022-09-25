@@ -165,7 +165,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (trend == 0) {
             let widget = window.TradingApp.Main.widgets[symbol];
             let total = widget.exitOrderPairs.length;
-            if (total == 8) {
+            if (total == 8 || 16) {
                 return true;
             }
         }
