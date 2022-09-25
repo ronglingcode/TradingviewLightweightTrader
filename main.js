@@ -20,6 +20,15 @@ window.TradingApp.TOS.initialize().then(() => {
             window.TradingApp.Chart.updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
     }
+    // get SPY open price
+    let rightAfterMarketOpen = new Date();
+    rightAfterMarketOpen.setHours(6);
+    rightAfterMarketOpen.setMinutes(30);
+    rightAfterMarketOpen.setSeconds(3);
+    let openPriceDelay = now > rightAfterMarketOpen ? 0 : rightAfterMarketOpen - now;
+    setTimeout(() => {
+        window.TradingApp.DB.fetchSPYOpenPrice();
+    }, openPriceDelay);
 });
 
 

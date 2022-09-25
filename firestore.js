@@ -107,6 +107,7 @@ window.TradingApp.Firestore = (function () {
             cache.autoTraderState = state;
             console.log(state);
         }
+        return true;
     };
     const getTradesCount = () => {
         return window.TradingApp.AutoTrader.countTrades(cache.tosAccount);

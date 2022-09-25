@@ -444,11 +444,26 @@ window.TradingApp.DB = (function () {
         window.TradingApp.Chart.updateUI(symbol, "spread", `${spread} (${spreadPercentage}%)`);
     };
 
+    const fetchSPYOpenPrice = async () => {
+        let response = await window.TradingApp.TOS.getPriceHistory('SPY');
+        let json = await response.json();
+        let candles = json.candles;
+
+        for (let i = 0; i < candles.length; i++) {
+            let candle = candles[i];
+            let d = new Date(candle.datetime);
+            if (isMarketOpenTime(d)) {
+                window.TradingApp.Firestore.setStockState('SPY', 'openPrice', candle.open);
+            }
+        }
+    };
+
     return {
         initialize,
         updateFromTimeSale,
         updateFromLevelOneQuote,
         dataBySymbol,
-        jsDateToUTC
+        jsDateToUTC,
+        fetchSPYOpenPrice,
     };
 })();
