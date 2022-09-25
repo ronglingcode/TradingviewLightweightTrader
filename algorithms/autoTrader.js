@@ -184,16 +184,12 @@ window.TradingApp.AutoTrader = (function () {
         if (!spyData || !spyData.openingCandle)
             return 0;
         let openPrice = spyData.openingCandle.open;
+        let spyRange = window.TradingApp.Algo.StockSelection.getSPYRange();
 
-        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
-            let stock = window.TradingApp.Watchlist[i];
-            if (stock.symbol === 'SPY') {
-                if (stock.boxup && openPrice > stock.boxup)
-                    return 1;
-                if (stock.boxdown && openPrice < stock.boxdown)
-                    return -1;
-            }
-        };
+        if (openPrice > spyRange.high)
+            return 1;
+        if (openPrice < spyRange.low)
+            return -1;
         return 0;
     };
 

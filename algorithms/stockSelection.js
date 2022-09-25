@@ -11,6 +11,11 @@ window.TradingApp.Algo.StockSelection = (function () {
             return true;
         }
     };
+    const getSPYRange = () => {
+        let currentDay = window.TradingApp.Settings.currentDay;
+        let todayData = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
+        return todayData.SPYRange;
+    };
     const createWatchlist = async () => {
         let currentDay = window.TradingApp.Settings.currentDay;
         let todayData = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
@@ -73,5 +78,6 @@ window.TradingApp.Algo.StockSelection = (function () {
 
     return {
         createWatchlist,
+        getSPYRange,
     };
 })();
