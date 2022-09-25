@@ -3,10 +3,10 @@ window.TradingApp.TOS = (function () {
     let userPrincipal = {};
     let initialAccount = {};
     const initialize = async () => {
-        await createAccessToken();
-        await createWatchlist();
-        await getUserPrincipal();
-        await setInitialAccount();
+        let r1 = await createAccessToken();
+        let r2 = await createWatchlist();
+        let r3 = await getUserPrincipal();
+        let r4 = await setInitialAccount();
 
         window.TradingApp.TOS.initialized = true;
     };
@@ -142,7 +142,8 @@ window.TradingApp.TOS = (function () {
     const setInitialAccount = async () => {
         let account = await getAccount();
         window.TradingApp.TOS.initialAccount = account;
-        window.TradingApp.Firestore.initializeAutoTraderState(account);
+        let result = await window.TradingApp.Firestore.initializeAutoTraderState(account);
+        return result;
     };
 
     // this method is not used now
@@ -188,7 +189,7 @@ window.TradingApp.TOS = (function () {
 
         let order = widget.workingOrders[orderNumber - 1];
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
-        
+
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, order, newPrice);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
