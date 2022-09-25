@@ -160,6 +160,15 @@ window.TradingApp.Algo.TakeProfit = (function () {
                 return true;
             }
         }
+        let trend = window.TradingApp.AutoTrader.getMarketTrendType();
+        // on range days, allow first exit adjustment without restrictions
+        if (trend == 0) {
+            let widget = window.TradingApp.Main.widgets[symbol];
+            let total = widget.exitOrderPairs.length;
+            if (total == 8) {
+                return true;
+            }
+        }
         if (!checkRuleForMinimumProfit(symbol, order, isBuyOrder, symbolData))
             return false;
 
