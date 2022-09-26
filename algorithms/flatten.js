@@ -1,5 +1,6 @@
 window.TradingApp.Algo.Flatten = (function () {
     // return true if ok to flatten
+    // see some trade examples in https://sunrisetrading.atlassian.net/browse/TPS-80
     const checkRules = (symbol) => {
         if (!window.TradingApp.Profiles.getActiveProfile().settings.flattenRulesEnabled) {
             return true;

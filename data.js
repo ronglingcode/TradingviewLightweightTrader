@@ -180,5 +180,11 @@ window.TradingData = {
                 { symbol: 'COIN', highQualityNews: 'downgrade' }, { symbol: 'FDX', highQualityNews: 'earnings' },
                 { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
         },
+        '9/26/2022': {
+            'SPYRange': { 'high': 369.72, 'low': 363 },
+            'stocks': [
+                { symbol: 'TSLA', highQualityNews: 'fire in berlin factory' }, { symbol: 'WYNN', highQualityNews: 'upgrade' },
+                { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+        },
     }
 };
