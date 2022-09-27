@@ -1,4 +1,5 @@
 window.TradingApp.Secrets = (function () {
+    const name = "name of the account";
     const accountId = '123456';
     let accessToken = "a_very_long_string";
     const refreshToken = "abc";
