@@ -186,5 +186,11 @@ window.TradingData = {
                 { symbol: 'TSLA', highQualityNews: 'fire in berlin factory' }, { symbol: 'WYNN', highQualityNews: 'upgrade' },
                 { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
         },
+        '9/27/2022': {
+            'SPYRange': { 'high': 369.72, 'low': 363.11 },
+            'stocks': [
+                { symbol: 'COIN', highQualityNews: 'fed talk crypto' }, { symbol: 'NVDA', highQualityNews: 'upgrade' },
+                { symbol: 'TSLA', highQualityNews: 'twiter case delayed' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+        },
     }
 };
