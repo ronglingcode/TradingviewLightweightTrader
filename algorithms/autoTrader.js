@@ -180,10 +180,7 @@ window.TradingApp.AutoTrader = (function () {
     // 0: range
     // -1: down trend
     const getMarketTrendType = () => {
-        let spyData = window.TradingApp.DB.dataBySymbol[symbol];
-        if (!spyData || !spyData.openingCandle)
-            return 0;
-        let openPrice = spyData.openingCandle.open;
+        let openPrice = window.TradingApp.Firestore.getStockState('SPY', 'openPrice');
         let spyRange = window.TradingApp.Algo.StockSelection.getSPYRange();
 
         if (openPrice > spyRange.high)
