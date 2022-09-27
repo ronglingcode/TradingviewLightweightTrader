@@ -1,6 +1,6 @@
 window.TradingData = {
     'StockSelection': {
-        'index': [{ symbol: 'QQQ', news: 'practice' }, { symbol: 'SPY', news: 'practice' }],
+        'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
         '6/10/2022': ['DOCU', 'NFLX', 'TSLA', 'SPY'],
         '6/13/2022': ['AMD', 'TSLA', 'QQQ', 'SPY'],
         '6/14/2022': ['ORCL', 'COIN', 'QQQ', 'SPY'],
