@@ -189,8 +189,8 @@ window.TradingData = {
         '9/27/2022': {
             'SPYRange': { 'high': 369.72, 'low': 363.11 },
             'stocks': [
-                { symbol: 'COIN', highQualityNews: 'fed talk crypto' }, { symbol: 'NVDA', highQualityNews: 'upgrade' },
-                { symbol: 'TSLA', highQualityNews: 'twiter case delayed' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+                { symbol: 'TSLA', highQualityNews: 'twiter case delayed' }, { symbol: 'NVDA', highQualityNews: 'upgrade' },
+                { symbol: 'COIN', highQualityNews: 'fed talk crypto' }, { symbol: 'SPY', highQualityNews: 'durable goods data' }],
         },
     }
 };
