@@ -5,9 +5,9 @@ window.TradingData = {
             'SPYRange': { 'high': 366.5, 'low': 362.2 },
             'stocks': [
                 { symbol: 'AAPL', highQualityNews: 'production news' }, { symbol: 'BIIB', highQualityNews: 'phase 3' },
-                { symbol: 'LLY', highQualityNews: 'BIIB news' },
-                //{ symbol: 'QQQ', highQualityNews: 'market' },
-                { symbol: 'SPY', highQualityNews: 'market' }],
+                { symbol: 'LLY', highQualityNews: 'BIIB news' }, { symbol: 'PRTA', highQualityNews: 'BIIB news' },
+                //{ symbol: 'QQQ', highQualityNews: 'market' },{ symbol: 'SPY', highQualityNews: 'market' }
+            ],
         },
         '6/10/2022': ['DOCU', 'NFLX', 'TSLA', 'SPY'],
         '6/13/2022': ['AMD', 'TSLA', 'QQQ', 'SPY'],
