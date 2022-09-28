@@ -11,7 +11,7 @@ window.TradingApp = {
     'Models': {},
     'Profiles': {},
     'StockCandidates': {
-        'LI': {
+        'BIIB': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
@@ -19,7 +19,7 @@ window.TradingApp = {
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
-        'FDX': {
+        'LLY': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
