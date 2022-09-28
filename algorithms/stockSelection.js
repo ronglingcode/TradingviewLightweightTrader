@@ -29,7 +29,9 @@ window.TradingApp.Algo.StockSelection = (function () {
             bestStocksToTradeToday = window.TradingData.StockSelection['index'];
         }
         let nonShortableStocks = ['GME'];
-        let stocksNotGoodForDayTrading = [];
+        let stocksNotGoodForDayTrading = [
+            'LLY', // https://sunrisetrading.atlassian.net/browse/TPS-172
+        ];
         let stocks = [];
         for (let i = 0; i < bestStocksToTradeToday.length; i++) {
             let stock = bestStocksToTradeToday[i];
