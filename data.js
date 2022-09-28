@@ -2,10 +2,12 @@ window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
         '9/28/2022': {
-            'SPYRange': { 'high': 123, 'low': 456 },
+            'SPYRange': { 'high': 366.5, 'low': 362.2 },
             'stocks': [
-                { symbol: 'TSLA', highQualityNews: 'twiter case delayed' }, { symbol: 'NVDA', highQualityNews: 'upgrade' },
-                { symbol: 'COIN', highQualityNews: 'fed talk crypto' }, { symbol: 'SPY', highQualityNews: 'durable goods data' }],
+                { symbol: 'AAPL', highQualityNews: 'production news' }, { symbol: 'BIIB', highQualityNews: 'phase 3' },
+                { symbol: 'LLY', highQualityNews: 'BIIB news' }, { symbol: 'PRTA', highQualityNews: 'BIIB news' },
+                //{ symbol: 'QQQ', highQualityNews: 'market' },{ symbol: 'SPY', highQualityNews: 'market' }
+            ],
         },
         '6/10/2022': ['DOCU', 'NFLX', 'TSLA', 'SPY'],
         '6/13/2022': ['AMD', 'TSLA', 'QQQ', 'SPY'],
