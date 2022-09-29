@@ -358,6 +358,7 @@ window.TradingApp.DB = (function () {
                 window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
             } else if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
                 // second minute just closed
+                window.TradingApp.Firestore.logInfo("onSecondMinuteClose " + symbol);
                 window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
             } else if (newlyClosedCandle.minutesSinceMarketOpen === 2) {
                 // third minute just closed
@@ -369,6 +370,7 @@ window.TradingApp.DB = (function () {
             );
 
             // create a new candle
+            let newDate = window.TradingApp.Helper.tvTimestampToLocalJsDate(newTime);
             lastCandle = {
                 symbol: timesale.symbol,
                 time: newTime,
@@ -376,7 +378,7 @@ window.TradingApp.DB = (function () {
                 high: timesale.lastPrice,
                 low: timesale.lastPrice,
                 close: timesale.lastPrice,
-                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(localJsDate),
+                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(newDate),
                 firstTradeTime: timesale.tradeTime
             };
             globalData.candles.push(lastCandle);
