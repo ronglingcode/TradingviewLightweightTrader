@@ -2,6 +2,13 @@ window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
         '9/28/2022': {
+            'SPYRange': { 'high': 371.32, 'low': 365.97 },
+            'stocks': [
+                { symbol: 'AAPL', highQualityNews: 'BoA downgrade' }, { symbol: 'BIIB', highQualityNews: 'phase 3' },
+                //{ symbol: 'QQQ', highQualityNews: 'market' },{ symbol: 'SPY', highQualityNews: 'market' }
+            ],
+        },
+        '9/28/2022': {
             'SPYRange': { 'high': 366.5, 'low': 362.2 },
             'stocks': [
                 { symbol: 'AAPL', highQualityNews: 'production news' }, { symbol: 'BIIB', highQualityNews: 'phase 3' },
