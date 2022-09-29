@@ -79,6 +79,7 @@ window.TradingApp.AutoTrader = (function () {
     const checkFalseBreakdown = (symbol, breakdownLevel, candle) => {
         if (candle.low < breakdownLevel && candle.close > breakdownLevel) {
             window.TradingApp.Firestore.logInfo('draw false breakdown marker for ' + symbol);
+            window.TradingApp.Helper.playNotificationSound();
             window.TradingApp.Chart.addMarker(symbol, {
                 time: candle.time,
                 position: 'belowBar',
@@ -92,6 +93,7 @@ window.TradingApp.AutoTrader = (function () {
     const checkFalseBreakout = (symbol, breakoutLevel, candle) => {
         if (candle.high > breakoutLevel && candle.close < breakoutLevel) {
             window.TradingApp.Firestore.logInfo('draw false breakout marker for ' + symbol);
+            window.TradingApp.Helper.playNotificationSound();
             window.TradingApp.Chart.addMarker(symbol, {
                 time: candle.time,
                 position: 'aboveBar',
