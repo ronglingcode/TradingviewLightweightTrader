@@ -20,12 +20,17 @@ window.TradingApp.Helper = (function () {
         let m = Math.floor(seconds / 60);
         let s = seconds - m * 60;
         return `${m} minutes ${s} seconds`;
-    }
+    };
+    const playNotificationSound = () => {
+        const audio = new Audio("/resources/notification_sound.wav");
+        audio.play();
+    };
     return {
         tvTimestampToLocalJsDate,
         getMinutesSinceMarketOpen,
         getSecondsSinceMarketOpen,
         roundToCents,
         toUserTimeString,
+        playNotificationSound,
     };
 })();
