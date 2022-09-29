@@ -25,6 +25,22 @@ window.TradingApp.Helper = (function () {
         const audio = new Audio("/resources/notification_sound.wav");
         audio.play();
     };
+    const blinkChart = (symbol, isLong) => {
+        let color = isLong ? "green" : "red";
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let chart = widget.htmlContents.chart;
+        let a = setInterval(function () {
+            if (chart.style.backgroundColor != color) {
+                chart.style.backgroundColor = color;
+            } else {
+                chart.style.backgroundColor = '';
+            }
+        }, 300);
+        setTimeout(() => {
+            clearInterval(a);
+            chart.style.backgroundColor = '';
+        }, 10000);
+    };
     return {
         tvTimestampToLocalJsDate,
         getMinutesSinceMarketOpen,
@@ -32,5 +48,6 @@ window.TradingApp.Helper = (function () {
         roundToCents,
         toUserTimeString,
         playNotificationSound,
+        blinkChart,
     };
 })();
