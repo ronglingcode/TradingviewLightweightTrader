@@ -18,7 +18,7 @@ window.TradingApp.Firestore = (function () {
     };
 
     const getCollectionNamePrefix = () => {
-        `${year}-${month}-${date}-${window.TradingApp.Secrets.accountId}`;
+        return `${year}-${month}-${date}-${window.TradingApp.Secrets.accountId}`;
     };
 
     const getStatePrefix = () => {
