@@ -4,8 +4,12 @@ window.TradingData = {
         '9/29/2022': {
             'SPYRange': { 'high': 371.32, 'low': 365.97 },
             'stocks': [
-                { symbol: 'AAPL', highQualityNews: 'BoA downgrade' }, { symbol: 'BIIB', highQualityNews: 'phase 3' },
-                { symbol: 'QQQ', highQualityNews: 'GDP, job numbers' }, { symbol: 'SPY', highQualityNews: 'GDP, job numbers' }
+                { symbol: 'AAPL', highQualityNews: 'BoA downgrade' },
+                { symbol: 'TSLA', highQualityNews: 'small firm price cut' },
+                //{ symbol: 'KMX', highQualityNews: 'earnings, below at time low' },
+                { symbol: 'BIIB', highQualityNews: 'second day drug news' },
+                // { symbol: 'QQQ', highQualityNews: 'GDP, job numbers' },
+                { symbol: 'SPY', highQualityNews: 'GDP, job numbers' }
             ],
         },
         '9/28/2022': {
