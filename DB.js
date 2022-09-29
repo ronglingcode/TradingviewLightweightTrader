@@ -158,17 +158,20 @@ window.TradingApp.DB = (function () {
                 value: totalTradingAmount / totalVolume
             });
             window.TradingApp.Indicators.populatePreMarketLineSeries(newD, premktHigh, premktLow, window.TradingApp.Main.widgets[symbol]);
-
             // simulate auto trader
-            if (isMarketOpenTime(d)) {
-                // first minute just closed
-                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newCandle, vwap.slice(-1)[0].value);
-            } else if (newCandle.minutesSinceMarketOpen === 1) {
-                // second minute just closed
-                window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, candles[candles.length - 2], newCandle);
-            } else if (newCandle.minutesSinceMarketOpen === 2) {
-                // third minute just closed
-                window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, candles[candles.length - 3], candles[candles.length - 2], newCandle);
+            // not simulate last candle, it's usually not closed
+            // let time and sales data trigger this candle close
+            if (i < data.length - 1) {
+                if (isMarketOpenTime(d)) {
+                    // first minute just closed
+                    window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newCandle, vwap.slice(-1)[0].value);
+                } else if (newCandle.minutesSinceMarketOpen === 1) {
+                    // second minute just closed
+                    window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, candles[candles.length - 2], newCandle);
+                } else if (newCandle.minutesSinceMarketOpen === 2) {
+                    // third minute just closed
+                    window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, candles[candles.length - 3], candles[candles.length - 2], newCandle);
+                }
             }
         }
 
