@@ -1,7 +1,7 @@
 window.TradingApp.Algo.StockSelection = (function () {
     // don't trade stocks just because it has relative strength/weakness
     // https://sunrisetrading.atlassian.net/browse/TPS-162
-    const lowQualityNewsWords = ['relative', 'stronger', 'weaker', 'strength', 'weakness'];
+    const lowQualityNewsWords = ['relative', 'stronger', 'weaker', 'strength', 'weakness', 'second'];
     const checkRuleForLowFloat = async (symbol) => {
         let fundamental = await window.TradingApp.TOS.getFundamentals(symbol);
         if (fundamental.marketCapFloat < 90 && fundamental.marketCapFloat != 0) {
