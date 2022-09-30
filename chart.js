@@ -332,10 +332,16 @@ window.TradingApp.Chart = (function () {
             let limitB = b['LIMIT'];
             let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(limitB.orderLegCollection[0].instruction);
             let isLong = !isBuyOrder;
-            if (isLong) {
-                return limitA.price - limitB.price;
+            if (limitA.quantity > limitB.quantity) {
+                return -1;
+            } else if (limitA.quantity < limitB.quantity) {
+                return 1;
             } else {
-                return limitB.price - limitA.price;
+                if (isLong) {
+                    return limitA.price - limitB.price;
+                } else {
+                    return limitB.price - limitA.price;
+                }
             }
         });
         widget.exitOrderPairs = exitOrderPairs;
