@@ -158,6 +158,13 @@ window.TradingApp.Algo.Breakout = (function () {
         return true;
     };
 
+    // https://sunrisetrading.atlassian.net/browse/TPS-145
+    // if the entry is within first 2 minutes and last 2 minutes was above vwap
+    // cannot short on the breakdown
+    const checkRuleForPremarketVwap = (symbol, isLong) => {
+
+    };
+
     const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
         let orders = [];
         let checkResult = checkRules(symbol, entryPrice, stopOut);
