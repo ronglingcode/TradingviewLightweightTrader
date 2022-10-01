@@ -11,11 +11,11 @@ window.TradingApp = {
     'Models': {},
     'Profiles': {},
     'StockCandidates': {
-        'KMX': {
+        'NKE': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
+            bias: 'short',
             deferTrading: false,
-            boxup: 75, boxdown: 70
+            boxup: 84, boxdown: 81.5
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
@@ -27,11 +27,11 @@ window.TradingApp = {
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'PRTA': {
+        'MU': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
+            bias: 'short',
             deferTrading: false,
-            boxup: 56.5, boxdown: 55,
+            boxup: 50.5, boxdown: 48.5,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
@@ -47,7 +47,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 285, boxdown: 280.5,
+            boxup: 269, boxdown: 265,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
