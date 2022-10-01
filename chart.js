@@ -333,9 +333,9 @@ window.TradingApp.Chart = (function () {
             let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(limitB.orderLegCollection[0].instruction);
             let isLong = !isBuyOrder;
             if (limitA.quantity > limitB.quantity) {
-                return -1;
-            } else if (limitA.quantity < limitB.quantity) {
                 return 1;
+            } else if (limitA.quantity < limitB.quantity) {
+                return -1;
             } else {
                 if (isLong) {
                     return limitA.price - limitB.price;

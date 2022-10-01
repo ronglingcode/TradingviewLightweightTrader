@@ -1,6 +1,17 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '9/30/2022': {
+            'SPYRange': { 'high': 368, 'low': 360.7 },
+            'stocks': [
+                { symbol: 'NKE', highQualityNews: 'earnings' },
+                { symbol: 'TSLA', highQualityNews: 'AI day' },
+                //{ symbol: 'META', highQualityNews: 'hiring freez' },
+                { symbol: 'MU', highQualityNews: 'earnings' },
+                // { symbol: 'QQQ', highQualityNews: 'GDP, job numbers' },
+                { symbol: 'SPY', highQualityNews: 'GDP, job numbers' }
+            ],
+        },
         '9/29/2022': {
             'SPYRange': { 'high': 371.32, 'low': 365.97 },
             'stocks': [
