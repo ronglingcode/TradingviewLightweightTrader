@@ -3,7 +3,6 @@ window.TradingApp.Algo.Breakout = (function () {
     // 0 means cannot make the trade
     // 1 means trade with full size
     const checkRules = (symbol, entryPrice, stopOutPrice) => {
-        let isLong = entryPrice > stopOutPrice;
         if (window.TradingApp.Secrets.isTestAccount) {
             // bypass check rules if this account is for testing
             return 1;
@@ -19,7 +18,10 @@ window.TradingApp.Algo.Breakout = (function () {
             window.TradingApp.Firestore.logError(`checkRule: Daily max loss exceeded`);
             return 0;
         }
-        if (!checkRuleForTimeWindow()) {
+        let isLong = entryPrice > stopOutPrice;
+        let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
+
+        if (!checkRuleForTimeWindow(secondsSinceMarketOpen)) {
             window.TradingApp.Firestore.logError(`checkRule: Time Window rule failed for ${symbol}`);
             return 0;
         }
@@ -37,6 +39,10 @@ window.TradingApp.Algo.Breakout = (function () {
         }
         if (!checkRuleForOpenCandle(symbol, entryPrice, stopOutPrice)) {
             window.TradingApp.Firestore.logError(`checkRule: OpenCandle rule failed for ${symbol}`);
+            return 0;
+        }
+        if (!checkRuleForPremarketVwap(symbol, isLong, secondsSinceMarketOpen)) {
+            window.TradingApp.Firestore.logError(`checkRule: Premarket VWAP rule failed for ${symbol}`);
             return 0;
         }
         return 1;
@@ -86,12 +92,10 @@ window.TradingApp.Algo.Breakout = (function () {
             return 0;
         }
     };
-    const checkRuleForTimeWindow = () => {
-        let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
+    const checkRuleForTimeWindow = (secondsSinceMarketOpen) => {
         // only allow new trades after first 1 minute candle close
         // cannot take trades after 30 minutes of market open
         // add a few seconds as buffer
-        console.log("seconds: " + secondsSinceMarketOpen);
         if (58 <= secondsSinceMarketOpen && secondsSinceMarketOpen <= (30 * 60 + 10)) {
             return 1;
         } else {
@@ -161,8 +165,12 @@ window.TradingApp.Algo.Breakout = (function () {
     // https://sunrisetrading.atlassian.net/browse/TPS-145
     // if the entry is within first 2 minutes and last 2 minutes was above vwap
     // cannot short on the breakdown
-    const checkRuleForPremarketVwap = (symbol, isLong) => {
-        // check time for first 2 minutes
+    const checkRuleForPremarketVwap = (symbol, isLong, secondsSinceMarketOpen) => {
+        // only check this rule for first 2 minutes
+        if (secondsSinceMarketOpen > (60 + 55)) {
+            return 1;
+        }
+
         let data = window.TradingApp.DB.dataBySymbol[symbol];
         let candles = data.candles;
         let twoMinutesBeforeOpenCandles = [];
@@ -172,14 +180,21 @@ window.TradingApp.Algo.Breakout = (function () {
             if (timeWindow.includes(candles[i].minutesSinceMarketOpen)) {
                 twoMinutesBeforeOpenCandles.push(candles[i]);
                 vwap.push(data.vwap[i].value);
+                twoMinutesBeforeOpenCandles.push(candles[i + 1]);
+                vwap.push(data.vwap[i + 1].value);
+                break;
             }
         }
         if (isLong) {
-            return twoMinutesBeforeOpenCandles[0].low > vwap[0] && twoMinutesBeforeOpenCandles[1].low > vwap[1];
+            if (twoMinutesBeforeOpenCandles[0].high < vwap[0] && twoMinutesBeforeOpenCandles[1].high < vwap[1])
+                return 1;
+            else
+                return -1;
         } else {
-            console.log(twoMinutesBeforeOpenCandles);
-            console.log(vwap);
-            return twoMinutesBeforeOpenCandles[0].high < vwap[0] && twoMinutesBeforeOpenCandles[1].high < vwap[1];
+            if (twoMinutesBeforeOpenCandles[0].low > vwap[0] && twoMinutesBeforeOpenCandles[1].low > vwap[1])
+                return -1;
+            else
+                return 1;
         }
     };
 
@@ -267,6 +282,5 @@ window.TradingApp.Algo.Breakout = (function () {
         getEntryPrice,
         checkRules,
         checkRuleForDailyMaxLoss,
-        checkRuleForPremarketVwap,
     };
 })();
