@@ -162,7 +162,25 @@ window.TradingApp.Algo.Breakout = (function () {
     // if the entry is within first 2 minutes and last 2 minutes was above vwap
     // cannot short on the breakdown
     const checkRuleForPremarketVwap = (symbol, isLong) => {
-
+        // check time for first 2 minutes
+        let data = window.TradingApp.DB.dataBySymbol[symbol];
+        let candles = data.candles;
+        let twoMinutesBeforeOpenCandles = [];
+        let vwap = [];
+        let timeWindow = [-2, -1];
+        for (let i = 0; i < candles.length; i++) {
+            if (timeWindow.includes(candles[i].minutesSinceMarketOpen)) {
+                twoMinutesBeforeOpenCandles.push(candles[i]);
+                vwap.push(data.vwap[i].value);
+            }
+        }
+        if (isLong) {
+            return twoMinutesBeforeOpenCandles[0].low > vwap[0] && twoMinutesBeforeOpenCandles[1].low > vwap[1];
+        } else {
+            console.log(twoMinutesBeforeOpenCandles);
+            console.log(vwap);
+            return twoMinutesBeforeOpenCandles[0].high < vwap[0] && twoMinutesBeforeOpenCandles[1].high < vwap[1];
+        }
     };
 
     const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
@@ -249,5 +267,6 @@ window.TradingApp.Algo.Breakout = (function () {
         getEntryPrice,
         checkRules,
         checkRuleForDailyMaxLoss,
+        checkRuleForPremarketVwap,
     };
 })();
