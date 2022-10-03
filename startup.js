@@ -11,11 +11,11 @@ window.TradingApp = {
     'Models': {},
     'Profiles': {},
     'StockCandidates': {
-        'NKE': {
+        'NIO': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             bias: 'short',
             deferTrading: false,
-            boxup: 84, boxdown: 81.5
+            //boxup: 84, boxdown: 81.5
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
         },
@@ -27,19 +27,19 @@ window.TradingApp = {
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'MU': {
+        'DOCU': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             bias: 'short',
             deferTrading: false,
-            boxup: 50.5, boxdown: 48.5,
+            boxup: 54, boxdown: 51,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'NFLX': {
+        'MYOV': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 66.5, boxdown: 65,
+            boxup: 24.25, boxdown: 23,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
@@ -47,7 +47,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 269, boxdown: 265,
+            boxup: 260, boxdown: 252,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },

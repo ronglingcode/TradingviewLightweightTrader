@@ -157,6 +157,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
             // isBuyOrder means it is buy to cover, it's a short sell. 
             if ((isBuyOrder && newPrice < oldPrice) ||
                 (!isBuyOrder && newPrice > oldPrice)) {
+                window.TradingApp.Firestore.logInfo(`increasing profit target new price: ${newPrice}, old price: ${oldPrice}`);
                 return true;
             }
         }
@@ -165,7 +166,8 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (trend == 0) {
             let widget = window.TradingApp.Main.widgets[symbol];
             let total = widget.exitOrderPairs.length;
-            if (total == 8 || 16) {
+            if (total == 8 || total == 16) {
+                window.TradingApp.Firestore.logInfo(`allow for first order`);
                 return true;
             }
         }
