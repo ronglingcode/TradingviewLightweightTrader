@@ -1,6 +1,15 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/3/2022': {
+            'SPYRange': { 'high': 361.47, 'low': 356.83 },
+            'stocks': [
+                { symbol: 'TSLA', highQualityNews: 'delivery numbers miss' },
+                { symbol: 'NIO', highQualityNews: 'delivery' },
+                { symbol: 'QQQ', highQualityNews: 'europe give up tax cuts' },
+                { symbol: 'SPY', highQualityNews: 'europe give up tax cuts' }
+            ],
+        },
         '9/30/2022': {
             'SPYRange': { 'high': 368, 'low': 360.7 },
             'stocks': [
