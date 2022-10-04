@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date(), //('2022-01-28 6:30'),
+        'currentDay': new Date(), //('2022-09-23 6:30'),
         'drawIndicatorsAsSeries': true,
         // I can focus on no more than 4 stocks at the same time,
         // see details in https://sunrisetrading.atlassian.net/browse/TPS-161
@@ -8,37 +8,38 @@ window.TradingApp = {
     },
     'Algo': {},
     'Controller': {},
+    'Models': {},
     'Profiles': {},
     'StockCandidates': {
-        'AAPL': {
+        'NIO': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
+            bias: 'short',
             deferTrading: false,
-            //boxup: 74, boxdown: 70
+            //boxup: 84, boxdown: 81.5
             //longTargets: [{ price: 157.5, percentage: 0.3 }],
             //shortTargets: [{ price: 170.3, percentage: 0.3 }]
-        },
-        'MU': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
-            deferTrading: false,
-            //boxup: 162.5, boxdown: 158,
-            //longTargets: [{ price: 59.95, percentage: 0.3 }],
-            //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
         'META': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 151, boxdown: 149,
+            boxup: 338, boxdown: 332,
+            //longTargets: [{ price: 59.95, percentage: 0.3 }],
+            //shortTargets: [{ price: 50.7, percentage: 0.3 }]
+        },
+        'DOCU': {
+            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+            bias: 'short',
+            deferTrading: false,
+            boxup: 54, boxdown: 51,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'MRNA': {
+        'MYOV': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 126, boxdown: 124,
+            boxup: 24.25, boxdown: 23,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
@@ -46,7 +47,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 308.5, boxdown: 306.5,
+            boxup: 260, boxdown: 252,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
@@ -54,23 +55,23 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 141.5, boxdown: 139.5,
+            boxup: 125.5, boxdown: 124,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },
-        'LMT': {
+        'BIIB': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
-            boxup: 429, boxdown: 425,
+            boxup: 272, boxdown: 268.5,
             //longTargets: [{ price: 156, percentage: 0.1 }, { price: 156.5, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
-        'BA': {
+        'AAPL': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'long',
             deferTrading: false,
-            boxup: 148, boxdown: 145.5,
+            //boxup: 149, boxdown: 146,
             //longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
@@ -94,7 +95,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 389, boxdown: 377,
+            boxup: 373.44, boxdown: 378.3,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },

@@ -20,6 +20,15 @@ window.TradingApp.TOS.initialize().then(() => {
             window.TradingApp.Chart.updateAccountUIStatusForSymbol(symbol, symbolAccount);
         });
     }
+    // get SPY open price
+    let rightAfterMarketOpen = new Date();
+    rightAfterMarketOpen.setHours(6);
+    rightAfterMarketOpen.setMinutes(30);
+    rightAfterMarketOpen.setSeconds(3);
+    let openPriceDelay = now > rightAfterMarketOpen ? 0 : rightAfterMarketOpen - now;
+    setTimeout(() => {
+        window.TradingApp.DB.fetchSPYOpenPrice();
+    }, openPriceDelay);
 });
 
 
@@ -124,10 +133,10 @@ htmlBody.addEventListener("keydown", async function (keyboardEvent) {
                 let estimatedEntryPrice = 0;
                 if (code === "KeyB") {
                     window.TradingApp.Firestore.logInfo("market buy for " + symbol);
-                    estimatedEntryPrice = ask + 1 * spread;
+                    estimatedEntryPrice = ask + 0.2 * spread;
                 } else if (code === "KeyS") {
                     window.TradingApp.Firestore.logInfo("market sell for " + symbol);
-                    estimatedEntryPrice = bid - 1 * spread;
+                    estimatedEntryPrice = bid - 0.2 * spread;
                 }
                 let checkResult = window.TradingApp.Algo.Breakout.checkRules(symbol, estimatedEntryPrice, stopOutPrice);
                 if (checkResult == 0) {

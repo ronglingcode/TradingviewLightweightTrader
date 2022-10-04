@@ -158,17 +158,20 @@ window.TradingApp.DB = (function () {
                 value: totalTradingAmount / totalVolume
             });
             window.TradingApp.Indicators.populatePreMarketLineSeries(newD, premktHigh, premktLow, window.TradingApp.Main.widgets[symbol]);
-
             // simulate auto trader
-            if (isMarketOpenTime(d)) {
-                // first minute just closed
-                window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newCandle, vwap.slice(-1)[0].value);
-            } else if (newCandle.minutesSinceMarketOpen === 1) {
-                // second minute just closed
-                window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, candles[candles.length - 2], newCandle);
-            } else if (newCandle.minutesSinceMarketOpen === 2) {
-                // third minute just closed
-                window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, candles[candles.length - 3], candles[candles.length - 2], newCandle);
+            // not simulate last candle, it's usually not closed
+            // let time and sales data trigger this candle close
+            if (i < data.length - 1) {
+                if (isMarketOpenTime(d)) {
+                    // first minute just closed
+                    window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newCandle, vwap.slice(-1)[0].value);
+                } else if (newCandle.minutesSinceMarketOpen === 1) {
+                    // second minute just closed
+                    window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, candles[candles.length - 2], newCandle);
+                } else if (newCandle.minutesSinceMarketOpen === 2) {
+                    // third minute just closed
+                    window.TradingApp.AutoTrader.onThirdMinuteClose(symbol, candles[candles.length - 3], candles[candles.length - 2], newCandle);
+                }
             }
         }
 
@@ -358,6 +361,7 @@ window.TradingApp.DB = (function () {
                 window.TradingApp.AutoTrader.onFirstMinuteClose(symbol, newlyClosedCandle, newVwapValue);
             } else if (newlyClosedCandle.minutesSinceMarketOpen === 1) {
                 // second minute just closed
+                window.TradingApp.Firestore.logInfo("onSecondMinuteClose " + symbol);
                 window.TradingApp.AutoTrader.onSecondMinuteClose(symbol, globalData.candles[globalData.candles.length - 2], newlyClosedCandle);
             } else if (newlyClosedCandle.minutesSinceMarketOpen === 2) {
                 // third minute just closed
@@ -369,6 +373,7 @@ window.TradingApp.DB = (function () {
             );
 
             // create a new candle
+            let newDate = window.TradingApp.Helper.tvTimestampToLocalJsDate(newTime);
             lastCandle = {
                 symbol: timesale.symbol,
                 time: newTime,
@@ -376,7 +381,7 @@ window.TradingApp.DB = (function () {
                 high: timesale.lastPrice,
                 low: timesale.lastPrice,
                 close: timesale.lastPrice,
-                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(localJsDate),
+                minutesSinceMarketOpen: window.TradingApp.Helper.getMinutesSinceMarketOpen(newDate),
                 firstTradeTime: timesale.tradeTime
             };
             globalData.candles.push(lastCandle);
@@ -444,11 +449,26 @@ window.TradingApp.DB = (function () {
         window.TradingApp.Chart.updateUI(symbol, "spread", `${spread} (${spreadPercentage}%)`);
     };
 
+    const fetchSPYOpenPrice = async () => {
+        let response = await window.TradingApp.TOS.getPriceHistory('SPY');
+        let json = await response.json();
+        let candles = json.candles;
+
+        for (let i = 0; i < candles.length; i++) {
+            let candle = candles[i];
+            let d = new Date(candle.datetime);
+            if (isMarketOpenTime(d)) {
+                window.TradingApp.Firestore.setStockState('SPY', 'openPrice', candle.open);
+            }
+        }
+    };
+
     return {
         initialize,
         updateFromTimeSale,
         updateFromLevelOneQuote,
         dataBySymbol,
-        jsDateToUTC
+        jsDateToUTC,
+        fetchSPYOpenPrice,
     };
 })();

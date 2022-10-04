@@ -227,21 +227,18 @@ window.TradingApp.Chart = (function () {
             html.style.color = 'black';
             return;
         }
-        let position = account.position;
-        let filledPrice = position.averagePrice;
-        let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
-        let riskManager = window.TradingApp.Algo.RiskManager;
 
+        let riskMultiples = window.TradingApp.Models.Account.getRiskMultiples(symbol);
+        if (riskMultiples == 0)
+            return;
+
+        let position = account.position;
         // show relative position size regarding to risk size
         if (position.longQuantity) {
-            let riskPerShare = filledPrice - symbolData.lowOfDay;
-            let riskMultiples = riskManager.quantityToRiskMultiples(riskPerShare, position.longQuantity);
             html.innerText = `Pos: +${riskMultiples}%`;
             html.style.color = 'green';
             return;
         } else if (position.shortQuantity) {
-            let riskPerShare = symbolData.highOfDay - filledPrice;
-            let riskMultiples = riskManager.quantityToRiskMultiples(riskPerShare, position.shortQuantity);
             html.innerText = `Pos: -${riskMultiples}%`;
             html.style.color = 'red';
             return;
@@ -335,10 +332,16 @@ window.TradingApp.Chart = (function () {
             let limitB = b['LIMIT'];
             let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(limitB.orderLegCollection[0].instruction);
             let isLong = !isBuyOrder;
-            if (isLong) {
-                return limitA.price - limitB.price;
+            if (limitA.quantity > limitB.quantity) {
+                return 1;
+            } else if (limitA.quantity < limitB.quantity) {
+                return -1;
             } else {
-                return limitB.price - limitA.price;
+                if (isLong) {
+                    return limitA.price - limitB.price;
+                } else {
+                    return limitB.price - limitA.price;
+                }
             }
         });
         widget.exitOrderPairs = exitOrderPairs;

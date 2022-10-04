@@ -376,6 +376,7 @@ window.TradingApp.OrderFactory = (function () {
             }
             if (children.length != 2) {
                 window.TradingApp.Firestore.logError(`OCO should have 2 legs, but got ${children.length} instead`);
+                console.log(order);
             }
             let exitPair = {
                 'STOP': {},
@@ -399,8 +400,13 @@ window.TradingApp.OrderFactory = (function () {
     const extractWorkingChildOrdersFromOCO = (oco) => {
         let workingChildOrders = [];
         oco.childOrderStrategies.forEach(order => {
-            if (WorkingOrdersStatus.includes(order.status)) {
+            if (order.orderStrategyType == 'SINGLE' && WorkingOrdersStatus.includes(order.status)) {
                 workingChildOrders.push(order);
+            } else if (order.orderStrategyType == 'OCO') {
+                let more = extractWorkingChildOrdersFromOCO(order);
+                if (more.length > 0) {
+                    workingChildOrders.push(...more);
+                }
             }
         });
         return workingChildOrders;

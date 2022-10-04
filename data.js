@@ -1,6 +1,45 @@
 window.TradingData = {
     'StockSelection': {
-        'index': [{ symbol: 'QQQ', news: 'practice' }, { symbol: 'SPY', news: 'practice' }],
+        'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/3/2022': {
+            'SPYRange': { 'high': 361.47, 'low': 356.83 },
+            'stocks': [
+                { symbol: 'TSLA', highQualityNews: 'delivery numbers miss' },
+                { symbol: 'NIO', highQualityNews: 'delivery' },
+                { symbol: 'QQQ', highQualityNews: 'europe give up tax cuts' },
+                { symbol: 'SPY', highQualityNews: 'europe give up tax cuts' }
+            ],
+        },
+        '9/30/2022': {
+            'SPYRange': { 'high': 368, 'low': 360.7 },
+            'stocks': [
+                { symbol: 'NKE', highQualityNews: 'earnings' },
+                { symbol: 'TSLA', highQualityNews: 'AI day' },
+                //{ symbol: 'META', highQualityNews: 'hiring freez' },
+                { symbol: 'MU', highQualityNews: 'earnings' },
+                // { symbol: 'QQQ', highQualityNews: 'GDP, job numbers' },
+                { symbol: 'SPY', highQualityNews: 'GDP, job numbers' }
+            ],
+        },
+        '9/29/2022': {
+            'SPYRange': { 'high': 371.32, 'low': 365.97 },
+            'stocks': [
+                { symbol: 'AAPL', highQualityNews: 'BoA downgrade' },
+                { symbol: 'TSLA', highQualityNews: 'small firm price cut' },
+                //{ symbol: 'KMX', highQualityNews: 'earnings, below at time low' },
+                { symbol: 'BIIB', highQualityNews: 'second day drug news' },
+                // { symbol: 'QQQ', highQualityNews: 'GDP, job numbers' },
+                { symbol: 'SPY', highQualityNews: 'GDP, job numbers' }
+            ],
+        },
+        '9/28/2022': {
+            'SPYRange': { 'high': 366.5, 'low': 362.2 },
+            'stocks': [
+                { symbol: 'AAPL', highQualityNews: 'production news' }, { symbol: 'BIIB', highQualityNews: 'phase 3' },
+                { symbol: 'LLY', highQualityNews: 'BIIB news' }, { symbol: 'PRTA', highQualityNews: 'BIIB news' },
+                //{ symbol: 'QQQ', highQualityNews: 'market' },{ symbol: 'SPY', highQualityNews: 'market' }
+            ],
+        },
         '6/10/2022': ['DOCU', 'NFLX', 'TSLA', 'SPY'],
         '6/13/2022': ['AMD', 'TSLA', 'QQQ', 'SPY'],
         '6/14/2022': ['ORCL', 'COIN', 'QQQ', 'SPY'],
@@ -171,5 +210,26 @@ window.TradingData = {
         '9/21/2022': [
             { symbol: 'TSLA', news: 'relative strength' }, { symbol: 'AAPL', news: 'heavy weight' },
             { symbol: 'LMT', news: 'war escalate' }, { symbol: 'SPY', news: 'FOMC day' }],
+        '9/22/2022': [
+            { symbol: 'TSLA', news: 'recall' }, { symbol: 'LI', news: 'launch new SUV' },
+            { symbol: 'CRM', news: 'raise guidance' }, { symbol: 'SQ', news: 'downgrade' }],
+        '9/23/2022': {
+            'SPYRange': { 'high': 123, 'low': 567 },
+            'stocks': [
+                { symbol: 'COIN', highQualityNews: 'downgrade' }, { symbol: 'FDX', highQualityNews: 'earnings' },
+                { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+        },
+        '9/26/2022': {
+            'SPYRange': { 'high': 369.72, 'low': 363 },
+            'stocks': [
+                { symbol: 'TSLA', highQualityNews: 'fire in berlin factory' }, { symbol: 'WYNN', highQualityNews: 'upgrade' },
+                { symbol: 'QQQ', highQualityNews: 'big gap down' }, { symbol: 'SPY', highQualityNews: 'big gap down' }],
+        },
+        '9/27/2022': {
+            'SPYRange': { 'high': 369.72, 'low': 363.11 },
+            'stocks': [
+                { symbol: 'TSLA', highQualityNews: 'twiter case delayed' }, { symbol: 'NVDA', highQualityNews: 'upgrade' },
+                { symbol: 'COIN', highQualityNews: 'fed talk crypto' }, { symbol: 'SPY', highQualityNews: 'durable goods data' }],
+        },
     }
 };

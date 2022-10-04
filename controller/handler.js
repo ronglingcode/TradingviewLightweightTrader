@@ -24,7 +24,7 @@ window.TradingApp.Controller.Handler = (function () {
         let pair = getExitPairFromKeyCode(symbol, keyCode, "Digit");
         let newPrice = getCursorPrice(symbol);
 
-        let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);        
+        let orders = window.TradingApp.Controller.OrderFlow.chooseOrderLeg(symbol, [pair], newPrice);
         let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForAdjustingExitOrders(symbol, orders[0], newPrice);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`Rules blocked adjusting order for ${symbol}`);
@@ -48,8 +48,9 @@ window.TradingApp.Controller.Handler = (function () {
     };
     const keyGPressed = async (symbol) => {
         let action = "move half exit orders";
+        let usageKey = "limitOutHalf";
         window.TradingApp.Firestore.logInfo(`${symbol}: ${action}`);
-        let allowed = usageAllowedOnce(symbol, "limitOutHalf");
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForHalfOut(symbol, usageKey, action);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`${symbol}: Rules blocked for ${action} `);
             return;
@@ -60,8 +61,9 @@ window.TradingApp.Controller.Handler = (function () {
     };
     const keyGPressedWithShift = async (symbol) => {
         let action = "market out half positions";
+        let usageKey = "marketOutHalf";
         window.TradingApp.Firestore.logInfo(`${symbol}: ${action}`);
-        let allowed = usageAllowedOnce(symbol, "marketOutHalf");
+        let allowed = window.TradingApp.Algo.TakeProfit.checkRulesForHalfOut(symbol, usageKey, action);
         if (!allowed) {
             window.TradingApp.Firestore.logError(`${symbol}: Rules blocked for ${action} `);
             return;
@@ -69,16 +71,7 @@ window.TradingApp.Controller.Handler = (function () {
         window.TradingApp.Firestore.logInfo(`${symbol}: Rules passed for ${action}`);
         window.TradingApp.Controller.OrderFlow.marketOutHalfExitOrders(symbol);
     };
-    // allow used once, returns true if allowed this time
-    const usageAllowedOnce = (symbol, fieldToCheck) => {
-        let hasDoneIt = window.TradingApp.Firestore.getStockState(symbol, fieldToCheck);
-        if (!window.TradingApp.Secrets.isTestAccount && hasDoneIt === true) {
-            window.TradingApp.Firestore.logInfo(`has already done ${fieldToCheck} for ${symbol}, skipping this time.`);
-            return false;
-        }
-        window.TradingApp.Firestore.setStockState(symbol, fieldToCheck, true);
-        return true;
-    };
+
     const buySellKeyPressed = async (symbol, keyCode) => { };
     const buySellKeyPressedWithShift = async (symbol, keyCode) => {
 

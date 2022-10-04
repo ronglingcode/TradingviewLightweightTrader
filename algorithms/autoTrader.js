@@ -1,7 +1,19 @@
 window.TradingApp.AutoTrader = (function () {
-    const entryCoolDownInSeconds = 300; // 5 minutes
+    const defaultEntryCoolDownInSeconds = {
+        'bigTrendDay': 300, // 5 minutes
+        'rangeDay': 210 // 3.5 minutes
+    };
+
     let stateBySymbol = {};
 
+    const getEntryCoolDownInSeconds = () => {
+        let trend = getMarketTrendType();
+        if (trend == 0) {
+            return defaultEntryCoolDownInSeconds.rangeDay;
+        } else {
+            return defaultEntryCoolDownInSeconds.bigTrendDay;
+        }
+    };
     const addStocksFromWatchlist = (stocks) => {
         stocks.forEach(stock => {
             stateBySymbol[stock.symbol] = {};
@@ -67,6 +79,7 @@ window.TradingApp.AutoTrader = (function () {
     const checkFalseBreakdown = (symbol, breakdownLevel, candle) => {
         if (candle.low < breakdownLevel && candle.close > breakdownLevel) {
             window.TradingApp.Firestore.logInfo('draw false breakdown marker for ' + symbol);
+            notifyEntrySignal(symbol, true);
             window.TradingApp.Chart.addMarker(symbol, {
                 time: candle.time,
                 position: 'belowBar',
@@ -80,6 +93,7 @@ window.TradingApp.AutoTrader = (function () {
     const checkFalseBreakout = (symbol, breakoutLevel, candle) => {
         if (candle.high > breakoutLevel && candle.close < breakoutLevel) {
             window.TradingApp.Firestore.logInfo('draw false breakout marker for ' + symbol);
+            notifyEntrySignal(symbol, false);
             window.TradingApp.Chart.addMarker(symbol, {
                 time: candle.time,
                 position: 'aboveBar',
@@ -88,7 +102,12 @@ window.TradingApp.AutoTrader = (function () {
                 text: 'false breakout'
             });
         }
-    }
+    };
+
+    const notifyEntrySignal = (symbol, isLong) => {
+        window.TradingApp.Helper.playNotificationSound();
+        window.TradingApp.Helper.blinkChart(symbol, isLong);
+    };
 
     const manualTrigger = (symbol, trigger) => {
         stateBySymbol[symbol].manualTriggered = trigger;
@@ -157,6 +176,7 @@ window.TradingApp.AutoTrader = (function () {
 
     const getRemainingCoolDownInSeconds = (symbol) => {
         let entryTimeFromNow = getEntryTimeFromNowInSeconds(symbol);
+        let entryCoolDownInSeconds = getEntryCoolDownInSeconds();
         if (entryTimeFromNow == -1 || entryTimeFromNow > entryCoolDownInSeconds)
             return 0;
         else
@@ -167,20 +187,13 @@ window.TradingApp.AutoTrader = (function () {
     // 0: range
     // -1: down trend
     const getMarketTrendType = () => {
-        let spyData = window.TradingApp.DB.dataBySymbol[symbol];
-        if (!spyData || !spyData.openingCandle)
-            return 0;
-        let openPrice = spyData.openingCandle.open;
+        let openPrice = window.TradingApp.Firestore.getStockState('SPY', 'openPrice');
+        let spyRange = window.TradingApp.Algo.StockSelection.getSPYRange();
 
-        for (let i = 0; i < window.TradingApp.Watchlist.length; i++) {
-            let stock = window.TradingApp.Watchlist[i];
-            if (stock.symbol === 'SPY') {
-                if (stock.boxup && openPrice > stock.boxup)
-                    return 1;
-                if (stock.boxdown && openPrice < stock.boxdown)
-                    return -1;
-            }
-        };
+        if (openPrice > spyRange.high)
+            return 1;
+        if (openPrice < spyRange.low)
+            return -1;
         return 0;
     };
 
