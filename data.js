@@ -1,6 +1,29 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/5/2022': {
+            'SPYRange': { 'high': 379.65, 'low': 373.94 },
+            'stocks': [
+                {
+                    symbol: 'TSLA', highQualityNews: 'elon buy twitter', longTargets: [],
+                    shortTargets: [{ price: 244.1, percentage: 0.1 }, { price: 241.5, percentage: 0.1 }, { price: 242.5, percentage: 0.1 }, { price: 238.5, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'AMD', highQualityNews: 'price cut', longTargets: [],
+                    shortTargets: [{ price: 66.3, percentage: 0.1 },{ price: 65.97, percentage: 0.1 },{ price: 65.5, percentage: 0.1 },{ price: 64.92, percentage: 0.1 }]
+                },
+                {
+                    symbol: 'QQQ', highQualityNews: 'oil production cut',
+                    longTargets: [{ price: 279.41, percentage: 0.1 }, { price: 279.9, percentage: 0.1 }, { price: 280.22, percentage: 0.3 }],
+                    shortTargets: [{ price: 276.8, percentage: 0.3 }, { price: 275.8, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'SPY', highQualityNews: 'oil production cut',
+                    longTargets: [{ price: 375.2, percentage: 0.3 }],
+                    shortTargets: [{ price: 373.42, percentage: 0.1 }, { price: 372.95, percentage: 0.3 }]
+                }
+            ],
+        },
         '10/4/2022': {
             'SPYRange': { 'high': 368.38, 'low': 363.11 },
             'stocks': [
