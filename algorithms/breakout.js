@@ -45,6 +45,10 @@ window.TradingApp.Algo.Breakout = (function () {
             window.TradingApp.Firestore.logError(`checkRule: Premarket VWAP rule failed for ${symbol}`);
             return 0;
         }
+        if (!checkRuleForMarketTrend(isLong, secondsSinceMarketOpen)) {
+            window.TradingApp.Firestore.logError(`checkRule: Market Trend rule failed for ${symbol}`);
+            return 0;
+        }
         return 1;
     };
     const checkRuleForDeferTrading = (symbol) => {
@@ -138,6 +142,17 @@ window.TradingApp.Algo.Breakout = (function () {
         }
         return true;
     };
+    // https://sunrisetrading.atlassian.net/browse/TPS-181
+    const checkRuleForMarketTrend = (isLong, secondsSinceMarketOpen) => {
+        if (secondsSinceMarketOpen > 10*60) {
+            return true;
+        }
+        let trend = window.TradingApp.AutoTrader.getMarketTrendType();
+        if ((trend == 1 && !isLong) || (trend == -1 && isLong)) {
+            return false;
+        }
+        return true;
+    };
     // avoid chase the first candle during second candle
     const checkRuleForOpenCandle = (symbol, entryPrice, stopOutPrice) => {
         let openingCandle = window.TradingApp.DB.dataBySymbol[symbol].openingCandle;
@@ -198,7 +213,7 @@ window.TradingApp.Algo.Breakout = (function () {
         }
     };
 
-    const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, multiplier) => {
+    const submitBreakoutOrders = async (symbol, entryPrice, stopOut, setupQuality, isLong, multiplier) => {
         let orders = [];
         let checkResult = checkRules(symbol, entryPrice, stopOut);
         if (checkResult == 0) {
@@ -206,6 +221,10 @@ window.TradingApp.Algo.Breakout = (function () {
         }
         multiplier = multiplier * checkResult;
         let orderType = window.TradingApp.OrderFactory.OrderType.STOP;
+        let currentPrice = window.TradingApp.DB.getCurrentPrice(symbol);
+        if ((isLong && currentPrice > entryPrice) || (!isLong && currentPrice < entryPrice)) {
+            orderType = window.TradingApp.OrderFactory.OrderType.LIMIT;
+        }
         orders = window.TradingApp.OrderFactory.createEntryOrdersWithFixedRisk(symbol, orderType, entryPrice, stopOut, setupQuality, multiplier);
 
         orders.forEach(order => {
@@ -256,26 +275,22 @@ window.TradingApp.Algo.Breakout = (function () {
 
         return p;
     };
-
-    const test = () => {
-        submitBreakoutOrders("MSFT", 340, 320, "a", 1);
-    };
-
+    
     const prepareBreakoutOrders = (symbol, code) => {
         let stopOutPrice = getStopLossPrice(symbol, code);
         let entryPrice = getEntryPrice(symbol, code);
         let multiplier = window.TradingApp.Chart.getMultiplier(window.TradingApp.Main.widgets[symbol]);
-
+        let isLong = true;
         if (code === "KeyB") {
             window.TradingApp.Firestore.logInfo("breakout buy for " + symbol + " " + multiplier);
         } else if (code === "KeyS") {
+            isLong = false;
             window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol + " " + multiplier);
         }
-        submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", multiplier);
+        submitBreakoutOrders(symbol, entryPrice, stopOutPrice,"A", isLong, multiplier);
     };
 
     return {
-        submitBreakoutOrders,
         prepareBreakoutOrders,
         test,
         getStopLossPrice,

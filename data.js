@@ -13,10 +13,11 @@ window.TradingData = {
         '10/3/2022': {
             'SPYRange': { 'high': 361.47, 'low': 356.83 },
             'stocks': [
-                { symbol: 'TSLA', highQualityNews: 'delivery numbers miss' },
-                { symbol: 'NIO', highQualityNews: 'delivery' },
-                { symbol: 'QQQ', highQualityNews: 'europe give up tax cuts' },
-                { symbol: 'SPY', highQualityNews: 'europe give up tax cuts' }
+                { symbol: 'TSLA', highQualityNews: 'delivery numbers miss' , 
+                    longTargets: [{ price: 157.5, percentage: 0.3 }], shortTargets: [{ price: 170.3, percentage: 0.3 }]},
+                { symbol: 'NIO', highQualityNews: 'delivery' , targets: []},
+                { symbol: 'QQQ', highQualityNews: 'europe give up tax cuts', targets: [] },
+                { symbol: 'SPY', highQualityNews: 'europe give up tax cuts', targets: [] }
             ],
         },
         '9/30/2022': {

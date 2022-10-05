@@ -51,7 +51,7 @@ window.TradingApp.Algo.StockSelection = (function () {
             if (!stock.highQualityNews) {
                 window.TradingApp.Firestore.logError(`${skipMessage}has no news.`);
                 continue;
-            }
+            }           
 
             let newsWords = stock.highQualityNews.split(" ");
             for (let j = 0; j < newsWords.length; j++) {
@@ -59,6 +59,13 @@ window.TradingApp.Algo.StockSelection = (function () {
                     window.TradingApp.Firestore.logError(`${skipMessage}news contains low quality words: ${lowQualityNewsWords}`);
                     continue;
                 }
+            }
+
+            let hasLongTargets = stock.longTargets && stock.longTargets.length > 0;
+            let hasShortTargets = stock.shortTargets && stock.shortTargets.length > 0;
+            if (!hasLongTargets && !hasShortTargets) {
+                window.TradingApp.Firestore.logError(`${skipMessage}has no targets.`);
+                continue;
             }
 
             let passed = await checkRuleForLowFloat(symbol);
