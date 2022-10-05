@@ -144,7 +144,7 @@ window.TradingApp.Algo.Breakout = (function () {
     };
     // https://sunrisetrading.atlassian.net/browse/TPS-181
     const checkRuleForMarketTrend = (isLong, secondsSinceMarketOpen) => {
-        if (secondsSinceMarketOpen > 10*60) {
+        if (secondsSinceMarketOpen > 10 * 60) {
             return true;
         }
         let trend = window.TradingApp.AutoTrader.getMarketTrendType();
@@ -275,7 +275,7 @@ window.TradingApp.Algo.Breakout = (function () {
 
         return p;
     };
-    
+
     const prepareBreakoutOrders = (symbol, code) => {
         let stopOutPrice = getStopLossPrice(symbol, code);
         let entryPrice = getEntryPrice(symbol, code);
@@ -287,12 +287,11 @@ window.TradingApp.Algo.Breakout = (function () {
             isLong = false;
             window.TradingApp.Firestore.logInfo("breakdown sell for " + symbol + " " + multiplier);
         }
-        submitBreakoutOrders(symbol, entryPrice, stopOutPrice,"A", isLong, multiplier);
+        submitBreakoutOrders(symbol, entryPrice, stopOutPrice, "A", isLong, multiplier);
     };
 
     return {
         prepareBreakoutOrders,
-        test,
         getStopLossPrice,
         getEntryPrice,
         checkRules,
