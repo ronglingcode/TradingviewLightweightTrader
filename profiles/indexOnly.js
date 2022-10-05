@@ -5,6 +5,7 @@ window.TradingApp.Profiles.indexOnly = (function () {
         exitRulesEnabled: false,
         flattenRulesEnabled: false,
         fixedRisk: false,
+        priceTargetRequired: false,
     };
 
     return {

@@ -5,6 +5,7 @@ window.TradingApp.Profiles.dayTrading = (function () {
         exitRulesEnabled: true,
         flattenRulesEnabled: true,
         fixedRisk: true,
+        priceTargetRequired: true,
     };
 
     return {
