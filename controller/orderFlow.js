@@ -73,10 +73,7 @@ window.TradingApp.Controller.OrderFlow = (function () {
     };
 
     const chooseOrderLeg = (symbol, pairs, newPrice) => {
-        // get current price
-        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
-        let lastCandle = candles[candles.length - 1];
-        let currentPrice = lastCandle.close;
+        let currentPrice = window.TradingApp.DB.getCurrentPrice(symbol);
 
         let netQuantity = window.TradingApp.Firestore.getPositionNetQuantity(symbol);
         let chooseStopLeg = (netQuantity > 0 && newPrice < currentPrice) ||
