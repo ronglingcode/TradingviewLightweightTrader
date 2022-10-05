@@ -463,6 +463,12 @@ window.TradingApp.DB = (function () {
         }
     };
 
+    const getCurrentPrice = (symbol) => {
+        let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
+        let lastCandle = candles[candles.length - 1];
+        let currentPrice = lastCandle.close;
+    };
+
     return {
         initialize,
         updateFromTimeSale,
@@ -470,5 +476,6 @@ window.TradingApp.DB = (function () {
         dataBySymbol,
         jsDateToUTC,
         fetchSPYOpenPrice,
+        getCurrentPrice,
     };
 })();
