@@ -45,6 +45,10 @@ window.TradingApp.Algo.Breakout = (function () {
             window.TradingApp.Firestore.logError(`checkRule: Premarket VWAP rule failed for ${symbol}`);
             return 0;
         }
+        if (!checkRuleForMarketTrend(isLong)) {
+            window.TradingApp.Firestore.logError(`checkRule: Market Trend rule failed for ${symbol}`);
+            return 0;
+        }
         return 1;
     };
     const checkRuleForDeferTrading = (symbol) => {
@@ -135,6 +139,14 @@ window.TradingApp.Algo.Breakout = (function () {
                 //return confirm("buy orders on short bias, still continue?");
                 return false;
             }
+        }
+        return true;
+    };
+    // https://sunrisetrading.atlassian.net/browse/TPS-181
+    const checkRuleForMarketTrend = (isLong) => {
+        let trend = window.TradingApp.AutoTrader.getMarketTrendType();
+        if ((trend == 1 && !isLong) || (trend == -1 && isLong)) {
+            return false;
         }
         return true;
     };
