@@ -45,7 +45,7 @@ window.TradingApp.Algo.Breakout = (function () {
             window.TradingApp.Firestore.logError(`checkRule: Premarket VWAP rule failed for ${symbol}`);
             return 0;
         }
-        if (!checkRuleForMarketTrend(isLong)) {
+        if (!checkRuleForMarketTrend(isLong, secondsSinceMarketOpen)) {
             window.TradingApp.Firestore.logError(`checkRule: Market Trend rule failed for ${symbol}`);
             return 0;
         }
@@ -143,7 +143,10 @@ window.TradingApp.Algo.Breakout = (function () {
         return true;
     };
     // https://sunrisetrading.atlassian.net/browse/TPS-181
-    const checkRuleForMarketTrend = (isLong) => {
+    const checkRuleForMarketTrend = (isLong, secondsSinceMarketOpen) => {
+        if (secondsSinceMarketOpen > 10*60) {
+            return true;
+        }
         let trend = window.TradingApp.AutoTrader.getMarketTrendType();
         if ((trend == 1 && !isLong) || (trend == -1 && isLong)) {
             return false;
