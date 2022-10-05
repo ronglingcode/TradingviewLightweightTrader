@@ -162,15 +162,14 @@ window.TradingApp.Algo.TakeProfit = (function () {
             }
         }
         let trend = window.TradingApp.AutoTrader.getMarketTrendType();
-        // on range days, allow first exit adjustment without restrictions
-        if (trend == 0) {
-            let widget = window.TradingApp.Main.widgets[symbol];
-            let total = widget.exitOrderPairs.length;
-            if (total == 8 || total == 16) {
-                window.TradingApp.Firestore.logInfo(`allow for first order`);
-                return true;
-            }
+        // on range or trend days, allow first exit adjustment without restrictions        
+        let widget = window.TradingApp.Main.widgets[symbol];
+        let total = widget.exitOrderPairs.length;
+        if (total == 8 || total == 16) {
+            window.TradingApp.Firestore.logInfo(`allow for first order`);
+            return true;
         }
+        
         if (!checkRuleForMinimumProfit(symbol, order, isBuyOrder, symbolData))
             return false;
 
