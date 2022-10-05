@@ -59,7 +59,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
     };
 
     const getPresetTargets = (symbol, isLong) => {
-        let stockSettings = window.TradingApp.StockCandidates[symbol];
+        let stockSettings = window.TradingApp.Watchlist[symbol];
         if (!stockSettings) {
             return [];
         }
