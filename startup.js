@@ -35,11 +35,11 @@ window.TradingApp = {
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'MYOV': {
+        'PINS': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 24.25, boxdown: 23,
+            //boxup: 24.25, boxdown: 23,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
@@ -47,7 +47,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 245.5, boxdown: 242.5,
+            boxup: 241, boxdown: 238,
             //longTargets: [{ price: 715, percentage: 0.2 }, { price: 718, percentage: 0.3 }, { price: 710, percentage: 0.3 }],
             //shortTargets: [{ price: 695.5, percentage: 0.25 }, { price: 693, percentage: 0.25 }]
         },

@@ -1,6 +1,31 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/6/2022': {
+            'SPYRange': { 'high': 383.12, 'low': 372.56 },
+            'stocks': [
+                {
+                    symbol: 'TSLA', highQualityNews: 'price cuts',
+                    longTargets: [{ price: 244.1, percentage: 0.1 }, { price: 245, percentage: 0.3 }],
+                    shortTargets: [{ price: 234.1, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'PINS', highQualityNews: 'upgrade', 
+                    longTargets: [{ price: 25.88, percentage: 0.2 },{ price: 26.7, percentage: 0.2 }],
+                    shortTargets: []
+                },
+                {
+                    symbol: 'QQQ', highQualityNews: 'jobless numbers',
+                    longTargets: [{ price: 282.72, percentage: 0.3 }],
+                    shortTargets: [{ price: 280.27, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'SPY', highQualityNews: 'jobless numbers',
+                    longTargets: [{ price: 376.93, percentage: 0.3 }],
+                    shortTargets: [{ price: 375.58, percentage: 0.1 }]
+                }
+            ],
+        },
         '10/5/2022': {
             'SPYRange': { 'high': 379.65, 'low': 373.94 },
             'stocks': [
@@ -10,7 +35,7 @@ window.TradingData = {
                 },
                 {
                     symbol: 'AMD', highQualityNews: 'price cut', longTargets: [],
-                    shortTargets: [{ price: 66.3, percentage: 0.1 },{ price: 65.97, percentage: 0.1 },{ price: 65.5, percentage: 0.1 },{ price: 64.92, percentage: 0.1 }]
+                    shortTargets: [{ price: 66.3, percentage: 0.1 }, { price: 65.97, percentage: 0.1 }, { price: 65.5, percentage: 0.1 }, { price: 64.92, percentage: 0.1 }]
                 },
                 {
                     symbol: 'QQQ', highQualityNews: 'oil production cut',
