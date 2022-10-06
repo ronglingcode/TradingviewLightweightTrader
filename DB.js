@@ -467,6 +467,7 @@ window.TradingApp.DB = (function () {
         let candles = window.TradingApp.DB.dataBySymbol[symbol].candles;
         let lastCandle = candles[candles.length - 1];
         let currentPrice = lastCandle.close;
+        return currentPrice;
     };
 
     return {
