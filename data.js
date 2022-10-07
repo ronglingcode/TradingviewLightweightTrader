@@ -1,6 +1,31 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/7/2022': {
+            'SPYRange': { 'high': 375.5, 'low': 367.94 },
+            'stocks': [
+                {
+                    symbol: 'TSLA', highQualityNews: 'semi truck production',
+                    longTargets: [{ price: 238.5, percentage: 0.1 }, { price: 239.5, percentage: 0.1 }],
+                    shortTargets: [{ price: 234.1, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'AMD', highQualityNews: 'cuts outlook', 
+                    longTargets: [{ price: 65.5, percentage: 0.1 },{ price: 65.97, percentage: 0.2 }],
+                    shortTargets: [{ price: 233.35, percentage: 0.1 }, { price: 228.1, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'QQQ', highQualityNews: 'non farm payroll',
+                    longTargets: [{ price: 277.62, percentage: 0.3 }],
+                    shortTargets: [{ price: 273.72, percentage: 0.1 }, { price: 272.52, percentage: 0.1 }]
+                },
+                {
+                    symbol: 'SPY', highQualityNews: 'non farm payrolls',
+                    longTargets: [{ price: 370.7, percentage: 0.3 }],
+                    shortTargets: [{ price: 367.7, percentage: 0.2 }]
+                }
+            ],
+        },
         '10/6/2022': {
             'SPYRange': { 'high': 383.12, 'low': 372.56 },
             'stocks': [
