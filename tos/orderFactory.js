@@ -581,6 +581,12 @@ window.TradingApp.OrderFactory = (function () {
         console.log(text);
     };
 
+    const test = async () => {
+        let order = createStopOrder('SPY', 1, 359.9, 'BUY');
+        window.TradingApp.TOS.placeOrderBase(order);
+        return true;
+    };
+
     return {
         copyOrder,
         createMarketOrder,
@@ -612,5 +618,6 @@ window.TradingApp.OrderFactory = (function () {
         replicateOrderWithNewQuantity,
         generateExecutionScript,
         generateExecutionScriptForAllStocks,
+        test,
     }
 })();

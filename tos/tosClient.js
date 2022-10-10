@@ -358,9 +358,10 @@ window.TradingApp.TOS = (function () {
 
     const adjustStopOrders = async (symbol) => {
         let secondsSinceEntry = window.TradingApp.AutoTrader.getEntryTimeFromNowInSeconds(symbol);
+        let remainingCoolDownSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
         let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
-        if (secondsSinceEntry != -1 && secondsSinceEntry < 5 * 60 && secondsSinceMarketOpen < 60 * 15) {
-            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes before 6:45 AM, ${secondsSinceEntry} seconds so far`);
+        if (remainingCoolDownSeconds > 0 && secondsSinceMarketOpen < 60 * 15) {
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first few minutes before 6:45 AM, ${secondsSinceEntry} seconds so far`);
             return;
         }
 
@@ -369,6 +370,10 @@ window.TradingApp.TOS = (function () {
 
         let widget = window.TradingApp.Main.widgets[symbol];
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+        let isLong = window.TradingApp.Firestore.getPositionNetQuantity(symbol) > 0;
+        if (!window.TradingApp.Algo.TakeProfit.checkRuleForTightenStop(symbol, isLong, 'STOP', newPrice)) {
+            return;
+        }
 
         stopOrders.forEach(order => {
             let oldOrderId = order.orderId;

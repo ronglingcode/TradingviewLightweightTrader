@@ -169,7 +169,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
             window.TradingApp.Firestore.logInfo(`allow for first order`);
             return true;
         }
-        
+
         if (!checkRuleForMinimumProfit(symbol, order, isBuyOrder, symbolData))
             return false;
 
@@ -179,6 +179,25 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (!checkRuleForTimeSinceEntry(symbol))
             return false;
 
+        if (!checkRuleForTightenStop(symbol, isLong, order.orderType, newPrice))
+            return false;
+
+        return true;
+    };
+
+    // Cannot move stop to less loss if less than half position
+    // https://sunrisetrading.atlassian.net/browse/TPS-184
+    const checkRuleForTightenStop = (symbol, isLong, orderType, newPrice) => {
+        if (orderType != 'STOP') {
+            return true;
+        }
+        let riskMultiples = window.TradingApp.Models.Account.getRiskMultiples(symbol);
+        let entryPrice = window.TradingApp.Models.Account.getAveragePrice(symbol);
+        let stillLosingTrade = (isLong && newPrice < entryPrice) || (!isLong && newPrice > entryPrice);
+        if (riskMultiples < 55 && stillLosingTrade) {
+            window.TradingApp.Firestore.logError(`${symbol}: cannot tighten stop, still a losing trade.`);
+            return false;
+        }
         return true;
     };
     const checkRulesForHalfOut = (symbol, usageKey, action) => {
@@ -232,7 +251,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
         let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
         if (remainingSeconds > 0 && secondsSinceMarketOpen < 60 * 15) {
-            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first 5 minutes before 6:45 AM, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
+            window.TradingApp.Firestore.logInfo(`cannot adjust exit order for ${symbol} within first few minutes before 6:45 AM, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
             return false;
         }
         return true;
@@ -243,6 +262,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         getTempProfitTargets,
         checkRulesForAdjustingExitOrders,
         checkRulesForHalfOut,
+        checkRuleForTightenStop,
         isTargetAtLeastHalfOpenRange
     };
 })();
