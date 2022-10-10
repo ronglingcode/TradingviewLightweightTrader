@@ -370,6 +370,10 @@ window.TradingApp.TOS = (function () {
 
         let widget = window.TradingApp.Main.widgets[symbol];
         let newPrice = window.TradingApp.Helper.roundToCents(widget.crosshairPrice);
+        let isLong = window.TradingApp.Firestore.getPositionNetQuantity(symbol) > 0;
+        if (!window.TradingApp.Algo.TakeProfit.checkRuleForTightenStop(symbol, isLong, 'STOP', newPrice)) {
+            return;
+        }
 
         stopOrders.forEach(order => {
             let oldOrderId = order.orderId;

@@ -179,7 +179,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         if (!checkRuleForTimeSinceEntry(symbol))
             return false;
 
-        if (!checkRuleForTightenStop(symbol, isLong, order, newPrice))
+        if (!checkRuleForTightenStop(symbol, isLong, order.orderType, newPrice))
             return false;
 
         return true;
@@ -187,14 +187,15 @@ window.TradingApp.Algo.TakeProfit = (function () {
 
     // Cannot move stop to less loss if less than half position
     // https://sunrisetrading.atlassian.net/browse/TPS-184
-    const checkRuleForTightenStop = (symbol, isLong, order, newPrice) => {
-        if (order.orderType != 'STOP') {
+    const checkRuleForTightenStop = (symbol, isLong, orderType, newPrice) => {
+        if (orderType != 'STOP') {
             return true;
         }
         let riskMultiples = window.TradingApp.Models.Account.getRiskMultiples(symbol);
         let entryPrice = window.TradingApp.Models.Account.getAveragePrice(symbol);
         let stillLosingTrade = (isLong && newPrice < entryPrice) || (!isLong && newPrice > entryPrice);
         if (riskMultiples < 55 && stillLosingTrade) {
+            window.TradingApp.Firestore.logError(`${symbol}: cannot tighten stop, still a losing trade.`);
             return false;
         }
         return true;
@@ -261,6 +262,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         getTempProfitTargets,
         checkRulesForAdjustingExitOrders,
         checkRulesForHalfOut,
+        checkRuleForTightenStop,
         isTargetAtLeastHalfOpenRange
     };
 })();
