@@ -151,6 +151,7 @@ window.TradingApp.Algo.TakeProfit = (function () {
         let symbolData = window.TradingApp.DB.dataBySymbol[symbol];
         let orderInstruction = order.orderLegCollection[0].instruction;
         let isBuyOrder = window.TradingApp.OrderFactory.isBuyOrder(orderInstruction);
+        let isLong = !isBuyOrder;
         // allow increasing profit targets
         if (newPrice && order.orderType == 'LIMIT') {
             let oldPrice = order.price;

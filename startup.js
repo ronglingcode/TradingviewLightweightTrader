@@ -31,15 +31,15 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            //boxup: 54, boxdown: 51,
+            boxup: 32.5, boxdown: 31,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
             //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'PINS': {
+        'PYPL': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            //boxup: 24.25, boxdown: 23,
+            boxup: 87.5, boxdown: 86,
             //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
@@ -47,7 +47,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 235.5, boxdown: 232,
+            boxup: 225.5, boxdown: 222,
         },
         'NVDA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
@@ -71,14 +71,6 @@ window.TradingApp = {
             deferTrading: false,
             //boxup: 149, boxdown: 146,
             //longTargets: [{ price: 78.8, percentage: 0.1 }, { price: 78.95, percentage: 0.4 }],
-            //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
-        },
-        'PYPL': {
-            volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'long',
-            deferTrading: false,
-            boxup: 93.5, boxdown: 92,
-            //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
             //shortTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }]
         },
         'AMD': {
