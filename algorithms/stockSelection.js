@@ -4,7 +4,7 @@ window.TradingApp.Algo.StockSelection = (function () {
     const lowQualityNewsWords = ['relative', 'stronger', 'weaker', 'strength', 'weakness', 'second'];
     const checkRuleForLowFloat = async (symbol) => {
         let fundamental = await window.TradingApp.TOS.getFundamentals(symbol);
-        if (fundamental.marketCapFloat < 90 && fundamental.marketCapFloat != 0) {
+        if (fundamental && fundamental.marketCapFloat < 90 && fundamental.marketCapFloat != 0) {
             window.TradingApp.Firestore.logError(`${symbol} market cap float: ${fundamental.marketCapFloat}`);
             return false;
         } else {
@@ -77,8 +77,10 @@ window.TradingApp.Algo.StockSelection = (function () {
             }
 
             let candidate = window.TradingApp.StockCandidates[symbol];
+            if (symbol && candidate) {
             candidate.symbol = symbol;
             stocks.push(candidate);
+            }
         }
         if (stocks.length > window.TradingApp.Settings.maxStocksCount) {
             alert("Too many stocks to trade, see reasoning in https://sunrisetrading.atlassian.net/browse/TPS-161");
