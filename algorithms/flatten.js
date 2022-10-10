@@ -17,7 +17,7 @@ window.TradingApp.Algo.Flatten = (function () {
         let remainingSeconds = window.TradingApp.AutoTrader.getRemainingCoolDownInSeconds(symbol);
         let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
         if (remainingSeconds > 0 && secondsSinceMarketOpen < 60 * 10) {
-            window.TradingApp.Firestore.logInfo(`cannot flatten ${symbol} within first 5 minutes before 6:40 AM, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
+            window.TradingApp.Firestore.logInfo(`cannot flatten ${symbol} within first few minutes before 6:40 AM, ${secondsSinceEntry} seconds so far, ${remainingSeconds} to go`);
             return false;
         }
         return true;

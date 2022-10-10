@@ -19,7 +19,15 @@ window.TradingApp.Models.Account = (function () {
         }
         return 0;
     };
+    const getAveragePrice = (symbol) => {
+        let account = window.TradingApp.Firestore.getAccountForSymbol(symbol);
+        if (!account || !account.position) {
+            return 0;
+        }
+        return account.position.averagePrice;
+    };
     return {
         getRiskMultiples,
+        getAveragePrice,
     };
 })();
