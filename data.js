@@ -1,16 +1,41 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/11/2022': {
+            'SPYRange': { 'high': 366.56, 'low': 358.72 },
+            'stocks': [
+                {
+                    symbol: 'COIN', highQualityNews: 'partner with google',
+                    longTargets: [],
+                    shortTargets: [{ price: 68.05, percentage: 0.2 }]
+                },
+                {
+                    symbol: 'RBLX', highQualityNews: 'downgrade',
+                    longTargets: [],
+                    shortTargets: [{ price: 32.05, percentage: 0.1 }, { price: 31.6, percentage: 0.1 }]
+                },
+                {
+                    symbol: 'META', highQualityNews: 'downgrade',
+                    longTargets: [],
+                    shortTargets: [{ price: 130.1, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'DASH', highQualityNews: 'contractor laws',
+                    longTargets: [],
+                    shortTargets: [{ price: 41.2, percentage: 0.2 }, { price: 40.5, percentage: 0.2 }]
+                }
+            ],
+        },
         '10/10/2022': {
             'SPYRange': { 'high': 366.5, 'low': 358.7 },
             'stocks': [
                 {
                     symbol: 'TSLA', highQualityNews: 'delivery',
-                    longTargets: [{ price: 228.5, percentage: 0.3}],
+                    longTargets: [{ price: 228.5, percentage: 0.3 }],
                     shortTargets: [{ price: 220.1, percentage: 0.2 }]
                 },
                 {
-                    symbol: 'AMD', highQualityNews: 'us china lows', 
+                    symbol: 'AMD', highQualityNews: 'us china lows',
                     longTargets: [{ price: 57.9, percentage: 0.3 }],
                     shortTargets: [{ price: 57.2, percentage: 0.3 }]
                 },
@@ -35,8 +60,8 @@ window.TradingData = {
                     shortTargets: [{ price: 234.1, percentage: 0.3 }]
                 },
                 {
-                    symbol: 'AMD', highQualityNews: 'cuts outlook', 
-                    longTargets: [{ price: 65.5, percentage: 0.1 },{ price: 65.97, percentage: 0.2 }],
+                    symbol: 'AMD', highQualityNews: 'cuts outlook',
+                    longTargets: [{ price: 65.5, percentage: 0.1 }, { price: 65.97, percentage: 0.2 }],
                     shortTargets: [{ price: 233.35, percentage: 0.1 }, { price: 228.1, percentage: 0.3 }]
                 },
                 {
@@ -60,8 +85,8 @@ window.TradingData = {
                     shortTargets: [{ price: 234.1, percentage: 0.3 }]
                 },
                 {
-                    symbol: 'PINS', highQualityNews: 'upgrade', 
-                    longTargets: [{ price: 25.88, percentage: 0.2 },{ price: 26.7, percentage: 0.2 }],
+                    symbol: 'PINS', highQualityNews: 'upgrade',
+                    longTargets: [{ price: 25.88, percentage: 0.2 }, { price: 26.7, percentage: 0.2 }],
                     shortTargets: []
                 },
                 {
