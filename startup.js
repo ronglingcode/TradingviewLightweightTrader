@@ -29,7 +29,7 @@ window.TradingApp = {
         },
         'RBLX': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-            //bias: 'short',
+            bias: 'short',
             deferTrading: false,
             //boxup: 32.5, boxdown: 31,
             //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
@@ -47,7 +47,7 @@ window.TradingApp = {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 225.5, boxdown: 222,
+            boxup: 217, boxdown: 214,
         },
         'NVDA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
