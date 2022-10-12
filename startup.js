@@ -27,17 +27,21 @@ window.TradingApp = {
             //longTargets: [{ price: 59.95, percentage: 0.3 }],
             //shortTargets: [{ price: 50.7, percentage: 0.3 }]
         },
-        'BA': {
+        'RBLX': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             bias: 'short',
             deferTrading: false,
-            boxup: 130, boxdown: 128.25,
+            //boxup: 32.5, boxdown: 31,
+            //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
+            //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
         },
-        'MRNA': {
+        'DASH': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
             //bias: 'short',
             deferTrading: false,
-            boxup: 140, boxdown: 134,
+            boxup: 46, boxdown: 43,
+            //longTargets: [{ price: 123, percentage: 0.25 }, { price: 123, percentage: 0.25 }],
+            //shortTargets: [{ price: 166.02, percentage: 0.3 }, { price: 165.6, percentage: 0.2 }]
         },
         'TSLA': {
             volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
