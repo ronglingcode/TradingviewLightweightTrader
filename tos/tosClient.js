@@ -553,7 +553,6 @@ window.TradingApp.TOS = (function () {
                     "shortIntDayToCover": fundamental.shortIntDayToCover,
                     "beta": fundamental.beta,
                 };
-                console.log(summary);
                 return summary;
             })
             .catch(err => console.log('Request Failed', err));
