@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
-import { getFirestore, collection, addDoc, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+//import { getFirestore, collection, addDoc, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import * as gbase from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,7 +28,8 @@ window.TradingApp.Firestore = (function () {
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    var db = getFirestore(app);
+    var db = gbase.getFirestore(app);
+
     const logDebug = async (msg) => {
         log('Debug', msg);
         console.log(msg);
@@ -69,8 +71,8 @@ window.TradingApp.Firestore = (function () {
         });
     };
     const getAutoTraderStateFromFirestore = async () => {
-        const docRef = doc(db, `${getStatePrefix()}`, "autoTrader");
-        const docSnap = await getDoc(docRef);
+        const docRef = gbase.doc(db, `${getStatePrefix()}`, "autoTrader");
+        const docSnap = await gbase.getDoc(docRef);
 
         if (docSnap.exists()) {
             return docSnap.data();
@@ -211,6 +213,33 @@ window.TradingApp.Firestore = (function () {
         return true;
     };
 
+    const deleteMonthlyLogs = async (year, month) => {
+        for (let i = 1; i <= 31; i++) {
+            setTimeout(() => {
+                deleteDailyLogs(year, month, i);
+            }, 500 * i);
+        }
+    }
+
+    const deleteDailyLogs = async (year, month, day) => {
+        const prefix = `${year}-${month}-${day}-${window.TradingApp.Secrets.accountId}`;
+        console.log(`Delete for ${prefix}`);
+        const collections = [
+            gbase.collection(db, `${prefix}-Logs`),
+            gbase.collection(db, `${prefix}-Orders`)
+        ];
+        collections.forEach(collection => {
+            deleteCollection(collection);
+        });
+    };
+    const deleteCollection = async (collection) => {
+        const q = gbase.query(collection);
+        const querySnapshot = await gbase.getDocs(q);
+        querySnapshot.forEach((doc) => {
+            gbase.deleteDoc(doc.ref);
+        });
+    };
+
     return {
         addToLogView,
         logDebug,
@@ -234,5 +263,10 @@ window.TradingApp.Firestore = (function () {
         getAccountForSymbol,
         getPositionNetQuantity,
         usageAllowedOnce,
+        gbase,
+        app,
+        db,
+        deleteDailyLogs,
+        deleteMonthlyLogs
     };
 })();
