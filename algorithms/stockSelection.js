@@ -16,6 +16,12 @@ window.TradingApp.Algo.StockSelection = (function () {
         let todayData = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
         return todayData.SPYRange;
     };
+
+    const getStockCandidates = () => {
+        let currentDay = window.TradingApp.Settings.currentDay;
+        let todayData = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
+        return todayData.StockCandidates;
+    };
     const createWatchlist = async () => {
         let currentDay = window.TradingApp.Settings.currentDay;
         let todayData = window.TradingData.StockSelection[currentDay.toLocaleDateString()];
@@ -76,10 +82,11 @@ window.TradingApp.Algo.StockSelection = (function () {
                 continue;
             }
 
-            let candidate = window.TradingApp.StockCandidates[symbol];
+            let candidates = getStockCandidates();
+            let candidate = candidates[symbol];
             if (symbol && candidate) {
-            candidate.symbol = symbol;
-            stocks.push(candidate);
+                candidate.symbol = symbol;
+                stocks.push(candidate);
             }
         }
         if (stocks.length > window.TradingApp.Settings.maxStocksCount) {
@@ -92,5 +99,6 @@ window.TradingApp.Algo.StockSelection = (function () {
     return {
         createWatchlist,
         getSPYRange,
+        getStockCandidates,
     };
 })();

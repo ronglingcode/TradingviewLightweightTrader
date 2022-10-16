@@ -1,6 +1,61 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/17/2022': {
+            'SPYRange': { 'high': 361.46, 'low': 355.56 },
+            'stocks': [
+                {
+                    symbol: 'MRNA', highQualityNews: 'partner with merck for cancer vaccine',
+                    longTargets: [{ price: 139.8, percentage: 0.2 }, { price: 141.98, percentage: 0.2 }],
+                    shortTargets: [{ price: 68.05, percentage: 0.2 }]
+                },
+                {
+                    symbol: 'TSLA', highQualityNews: 'analyst short',
+                    longTargets: [],
+                    shortTargets: [{ price: 215.45, percentage: 0.1 }, { price: 215.06, percentage: 0.1 }]
+                },
+                {
+                    symbol: 'BA', highQualityNews: 'downgrade',
+                    longTargets: [],
+                    shortTargets: [{ price: 127.2, percentage: 0.1 }, { price: 125.5, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'SPY', highQualityNews: 'PPI numbers',
+                    longTargets: [],
+                    shortTargets: [{ price: 35.625, percentage: 0.2 }]
+                }
+            ],
+            'StockCandidates': {
+                'SAMPLE': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                    //boxup: 32.5, boxdown: 31,
+                    //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
+                    //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
+                },
+                'MRNA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+                'BA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+                'SPY': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+                'TSLA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+            }
+        },
         '10/12/2022': {
             'SPYRange': { 'high': 361.46, 'low': 355.56 },
             'stocks': [
@@ -25,6 +80,36 @@ window.TradingData = {
                     shortTargets: [{ price: 35.625, percentage: 0.2 }]
                 }
             ],
+            'StockCandidates': {
+                'SAMPLE': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                    //boxup: 32.5, boxdown: 31,
+                    //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
+                    //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
+                },
+                'MRNA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+                'BA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+                'SPY': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+                'TSLA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                },
+            }
         },
         '10/11/2022': {
             'SPYRange': { 'high': 366.56, 'low': 358.72 },

@@ -52,7 +52,8 @@ window.TradingApp.Algo.Breakout = (function () {
         return 1;
     };
     const checkRuleForDeferTrading = (symbol) => {
-        let stockSettings = window.TradingApp.StockCandidates[symbol];
+        let candidates = window.TradingApp.Algo.StockSelection.getStockCandidates();
+        let stockSettings = candidates[symbol];
         if (stockSettings.deferTrading) {
             let secondsSinceMarketOpen = window.TradingApp.Helper.getSecondsSinceMarketOpen(new Date());
             if (secondsSinceMarketOpen >= 5 * 60 - 5) {
