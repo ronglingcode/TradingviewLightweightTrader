@@ -46,7 +46,7 @@ window.TradingApp.Firestore = (function () {
     };
     /*
     const log = async (msgType, msg) => {
-        addDoc(collection(db, `${(getCollectionNamePrefix())}-Logs`), {
+        gbase.addDoc(collection(db, `${(getCollectionNamePrefix())}-Logs`), {
             msg: msg,
             type: msgType,
             timestamp: new Date()
@@ -56,8 +56,8 @@ window.TradingApp.Firestore = (function () {
     const log = async (msgType, msg) => {
         let now = new Date();
         let docId = now.getTime();
-        let docRef = await doc(db, `${getCollectionNamePrefix()}-Logs/${docId}`) // create this document newDoc at this path
-        await setDoc(docRef, {
+        let docRef = await gbase.doc(db, `${getCollectionNamePrefix()}-Logs/${docId}`) // create this document newDoc at this path
+        await gbase.setDoc(docRef, {
             msg: msg,
             type: msgType,
             timestamp: now
@@ -86,8 +86,8 @@ window.TradingApp.Firestore = (function () {
         setAutoTraderStateInFirestore(newState);
     };
     const setAutoTraderStateInFirestore = async (newState) => {
-        let docRef = await doc(db, `${getStatePrefix()}/autoTrader`)
-        await setDoc(docRef, newState);
+        let docRef = await gbase.doc(db, `${getStatePrefix()}/autoTrader`)
+        await gbase.setDoc(docRef, newState);
     };
     const initializeAutoTraderState = async (account) => {
         let state = await getAutoTraderStateFromFirestore();

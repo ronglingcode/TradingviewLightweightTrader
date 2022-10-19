@@ -1,6 +1,6 @@
 window.TradingApp = {
     'Settings': {
-        'currentDay': new Date('2022-10-12 6:30'), //('2022-09-23 6:30'),
+        'currentDay': new Date(), //('2022-09-23 6:30'),
         'drawIndicatorsAsSeries': true,
         // I can focus on no more than 4 stocks at the same time,
         // see details in https://sunrisetrading.atlassian.net/browse/TPS-161
