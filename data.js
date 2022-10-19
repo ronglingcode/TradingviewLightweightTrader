@@ -1,26 +1,32 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
-        '10/17/2022': {
-            'SPYRange': { 'high': 361.46, 'low': 355.56 },
+        '10/18/2022': {
+            'SPYRange': { 'high': 369.7, 'low': 363.14 },
             'stocks': [
                 {
-                    symbol: 'MRNA', highQualityNews: 'partner with merck for cancer vaccine',
-                    longTargets: [{ price: 139.8, percentage: 0.2 }, { price: 141.98, percentage: 0.2 }],
-                    shortTargets: [{ price: 68.05, percentage: 0.2 }]
+                    symbol: 'FUBO', highQualityNews: 'raise guidance',
+                    longTargets: [{ price: 4.98, percentage: 0.2 }],
+                    shortTargets: []
                 },
                 {
-                    symbol: 'TSLA', highQualityNews: 'analyst short',
+                    symbol: 'TSLA', highQualityNews: 'earnings tomorrow',
+                    longTargets: [{ price: 234, percentage: 0.2 }],
+                    shortTargets: []
+                },
+                /*
+                {
+                    symbol: 'CRM', highQualityNews: 'investor take stake',
                     longTargets: [],
-                    shortTargets: [{ price: 215.45, percentage: 0.1 }, { price: 215.06, percentage: 0.1 }]
-                },
+                    shortTargets: [{ price: 152.1, percentage: 0.3 }]
+                },*/
                 {
-                    symbol: 'BA', highQualityNews: 'downgrade',
+                    symbol: 'QQQ', highQualityNews: 'europe news',
                     longTargets: [],
-                    shortTargets: [{ price: 127.2, percentage: 0.1 }, { price: 125.5, percentage: 0.3 }]
+                    shortTargets: [{ price: 35.625, percentage: 0.2 }]
                 },
                 {
-                    symbol: 'SPY', highQualityNews: 'PPI numbers',
+                    symbol: 'SPY', highQualityNews: 'europe news',
                     longTargets: [],
                     shortTargets: [{ price: 35.625, percentage: 0.2 }]
                 }
@@ -34,24 +40,29 @@ window.TradingData = {
                     //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
                     //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
                 },
-                'MRNA': {
+                'FUBO': {
                     volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-                    bias: 'short',
                     deferTrading: false,
                 },
-                'BA': {
+                'MSFT': {
                     volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-                    bias: 'short',
                     deferTrading: false,
                 },
                 'SPY': {
                     volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-                    bias: 'short',
+                    deferTrading: false,
+                },
+                'QQQ': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
                     deferTrading: false,
                 },
                 'TSLA': {
                     volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
-                    bias: 'short',
+                    boxup: 230, boxdown: 227,
+                    deferTrading: false,
+                },
+                'CRM': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
                     deferTrading: false,
                 },
             }
