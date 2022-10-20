@@ -65,7 +65,7 @@ window.TradingApp.Firestore = (function () {
     };
     const logOrder = async (order) => {
         console.log(order);
-        addDoc(collection(db, `${getCollectionNamePrefix()}-Orders`), {
+        gbase.addDoc(gbase.collection(db, `${getCollectionNamePrefix()}-Orders`), {
             timestamp: new Date(),
             ...order
         });
