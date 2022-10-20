@@ -1,6 +1,59 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/20/2022': {
+            'SPYRange': { 'high': 371.4, 'low': 365.93 },
+            'stocks': [
+                {
+                    symbol: 'IBM', highQualityNews: 'earnings',
+                    longTargets: [{ price: 129.9, percentage: 0.3 }],
+                    shortTargets: []
+                },
+                {
+                    symbol: 'TSLA', highQualityNews: 'earnings',
+                    longTargets: [{ price: 214, percentage: 0.3 }],
+                    shortTargets: [{ price: 200.5, percentage: 0.3 }]
+                },
+                {
+                    symbol: 'QQQ', highQualityNews: 'job numbers',
+                    longTargets: [],
+                    shortTargets: [{ price: 35.625, percentage: 0.2 }]
+                },
+                {
+                    symbol: 'SPY', highQualityNews: 'job numbers',
+                    longTargets: [],
+                    shortTargets: [{ price: 35.625, percentage: 0.2 }]
+                }
+            ],
+            'StockCandidates': {
+                'SAMPLE': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                    //boxup: 32.5, boxdown: 31,
+                    //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
+                    //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
+                },
+                'IBM': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    boxup: 128.5, boxdown: 126.5,
+                    deferTrading: false,
+                },
+                'SPY': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    deferTrading: false,
+                },
+                'QQQ': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    deferTrading: false,
+                },
+                'TSLA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    boxup: 210.5, boxdown: 206,
+                    deferTrading: false,
+                },
+            }
+        },
         '10/18/2022': {
             'SPYRange': { 'high': 369.7, 'low': 363.14 },
             'stocks': [
