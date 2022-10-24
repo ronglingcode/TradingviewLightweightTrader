@@ -1,6 +1,75 @@
 window.TradingData = {
     'StockSelection': {
         'index': [{ symbol: 'QQQ', highQualityNews: 'practice' }, { symbol: 'SPY', highQualityNews: 'practice' }],
+        '10/24/2022': {
+            'SPYRange': { 'high': 378, 'low': 369.4 },
+            'stocks': [
+                {
+                    symbol: 'FUTU', highQualityNews: 'china GDP',
+                    longTargets: [],
+                    shortTargets: [{ price: 28.05, percentage: 0.1 }]
+                },
+                {
+                    symbol: 'TSLA', highQualityNews: 'china gdp',
+                    longTargets: [],
+                    shortTargets: [{ price: 200.3, percentage: 0.2 }]
+                },
+                {
+                    symbol: 'PDD', highQualityNews: 'china gdp',
+                    longTargets: [],
+                    shortTargets: [{ price: 48.6, percentage: 0.2 }]
+                },
+                {
+                    symbol: 'BABA', highQualityNews: 'china gdp',
+                    longTargets: [{ price: 67, percentage: 0.2 }],
+                    shortTargets: [{ price: 60.1, percentage: 0.2 }]
+                },
+                /*
+                {
+                    symbol: 'SPY', highQualityNews: 'pmi numbers',
+                    longTargets: [{ price: 378.03, percentage: 0.3 }],
+                    shortTargets: []
+                }*/
+            ],
+            'StockCandidates': {
+                'SAMPLE': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    bias: 'short',
+                    deferTrading: false,
+                    //boxup: 32.5, boxdown: 31,
+                    //longTargets: [{ price: 80.5, percentage: 0.1 }, { price: 80.9, percentage: 0.25 }],
+                    //shortTargets: [{ price: 26.55, percentage: 0.20 }, { price: 25.55, percentage: 0.50 }]
+                },
+                'FUTU': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    boxup: 30, boxdown: 28.5,
+                    deferTrading: false,
+                },
+                'SPY': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    deferTrading: false,
+                },
+                'QQQ': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    deferTrading: false,
+                },
+                'TSLA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    boxup: 211, boxdown: 204,
+                    deferTrading: false,
+                },
+                'PDD': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    boxup: 50, boxdown: 48,
+                    deferTrading: false,
+                },
+                'BABA': {
+                    volumeSum: 0, tradingSum: 0, premktHigh: 0, premktLow: 99999999,
+                    boxup: 64.5, boxdown: 62.5,
+                    deferTrading: false,
+                },
+            }
+        },
         '10/20/2022': {
             'SPYRange': { 'high': 371.4, 'low': 365.93 },
             'stocks': [
